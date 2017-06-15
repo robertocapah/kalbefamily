@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">Visit Plan</string>
+    <string name="nama_app">Visit Plan</string>
+    <string name="tv_progress">0</string>
+    <string name="app_noName"></string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="press_go">Press \'Go/Next\' to next step</string>
+    <string name="tv_version">Android.20160322.001</string>
+    <string name="tv_role">Role</string>
+    <string name="title_activity_home">Home</string>
+    <string name="copyright">Copyright \u00a9 KN IT</string>
+
+    <string name="navigation_item_1">Home</string>
+    <string name="navigation_item_2">Events</string>
+    <string name="starred_string">Starred</string>
+    <string name="inbox_string">Inbox</string>
+    <string name="sent_mail_string">Sent mail</string>
+    <string name="draft_string">Drafts</string>
+    <string name="subheader">Subheader</string>
+    <string name="trash_string">Trash</string>
+    <string name="all_mail_string">All mails</string>
+    <string name="spam_string">Spams</string>
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+
+    <string name="add_reso">Add Reso</string>
+    <string name="add_costumerbase">Add Customer Base</string>
+    <string name="add_activity">Add Activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="main_action_rotate">Rotate 90 degrees clockwise</string>
+    <string name="drawer_option_title">Crop View Presets</string>
+    <string name="drawer_option_oval">Circular</string>
+</resources>
