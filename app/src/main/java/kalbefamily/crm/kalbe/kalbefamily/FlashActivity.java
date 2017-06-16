@@ -154,7 +154,7 @@ public class FlashActivity extends clsActivity {
         Timer runProgress = new Timer();
         TimerTask viewTask = new TimerTask() {
             public void run() {
-                Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
                 finish();
                 startActivity(myIntent);
             }
