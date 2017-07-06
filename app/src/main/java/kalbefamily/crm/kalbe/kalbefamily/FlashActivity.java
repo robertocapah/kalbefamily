@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,8 +19,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
+//import com.activeandroid.query.Select;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,12 +29,14 @@ import java.util.TimerTask;
 import kalbefamily.crm.kalbe.kalbefamily.BL.Mobile_mConfigBL;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.BL.tdeviceBL;
-import kalbefamily.crm.kalbe.kalbefamily.Common.tdeviceData;
+//import kalbefamily.crm.kalbe.kalbefamily.Common.tdeviceData;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
 
 public class FlashActivity extends clsActivity {
     long delay = 5000;
     private TextView version;
     public ImageView ivBannerLogin=null;
+    boolean firstStart;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +57,9 @@ public class FlashActivity extends clsActivity {
     }
     @Override
     protected void onResume() {
-        tdeviceData dt=new tdeviceData();
-        new tdeviceBL().SaveData(dt);
-        new Mobile_mConfigBL().InsertDefaultMconfig();
+//        tdeviceData dt=new tdeviceData();
+//        new tdeviceBL().SaveData(dt);
+//        new Mobile_mConfigBL().InsertDefaultMconfig();
         super.onResume();
         int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(FlashActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -154,9 +158,33 @@ public class FlashActivity extends clsActivity {
         Timer runProgress = new Timer();
         TimerTask viewTask = new TimerTask() {
             public void run() {
-                Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
-                finish();
-                startActivity(myIntent);
+                SharedPreferences setting = getSharedPreferences("PRFRS", 0);
+                firstStart = setting.getBoolean("first_time_start", true);
+
+                if (firstStart) {
+                    SharedPreferences.Editor editor = setting.edit();
+                    editor.putBoolean("first_time_start", false);
+                    editor.commit();
+
+                    Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
+                    try {
+                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+                    startActivity(myIntent);
+                } else {
+                    Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+
+                    try {
+                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+                    startActivity(myIntent);
+                }
             }
         };
         runProgress.schedule(viewTask, delay);

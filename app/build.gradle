@@ -21,14 +21,14 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha6'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha6'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.github.apl-devs:appintro:v4.2.0'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+//    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.j256.ormlite:ormlite-android:4.46'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.google.android.gms:play-services-maps:9.0.2'

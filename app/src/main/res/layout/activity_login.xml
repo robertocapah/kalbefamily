@@ -110,10 +110,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtMemberID" />
             <Button
-                android:text="Submit"
+                android:text="Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnMember" />
+                android:textStyle="bold"
+                android:id="@+id/buttonLogin" />
 
         </LinearLayout>
 

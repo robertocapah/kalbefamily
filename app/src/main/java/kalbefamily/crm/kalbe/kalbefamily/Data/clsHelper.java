@@ -15,6 +15,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,12 +60,22 @@ public class clsHelper {
         RequestQueue queue = Volley.newRequestQueue(context);
         final String[] ret = {null};
         final ProgressDialog Dialog = new ProgressDialog(activity);
+        Dialog.show();
 //        JSONObject obj = null;
         StringRequest req = new StringRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
                 if (response != null){
-                    ret[0] = response;
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("validJson");
+
+                        String result = jsonObject2.getString("TxtResult");
+                        String txtWarn = jsonObject2.getString("TxtWarn");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    ret[0] = response;
                     Dialog.dismiss();
                 }
             }
