@@ -74,14 +74,6 @@ public class clsUserLoginData implements Serializable{
         this.txtEmail = txtEmail;
     }
 
-    public String getTxtEmpId() {
-        return txtEmpId;
-    }
-
-    public void setTxtEmpId(String txtEmpId) {
-        this.txtEmpId = txtEmpId;
-    }
-
     public String getDtLastLogin() {
         return dtLastLogin;
     }
@@ -122,14 +114,36 @@ public class clsUserLoginData implements Serializable{
     public String txtName;
     @DatabaseField(columnName = "txtEmail")
     public String txtEmail;
-    @DatabaseField(columnName = "txtEmpId")
-    public String txtEmpId;
     @DatabaseField(columnName = "dtLastLogin")
     public String dtLastLogin;
     @DatabaseField(columnName = "txtDeviceId")
     public String txtDeviceId;
     @DatabaseField(columnName = "dtLogout")
     public String dtLogOut;
+
+    public String Property_dbName = "clsUserLogin";
+    public String Property_clsUserLogin = "clsUserLogin";
+    public String Property_txtGUI = "txtGUI";
+    public String Property_txtNameApp = "txtNameApp";
+    public String Property_employeeId = "employeeId";
+    public String Property_txtUserId = "txtUserId";
+    public String Property_txtUserName = "txtUserName";
+    public String Property_txtName = "txtName";
+    public String Property_txtEmail = "txtEmail";
+    public String Property_dtLastLogin = "dtLastLogin";
+    public String Property_txtDeviceId = "txtDeviceId";
+    public String Property_dtLogout = "dtLogout";
+    public String Property_All=Property_clsUserLogin +","+
+            Property_txtGUI +","+
+            Property_txtNameApp +","+
+            Property_employeeId +","+
+            Property_txtUserId +","+
+            Property_txtUserName +","+
+            Property_txtName +","+
+            Property_txtEmail +","+
+            Property_dtLastLogin+","+
+            Property_txtDeviceId+","+
+            Property_dtLogout;
 
     public clsUserLoginData() {
 

@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_add_reso"
+        android:icon="@drawable/mnresospg"
+        android:title="Absen" />
+    <!--
+    <item
+        android:id="@+id/action_add_activity"
+        android:icon="@drawable/mnactivityspg"
+        android:title="Activity"/>
+    <item
+        android:id="@+id/action_add_customerbase"
+        android:icon="@drawable/mncustomerbasespg"
+        android:title="Customer Base" />-->
+</menu>
