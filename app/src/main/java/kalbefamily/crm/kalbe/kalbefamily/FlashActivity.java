@@ -22,14 +22,18 @@ import android.widget.TextView;
 //import com.activeandroid.query.Select;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.Mobile_mConfigBL;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.BL.clsMainBL;
 import kalbefamily.crm.kalbe.kalbefamily.BL.tdeviceBL;
 //import kalbefamily.crm.kalbe.kalbefamily.Common.tdeviceData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
 
 public class FlashActivity extends clsActivity {
@@ -176,6 +180,21 @@ public class FlashActivity extends clsActivity {
                     startActivity(myIntent);
                 } else {
                     Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    clsStatusMenuStart _clsStatusMenuStart = null;
+
+                    try {
+                        _clsStatusMenuStart = new clsMainBL().checkUserActive(getApplicationContext());
+                        if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.FormLogin) {
+                            myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        } else if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
+                            myIntent = new Intent(getApplicationContext(), MainMenu.class);
+                            myIntent.putExtra("key_view", "main_menu");
+//                        startService(new Intent(getApplicationContext(), MyServiceNative.class));
+//                        startService(new Intent(getApplicationContext(), MyTrackingLocationService.class));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     try {
                         new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();

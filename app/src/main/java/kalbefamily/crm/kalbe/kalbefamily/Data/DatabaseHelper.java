@@ -13,6 +13,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 //import kalbefamily.crm.kalbe.kalbefamily.Common.Mobile_mConfigData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsAbsenData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDisplayPicture;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
@@ -32,6 +33,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     // the DAO object we use to access the SimpleData table
     protected Dao<mConfigData, Integer> mConfigDao;
+    protected Dao<clsAbsenData, Integer> userAbsenDao;
 
     protected Dao<clsUserLoginData, Integer> userLoginDao;
     protected RuntimeExceptionDao<clsUserLoginData, Integer> userLoginRuntimeDao = null;
@@ -57,6 +59,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTableIfNotExists(connectionSource, clsmVersionApp.class);
             TableUtils.createTableIfNotExists(connectionSource, clsDisplayPicture.class);
             TableUtils.createTableIfNotExists(connectionSource, mConfigData.class);
+            TableUtils.createTableIfNotExists(connectionSource, clsAbsenData.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,6 +74,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, clsmVersionApp.class, true);
             TableUtils.dropTable(connectionSource, clsDisplayPicture.class, true);
             TableUtils.dropTable(connectionSource, mConfigData.class, true);
+            TableUtils.dropTable(connectionSource, clsAbsenData.class, true);
 
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
@@ -88,6 +92,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.clearTable(connectionSource, clsmVersionApp.class);
             TableUtils.clearTable(connectionSource, clsDisplayPicture.class);
             TableUtils.clearTable(connectionSource, mConfigData.class);
+            TableUtils.clearTable(connectionSource, clsAbsenData.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +103,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.clearTable(connectionSource, clsUserLoginData.class);
             TableUtils.clearTable(connectionSource, clsmVersionApp.class);
             TableUtils.clearTable(connectionSource, clsDisplayPicture.class);
+            TableUtils.clearTable(connectionSource, clsAbsenData.class);
             // after we drop the old databases, we create the new ones
 //            onCreate(db, connectionSource);
         } catch (SQLException e) {
@@ -111,6 +117,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mConfigDao = getDao(mConfigData.class);
         }
         return mConfigDao;
+    }
+    public Dao<clsAbsenData,Integer> getUserAbsenDao() throws SQLException{
+        if (userAbsenDao == null){
+            userAbsenDao = getDao(clsAbsenData.class);
+        }
+        return userAbsenDao;
     }
 
     public Dao<clsUserLoginData, Integer> getUserLoginDao() throws SQLException {

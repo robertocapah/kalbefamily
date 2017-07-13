@@ -1,0 +1,177 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context="absenmobilehr.app.kalbenutritionals.absenmobilehr.Fragment.FragmentAbsen" >
+
+
+
+    <ScrollView
+        android:id="@+id/scrollViewABsen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtHDId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="txthdId"
+                android:visibility="gone" />
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/txtHDId"
+                android:layout_marginTop="10dp"
+                android:background="#bfbfbf" />
+            <TableLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tlAbesen"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/view1"
+                android:background="@drawable/bg_rounded_normal">
+
+                <TableRow
+                    android:background="#4CAF50"
+                    android:padding="5dp"
+                    android:gravity="center_horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Position"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:background="#ffffff"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Long" />
+                    <TextView
+                        android:id="@+id/tvLong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="" />
+                </TableRow>
+                <TableRow
+                    android:background="#ffffff"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lat" />
+                    <TextView
+                        android:id="@+id/tvLat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="" />
+                </TableRow>
+            </TableLayout>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tlAbesen"
+                android:layout_marginTop="10dp"
+                android:background="#bfbfbf" />
+
+            <LinearLayout android:background="@drawable/bg_rounded_normal" android:layout_marginTop="10dp" android:gravity="center" android:id="@+id/llimgview" android:layout_below="@+id/view3" android:weightSum="3" android:layout_height="wrap_content" android:layout_width="wrap_content" android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Image"/>
+                <ImageView
+                    android:id="@+id/imageViewCamera1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/ic_maps_local_see"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:id="@+id/imageViewCamera2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/ic_maps_local_see"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf"
+                android:layout_below="@+id/btnRefreshMaps"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/buttonCheckIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:text="Check In"
+                android:background="@drawable/btn_download_all"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/view4" />
+
+            <Button
+                android:id="@+id/btnRefreshMaps"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Refresh Location"
+                android:textColor="#FFF"
+                android:background="@drawable/btn_download_all"
+                android:layout_below="@+id/llimgview"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/viewMap"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="View Location on Map"
+                android:textColor="#FFF"
+                android:background="@drawable/btn_download_all"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/btnRefreshMaps" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

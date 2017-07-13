@@ -92,4 +92,22 @@ public class clsDeviceInfoRepo implements crud {
         }
         return items;
     }
+
+    public clsDeviceInfoData getDataDevice(Context context){
+        clsDeviceInfoRepo repo = new clsDeviceInfoRepo(context);
+        clsDeviceInfoData dataLogin =new clsDeviceInfoData();
+//        if(repo.CheckLoginNow()){
+        List<clsDeviceInfoData> listData= null;
+        try {
+            listData = (List<clsDeviceInfoData>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (clsDeviceInfoData data : listData){
+            dataLogin = data;
+        }
+
+//        }
+        return dataLogin;
+    }
 }

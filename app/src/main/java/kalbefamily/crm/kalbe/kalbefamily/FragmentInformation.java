@@ -37,10 +37,10 @@ public class FragmentInformation extends Fragment {
         clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
 //        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
 
-//        if (data != null){
-//            tvUsername.setText(data.getTxtName().toString());
-//            tvEmail.setText(data.getTxtEmail().toString());
-//        }
+        if (data != null){
+            tvUsername.setText(data.getTxtName().toString());
+            tvEmail.setText(data.getTxtEmail().toString());
+        }
 //        if (dataAbsen!=null){
 //            ctvStatus.setText("Checkin");
 //        }else{

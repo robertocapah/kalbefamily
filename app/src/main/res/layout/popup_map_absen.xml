@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context="kalbefamily.crm.kalbe.kalbefamily.MainMenu" >
+
+    <kalbefamily.crm.kalbe.kalbefamily.addons.maps.MyMapFragmentContainer
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="50dp"
+            android:gravity="center_horizontal" >
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="500dp"
+                android:apiKey="AIzaSyAil1Hru11V9TQ3jN8craSVQK5vgBYil8c"
+                android:clickable="true"
+                android:enabled="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+    </kalbefamily.crm.kalbe.kalbefamily.addons.maps.MyMapFragmentContainer>
+</RelativeLayout>

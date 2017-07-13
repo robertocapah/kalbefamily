@@ -2,6 +2,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -29,18 +30,30 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsAbsenData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDisplayPicture;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsmVersionApp;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsAbsenDataRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsDisplayPictureRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserLoginRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsmVersionAppRepo;
 
@@ -52,7 +65,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private clsUserLoginData dttAbsenUserData;
+    private clsAbsenData dttAbsenUserData;
 
     private TextView tvUsername, tvEmail;
     private CircleImageView ivProfile;
@@ -123,6 +136,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
         fragmentTransactionHome.replace(R.id.frame, homeFragment);
         fragmentTransactionHome.commit();
+        selectedId = 99;
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View vwHeader = navigationView.getHeaderView(0);
@@ -138,22 +152,29 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        if (tDisplayPictureData.size() > 0 && tDisplayPictureData.get(0).getImage() != null) {
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(tDisplayPictureData.get(0).getImage(), 0, tDisplayPictureData.get(0).getImage().length);
-//            ivProfile.setImageBitmap(bitmap);
-//        } else {
-//            ivProfile.setImageBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(),
-//                    R.drawable.profile));
-//        }
+        tvUsername.setText(_clsMainActivity.greetings() + dataLogin.get(0).getTxtName());
+        tvEmail.setText(dataLogin.get(0).getTxtEmail());
+        try {
+            tDisplayPictureData = (List<clsDisplayPicture>) new clsDisplayPictureRepo(getApplicationContext()).findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (tDisplayPictureData.size() > 0 && tDisplayPictureData.get(0).getImage() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(tDisplayPictureData.get(0).getImage(), 0, tDisplayPictureData.get(0).getImage().length);
+            ivProfile.setImageBitmap(bitmap);
+        } else {
+            ivProfile.setImageBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                    R.drawable.profile));
+        }
         ivProfile.setOnClickListener(this);
         Menu header = navigationView.getMenu();
-//        clsAbsenData dataAbsenAktif = new clsAbsenDataRepo(getApplicationContext()).getDataCheckinActive(getApplicationContext());
-//        if (dataAbsenAktif!=null){
-//            header.removeItem(R.id.absen);
-//            header.removeItem(R.id.logout);
-//        }else{
-//            header.removeItem(R.id.checkout);
-//        }
+        clsAbsenData dataAbsenAktif = new clsAbsenDataRepo(getApplicationContext()).getDataCheckinActive(getApplicationContext());
+        if (dataAbsenAktif!=null){
+            header.removeItem(R.id.absen);
+            header.removeItem(R.id.logout);
+        }else{
+            header.removeItem(R.id.checkout);
+        }
         SubMenu subMenuVersion = header.addSubMenu(R.id.groupVersion, 0, 3, "Version");
         try {
             subMenuVersion.add(getPackageManager().getPackageInfo(getPackageName(), 0).versionName + " \u00a9 KN-IT").setIcon(R.drawable.ic_android).setEnabled(false);
@@ -184,7 +205,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-//                                        logout();
+                                        logout();
 //                                        stopService(new Intent(getApplicationContext(), MyServiceNative.class));
 //                                        stopService(new Intent(getApplicationContext(), MyTrackingLocationService.class));
 //                                        AsyncCallLogOut task = new AsyncCallLogOut();
@@ -200,14 +221,14 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
                         final AlertDialog alertD = alertDialogBuilder.create();
                         alertD.show();
                         return true;
-//                    case R.id.absen:
-//                        toolbar.setTitle("Kuesioner / Quiz");
-//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                        FragmentAbsen fragmentKuesioner = new FragmentAbsen();
-//                        FragmentTransaction fragmentTransactionKuesioner = getSupportFragmentManager().beginTransaction();
-//                        fragmentTransactionKuesioner.replace(R.id.frame, fragmentKuesioner);
-//                        fragmentTransactionKuesioner.commit();
-//                        return true;
+                    case R.id.absen:
+                        toolbar.setTitle("Absen");
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        FragmentAbsen fragmentAbsen = new FragmentAbsen();
+                        FragmentTransaction fragmentTransactionKuesioner = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionKuesioner.replace(R.id.frame, fragmentAbsen);
+                        fragmentTransactionKuesioner.commit();
+                        return true;
                     case R.id.home:
                         toolbar.setTitle("Home");
 
@@ -286,6 +307,38 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        toolbar.setTitle(item.getTitle());
+
+        Class<?> fragmentClass;
+        try {
+            Fragment fragment;
+
+            fragmentClass = Class.forName("kalbefamily.crm.kalbe.kalbefamily" + String.valueOf(item.getTitle()).replaceAll("\\s+", ""));
+            fragment = (Fragment) fragmentClass.newInstance();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame, fragment);
+            fragmentTransaction.commit();
+
+            selectedId=id;
+
+            if (!isSubMenu) isSubMenu = true;
+            else isSubMenu = false;
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -296,13 +349,13 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
             if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
             } else {
-//                Intent intent = new Intent(this, CropDisplayPicture.class);
+                Intent intent = new Intent(this, CropDisplayPicture.class);
                 String strName = imageUri.toString();
                 intent.putExtra("uriPicture", strName);
                 startActivity(intent);
                 finish();
             }
-        } else if (requestCode == 100 || requestCode == 130) {
+        } else if (requestCode == 100 || requestCode == 130){
             for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                 fragment.onActivityResult(requestCode, resultCode, data);
             }
@@ -310,12 +363,67 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
 
     }
 
+    public void logout(){
+        final ProgressDialog Dialog = new ProgressDialog(MainMenu.this);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        String strLinkAPI = "http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/LogOut_J"; // http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/LogIn_J
+        // http://10.171.10.30/KN2015_PRM_V2.WEB/VisitPlan/API/VisitPlanAPI/LogOut_J
+//        String nameRole = selectedRole;
+        final JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("TxtGUI_trUserLogin", dataLogin.get(0).getTxtGUI());
+            resJson.put("TxtUserID", dataLogin.get(0).getTxtUserID());
+            resJson.put("TxtGUI_mVersionApp", dataInfo.get(0).getTxtVersion());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+        new VolleyUtils().makeJsonObjectRequest(MainMenu.this, strLinkAPI, mRequestBody,"Logging Out, Please Wait !", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    JSONObject jsonObject1 = null;
+                    try {
+                        jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtWarn");
+                        String result = jsn.getString("TxtResult");
+                        if (result.equals("1")){
+//                            new DatabaseHelper(getApplicationContext()).clearDataAfterLogout();
+                            DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+                            helper.clearDataAfterLogout();
+//                            helper.close();
+                            Intent nextScreen = new Intent(MainMenu.this, FlashActivity.class);
+                            startActivity(nextScreen);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_image:
-//                pickImage2();
+                pickImage2();
                 break;
         }
+    }
+
+    public void pickImage2()
+    {
+        CropImage.startPickImageActivity(this);
     }
 }

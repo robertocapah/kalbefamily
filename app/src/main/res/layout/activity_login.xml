@@ -105,10 +105,10 @@
                 <!--android:id="@+id/buttonLogin"-->
                 <!--android:layout_marginTop="10dp"-->
                 <!--android:background="@drawable/bg_edtext" />-->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtMemberID" />
+            <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/txtMemberID" />-->
             <Button
                 android:text="Login"
                 android:layout_width="match_parent"

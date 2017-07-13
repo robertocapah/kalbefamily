@@ -63,7 +63,6 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsmVersionAppRepo;
 
 public class LoginActivity extends clsActivity {
     private EditText txtMemberID;
-    private Button btnMember;
     private clsWarning _clsWarning;
     private GoogleApiClient client;
 
@@ -225,7 +224,7 @@ public class LoginActivity extends clsActivity {
             }
         });
 
-        txtMemberID=(EditText) findViewById(R.id.txtMemberID);
+//        txtMemberID=(EditText) findViewById(R.id.txtMemberID);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
         Button btnExit = (Button) findViewById(R.id.buttonExit);
@@ -318,7 +317,6 @@ public class LoginActivity extends clsActivity {
             resJson.put("TxtPassword", txtPassword1);
             resJson.put("TxtModel", dataInfo.get(0).getTxtModel());
             resJson.put("TxtDevice", dataInfo.get(0).getTxtDevice());
-            resJson.put("TxtDevice", dataInfo.get(0).getTxtDevice());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -341,13 +339,12 @@ public class LoginActivity extends clsActivity {
                         String result = jsn.getString("TxtResult");
 
                         if (result.equals("1")) {
-//                            Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
-                            JSONObject jsonObject2 = jsonObject1.getJSONObject("TxtData");
+                            JSONObject jsonObject2 = jsn.getJSONObject("TxtData");
                             JSONObject jsonDataUserLogin = jsonObject2.getJSONObject("UserLogin");
-                            String TxtNameApp = null;
+                            String nameApp = null;
                             try {
                                 List<clsmVersionApp> appInfo = (List<clsmVersionApp>) repoVersionApp.findAll();
-                                TxtNameApp = appInfo.get(0).getTxtNameApp();
+                                nameApp = appInfo.get(0).getTxtNameApp();
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
@@ -360,7 +357,7 @@ public class LoginActivity extends clsActivity {
                             String DtLastLogin = jsonDataUserLogin.getString("DtLastLogin");
                             String TxtDeviceId = jsonDataUserLogin.getString("TxtDeviceId");
                             clsUserLoginData data = new clsUserLoginData();
-                            data.setTxtNameApp(TxtNameApp);
+                            data.setTxtNameApp(nameApp);
                             data.setTxtGUI(TxtGUI);
                             data.setTxtUserID(TxtUserID);
                             data.setIdUserLogin(1);
@@ -368,33 +365,29 @@ public class LoginActivity extends clsActivity {
                             data.setTxtName(TxtName);
                             data.setTxtEmail(TxtEmail);
                             data.setEmployeeId(TxtEmpID);
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Calendar cal = Calendar.getInstance();
+//                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                            Calendar cal = Calendar.getInstance();
                             data.setDtLastLogin(DtLastLogin);
                             data.setTxtDeviceId(TxtDeviceId);
-//                            data.setTxtInsertedBy(TxtInsertedBy);
-//                            data.setDtInserted(dateFormat.format(cal.getTime()));
 
-                            repoLogin =new clsUserLoginRepo(getApplicationContext());
+                            repoLogin = new clsUserLoginRepo(getApplicationContext());
                             int i = 0;
-                            i = repoLogin.create(data);
-                            if(i > -1)
-                            {
+                            i = repoLogin.createOrUpdate(data);
+                            if (i > -1) {
                                 Log.d("Data info", "Data info berhasil di simpan");
-                                new clsActivity().showToast(getApplicationContext(),warn);
-//                                Intent myIntent = new Intent(LoginActivity.this, MainMenu.class);
-//                                myIntent.putExtra("keyMainMenu", "main_menu");
-//                                startActivity(myIntent);
+                                Intent myIntent = new Intent(LoginActivity.this, MainMenu.class);
+                                myIntent.putExtra("keyMainMenu", "main_menu");
+                                startActivity(myIntent);
                             }
                         } else {
-                            new clsActivity().showCustomToast(getApplicationContext(),warn,false);
+                            new clsActivity().showCustomToast(getApplicationContext(), warn, false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
 //                if(!status){
-//                    new clsActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
 //                }
             }
         });
