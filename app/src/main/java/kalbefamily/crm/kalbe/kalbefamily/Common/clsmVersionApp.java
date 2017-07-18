@@ -10,19 +10,39 @@ import java.io.Serializable;
  */
 @DatabaseTable
 public class clsmVersionApp implements Serializable {
-    @DatabaseField(id = true,columnName = "txtGUI")
+    @DatabaseField(columnName = "txtGUI")
     public String txtGUI;
+    @DatabaseField(id = true,columnName = "intMApplication")
+    public String intMApplication;
     @DatabaseField(columnName = "bitActive")
     public String bitActive;
     @DatabaseField(columnName = "txtNameApp")
     public String txtNameApp;
     @DatabaseField(columnName = "txtVersion")
     public String txtVersion;
-    @DatabaseField(columnName = "txtFile")
-    public String txtFile;
+    @DatabaseField(columnName = "txtType")
+    public String txtType;
+    @DatabaseField(columnName = "txtLink")
+    public String txtLink;
 
     public void mVersionApp(){
 
+    }
+
+    public String getTxtLink() {
+        return txtLink;
+    }
+
+    public void setTxtLink(String txtLink) {
+        this.txtLink = txtLink;
+    }
+
+    public String getIntMApplication() {
+        return intMApplication;
+    }
+
+    public void setIntMApplication(String intMApplication) {
+        this.intMApplication = intMApplication;
     }
 
     public String getBitActive() {
@@ -57,11 +77,11 @@ public class clsmVersionApp implements Serializable {
         this.txtVersion = txtVersion;
     }
 
-    public String getTxtFile() {
-        return txtFile;
+    public String getTxtType() {
+        return txtType;
     }
 
-    public void setTxtFile(String txtFile) {
-        this.txtFile = txtFile;
+    public void setTxtType(String txtType) {
+        this.txtType = txtType;
     }
 }

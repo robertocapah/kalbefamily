@@ -100,7 +100,7 @@ public class clsUserLoginData implements Serializable{
 
     @DatabaseField(id = true,columnName = "clsUserLogin")
     public Integer idUserLogin;
-    @DatabaseField(columnName = "txtGUI")
+    @DatabaseField(columnName = "intMApplication")
     public String txtGUI;
     @DatabaseField(columnName = "txtNameApp")
     public String txtNameApp;
@@ -123,7 +123,7 @@ public class clsUserLoginData implements Serializable{
 
     public String Property_dbName = "clsUserLogin";
     public String Property_clsUserLogin = "clsUserLogin";
-    public String Property_txtGUI = "txtGUI";
+    public String Property_txtGUI = "intMApplication";
     public String Property_txtNameApp = "txtNameApp";
     public String Property_employeeId = "employeeId";
     public String Property_txtUserId = "txtUserId";

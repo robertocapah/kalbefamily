@@ -38,42 +38,42 @@ public class mConfigRepo {
         data1.setTxtValue("5");
         data1.setTxtDefaultValue("5");
         data1.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data1);
+        helper.getmConfigDao().createOrUpdate(data1);
         mConfigData data2 = new mConfigData();
         data2.setIntId(2);
         data2.setTxtName("API_LOGIN");
         data2.setTxtValue("http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/LogIn_J");
         data2.setTxtDefaultValue("http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/LogIn_J");
         data2.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data2);
+        helper.getmConfigDao().createOrUpdate(data2);
         mConfigData data3 = new mConfigData();
         data3.setIntId(3);
         data3.setTxtName("API_VERSION");
         data3.setTxtValue("http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J");
         data3.setTxtDefaultValue("http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J");
         data3.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data3);
+        helper.getmConfigDao().createOrUpdate(data3);
         mConfigData data4 = new mConfigData();
         data4.setIntId(4);
         data4.setTxtName("Domain Kalbe");
         data4.setTxtValue("ONEKALBE.LOCAL");
         data4.setTxtDefaultValue("ONEKALBE.LOCAL");
         data4.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data4);
+        helper.getmConfigDao().createOrUpdate(data4);
         mConfigData data5 = new mConfigData();
         data5.setIntId(5);
         data5.setTxtName("Application Name");
         data5.setTxtValue("Android - Call Plan BR Mobile");
         data5.setTxtDefaultValue("Android - Call Plan BR Mobile");
         data5.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data5);
+        helper.getmConfigDao().createOrUpdate(data5);
         mConfigData data6 = new mConfigData();
         data6.setIntId(6);
         data6.setTxtName("Text Footer");
         data6.setTxtValue("Copyright &copy; KN IT 2017");
         data6.setTxtDefaultValue("Copyright &copy; KN IT 2017");
         data6.setIntEditAdmin("1");
-        helper.getmConfigDao().create(data6);
+        helper.getmConfigDao().createOrUpdate(data6);
     }
 
     public List<mConfigData> findByName(String name) throws SQLException {

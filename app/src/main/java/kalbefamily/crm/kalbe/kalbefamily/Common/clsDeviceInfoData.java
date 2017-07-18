@@ -18,12 +18,12 @@ public class clsDeviceInfoData implements Serializable {
         this.idDevice = idDevice;
     }
 
-    public String getTxtGUI() {
-        return txtGUI;
+    public String getIntMApplication() {
+        return intMApplication;
     }
 
-    public void setTxtGUI(String txtGUI) {
-        this.txtGUI = txtGUI;
+    public void setIntMApplication(String intMApplication) {
+        this.intMApplication = intMApplication;
     }
 
     public String getTxtNameApp() {
@@ -50,12 +50,12 @@ public class clsDeviceInfoData implements Serializable {
         this.txtVersion = txtVersion;
     }
 
-    public String getTxtFile() {
-        return txtFile;
+    public String getTxtType() {
+        return txtType;
     }
 
-    public void setTxtFile(String txtFile) {
-        this.txtFile = txtFile;
+    public void setTxtType(String txtType) {
+        this.txtType = txtType;
     }
 
     public String getTxtDevice() {
@@ -82,24 +82,44 @@ public class clsDeviceInfoData implements Serializable {
         this.txtUserId = txtUserId;
     }
 
+    public String getTxtGUI() {
+        return txtGUI;
+    }
+
+    public void setTxtGUI(String txtGUI) {
+        this.txtGUI = txtGUI;
+    }
+
+    public String getTxtLink() {
+        return txtLink;
+    }
+
+    public void setTxtLink(String txtLink) {
+        this.txtLink = txtLink;
+    }
+
+    @DatabaseField(columnName = "txtGUI")
+    public String txtGUI;
     @DatabaseField(columnName = "idDevice")
     public String idDevice;
-    @DatabaseField(id = true, columnName = "txtGUI")
-    public String txtGUI;
+    @DatabaseField(id = true,columnName = "intMApplication")
+    public String intMApplication;
     @DatabaseField(columnName = "txtNameApp")
     public String txtNameApp;
     @DatabaseField(columnName = "bitActive")
     public String bitActive;
     @DatabaseField(columnName = "txtVersion")
     public String txtVersion;
-    @DatabaseField(columnName = "txtFile")
-    public String txtFile;
+    @DatabaseField(columnName = "txtType")
+    public String txtType;
     @DatabaseField(columnName = "txtDevice")
     public String txtDevice;
     @DatabaseField(columnName = "txtModel")
     public String txtModel;
     @DatabaseField(columnName = "txtUserId")
     public String txtUserId;
+    @DatabaseField(columnName = "txtLink")
+    public String txtLink;
 
     public clsDeviceInfoData() {
 

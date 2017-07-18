@@ -1,29 +1,21 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ParseException;
-import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,21 +26,15 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
-import kalbefamily.crm.kalbe.kalbefamily.BL.tdeviceBL;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsWarning;
@@ -396,7 +382,8 @@ public class LoginActivity extends clsActivity {
     public void checkVersion() {
         final ProgressDialog Dialog = new ProgressDialog(LoginActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String strLinkAPI = "http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J";
+        String strLinkAPI = "http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J"; // http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/
+        // http://10.171.11.87:8010/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J
         JSONObject resJson = new JSONObject();
         try {
             resJson.put("TxtVersion", pInfo.versionName);
@@ -417,14 +404,14 @@ public class LoginActivity extends clsActivity {
 
             @Override
             public void onResponse(String response, Boolean status, String strErrorMsg) {
-                if (response != null){
+                if (response != null) {
                     try {
                         JSONObject jsonObject1 = new JSONObject(response);
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("validJson");
 
                         String result = jsonObject2.getString("TxtResult");
                         String txtWarn = jsonObject2.getString("TxtWarn");
-                        if (result.equals("1")){
+                        if (result.equals("1")) {
                             JSONObject jsonObject3 = jsonObject2.getJSONObject("TxtData");
                             String txtGUI = jsonObject3.getString("TxtGUI");
                             String txtNameApp = jsonObject3.getString("TxtNameApp");
@@ -435,21 +422,16 @@ public class LoginActivity extends clsActivity {
 //                            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 //                            String imeiNumber = tm.getDeviceId();
                             clsDeviceInfoData data = new clsDeviceInfoData();
-                            data.setTxtGUI(txtGUI);
-                            data.setTxtNameApp(txtNameApp);
-                            data.setTxtDevice(android.os.Build.DEVICE);
-                            data.setTxtFile(txtFile);
-                            data.setTxtVersion(txtVersion);
-                            data.setBitActive(bitActive);
-                            data.setIdDevice("");
-                            data.setTxtModel(android.os.Build.MANUFACTURER+" "+android.os.Build.MODEL);
                             clsmVersionApp dataVersion = new clsmVersionApp();
                             dataVersion.setTxtGUI(txtGUI);
                             dataVersion.setTxtNameApp(txtNameApp);
                             dataVersion.setTxtVersion(txtVersion);
-                            dataVersion.setTxtFile(txtFile);
+                            dataVersion.setTxtType(txtFile);
                             dataVersion.setBitActive(bitActive);
-                            repoDeviceInfo =new clsDeviceInfoRepo(getApplicationContext());
+                            data.setTxtDevice(android.os.Build.DEVICE);
+                            data.setIdDevice("");
+                            data.setTxtModel(android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL);
+                            repoDeviceInfo = new clsDeviceInfoRepo(getApplicationContext());
                             repoVersionApp = new clsmVersionAppRepo(getApplicationContext());
                             int i = 0;
                             int j = 0;
@@ -459,12 +441,11 @@ public class LoginActivity extends clsActivity {
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
-                            if(i > -1)
-                            {
+                            if (i > -1 && j > -1) {
                                 Log.d("Data info", "Data info berhasil di simpan");
                                 status = true;
                             }
-                        }else{
+                        } else {
                             Toast.makeText(getApplicationContext(), txtWarn, Toast.LENGTH_SHORT).show();
                         }
 
@@ -476,11 +457,17 @@ public class LoginActivity extends clsActivity {
                         e.printStackTrace();
                     }
                 }
-                if(!status){
+                if (!status) {
                     new clsActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
                 }
             }
         });
+
+        /*try {
+            JSONObject jsonObject1 = new JSONObject(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 
 //    private class AsyncCallLogin extends AsyncTask<JSONObject, Void, JSONObject> {

@@ -179,13 +179,13 @@ public class FlashActivity extends clsActivity {
                     finish();
                     startActivity(myIntent);
                 } else {
-                    Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent myIntent = new Intent(getApplicationContext(), MemberActivity.class);
                     clsStatusMenuStart _clsStatusMenuStart = null;
 
                     try {
                         _clsStatusMenuStart = new clsMainBL().checkUserActive(getApplicationContext());
                         if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.FormLogin) {
-                            myIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            myIntent = new Intent(getApplicationContext(), MemberActivity.class);
                         } else if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
                             myIntent = new Intent(getApplicationContext(), MainMenu.class);
                             myIntent.putExtra("key_view", "main_menu");
