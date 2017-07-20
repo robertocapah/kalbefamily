@@ -1,5 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -21,57 +22,47 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLException;
+import java.util.List;
+
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 
 /**
  * Created by Rian Andrivani on 7/19/2017.
  */
 
-public class KontakDetailActivity extends AppCompatActivity {
+public class HomeMenu extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
+    private TextView tvUsername, tvEmail;
     PackageInfo pInfo = null;
     int selectedId;
     Boolean isSubMenu = false;
+    List<clsUserMember> dataMember = null;
+
     private GoogleApiClient client;
     clsActivity _clsMainActivity = new clsActivity();
-
-//    @Override
-//    public void onBackPressed() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//
-//        builder.setTitle("Exit");
-//        builder.setMessage("Do you want to exit?");
-//
-//        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
-//
-//            public void onClick(DialogInterface dialog, int which) {
-//                Intent intent = new Intent(KontakDetailActivity.this, CardViewActivity.class);
-//                finish();
-//                startActivity(intent);
-//            }
-//        });
-//
-//        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        AlertDialog alert = builder.create();
-//        alert.show();
-//    }
 
     @Override
     public void onBackPressed() {
@@ -113,7 +104,7 @@ public class KontakDetailActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main_contact);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Contact Detail");
+        toolbar.setTitle("Home");
         setSupportActionBar(toolbar);
 
         FragmentInfoContact ContactFragment = new FragmentInfoContact();
@@ -124,6 +115,17 @@ public class KontakDetailActivity extends AppCompatActivity {
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View vwHeader = navigationView.getHeaderView(0);
+        tvUsername = (TextView) vwHeader.findViewById(R.id.username);
+        tvEmail = (TextView) vwHeader.findViewById(R.id.email);
+        clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
+        try {
+            dataMember = (List<clsUserMember>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
+        tvEmail.setText(dataMember.get(0).getTxtMemberId());
 
         Menu header = navigationView.getMenu();
         SubMenu subMenuVersion = header.addSubMenu(R.id.groupVersion, 0, 3, "Version");
@@ -142,7 +144,7 @@ public class KontakDetailActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (menuItem.getItemId()) {
                     case R.id.logoutContact:
-                        LayoutInflater layoutInflater = LayoutInflater.from(KontakDetailActivity.this);
+                        LayoutInflater layoutInflater = LayoutInflater.from(HomeMenu.this);
                         final View promptView = layoutInflater.inflate(R.layout.confirm_data, null);
 
                         final TextView _tvConfirm = (TextView) promptView.findViewById(R.id.tvTitle);
@@ -150,13 +152,14 @@ public class KontakDetailActivity extends AppCompatActivity {
                         _tvDesc.setVisibility(View.INVISIBLE);
                         _tvConfirm.setText("Log Out Application ?");
                         _tvConfirm.setTextSize(18);
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(KontakDetailActivity.this);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeMenu.this);
                         alertDialogBuilder.setView(promptView);
                         alertDialogBuilder
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-//                                        logout();
+                                        logout();
+                                        new clsActivity().showCustomToast(getApplicationContext(), "Logout, Success", true);
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -233,5 +236,13 @@ public class KontakDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        Intent intent = new Intent(HomeMenu.this, MemberActivity.class);
+        DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+        helper.clearDataAfterLogout();
+        finish();
+        startActivity(intent);
     }
 }

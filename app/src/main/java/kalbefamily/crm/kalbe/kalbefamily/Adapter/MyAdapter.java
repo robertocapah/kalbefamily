@@ -1,7 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily.Adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -19,7 +18,7 @@ import java.util.List;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
-import kalbefamily.crm.kalbe.kalbefamily.KontakDetailActivity;
+import kalbefamily.crm.kalbe.kalbefamily.HomeMenu;
 import kalbefamily.crm.kalbe.kalbefamily.Models.TitleChild;
 import kalbefamily.crm.kalbe.kalbefamily.Models.TitleParent;
 import kalbefamily.crm.kalbe.kalbefamily.R;
@@ -97,7 +96,7 @@ public class MyAdapter extends ExpandableRecyclerAdapter<TitleParentViewHolder,T
                     Log.d("Data info", "Data member Berhasil Disimpan");
                 }
 //                System.exit(0);
-                Intent intent = new Intent(context2, KontakDetailActivity.class);
+                Intent intent = new Intent(context2, HomeMenu.class);
                 activity.finish();
                 context2.startActivity(intent);
             }

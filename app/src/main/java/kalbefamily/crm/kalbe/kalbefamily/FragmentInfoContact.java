@@ -14,10 +14,7 @@ import com.owater.library.CircleTextView;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
-import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserLoginRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 /**
@@ -26,7 +23,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 public class FragmentInfoContact extends Fragment {
     View v;
-    TextView tvUsername, tvBranchOutlet, tvMember;
+    TextView tvUsername, tvAlamat, tvMember;
     Context context;
     CircleTextView ctvStatus;
     List<clsUserMember> dataMember = null;
@@ -38,18 +35,19 @@ public class FragmentInfoContact extends Fragment {
         v = inflater.inflate(R.layout.activity_kontak_detail,container,false);
         context = getActivity().getApplicationContext();
         tvUsername = (TextView) v.findViewById(R.id.tvUsername);
-        tvBranchOutlet = (TextView) v.findViewById(R.id.tvBranchOutlet);
+        tvAlamat = (TextView) v.findViewById(R.id.tvAlamat);
         tvMember = (TextView) v.findViewById(R.id.tvMember);
 //        ctvStatus = (CircleTextView) v.findViewById(R.id.status);
 //        clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
 //        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
         try {
-            clsUserMemberRepo repoUserMember = new clsUserMemberRepo(context);
+            repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         tvUsername.setText(dataMember.get(0).getTxtNama().toString());
+        tvAlamat.setText(dataMember.get(0).getTxtAlamat().toString());
         tvMember.setText(dataMember.get(0).getTxtMemberId().toString());
 //        if (data != null){
 //            tvUsername.setText(data.getTxtName().toString());

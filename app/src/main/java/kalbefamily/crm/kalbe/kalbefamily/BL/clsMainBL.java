@@ -12,7 +12,9 @@ import java.util.UUID;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserLoginRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 
 /**
@@ -31,19 +33,22 @@ public class clsMainBL {
     }
     public clsStatusMenuStart checkUserActive(Context context) throws ParseException {
         clsUserLoginRepo repo = new clsUserLoginRepo(context);
+        clsUserMemberRepo repoUser = new clsUserMemberRepo(context);
         clsStatusMenuStart _clsStatusMenuStart =new clsStatusMenuStart();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         String now = dateFormat.format(cal.getTime()).toString();
 //        if(repo.CheckLoginNow()){
         List<clsUserLoginData> listData= null;
+        List<clsUserMember> listDataMember = null;
         try {
             listData = (List<clsUserLoginData>) repo.findAll();
+            listDataMember = (List<clsUserMember>) repoUser.findAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        for (clsUserLoginData data : listData){
-            if (data.dtLastLogin.equals(now)){
+        for (clsUserMember data : listDataMember){
+            if (!data.getTxtKontakId().equals(null)){
                 _clsStatusMenuStart.set_intStatus(enumStatusMenuStart.UserActiveLogin);
             }
         }

@@ -11,7 +11,7 @@
             android:checked="true"
             android:icon="@drawable/ic_home_black"
             android:orderInCategory="0"
-            android:title="Contact"
+            android:title="Home"
             app:actionLayout="@layout/menu_counter"/>
 
         <item

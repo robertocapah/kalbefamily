@@ -32,7 +32,7 @@ public class TitleCreator extends AppCompatActivity {
 
         for(clsUserMember data : dataMember)
         {
-            TitleParent title = new TitleParent(String.format("Kontak Id : " + data.getTxtKontakId()));
+            TitleParent title = new TitleParent(String.format("Nama : " + data.getTxtNama()));
             _titleParents.add(title);
         }
     }

@@ -187,8 +187,8 @@ public class FlashActivity extends clsActivity {
                         if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.FormLogin) {
                             myIntent = new Intent(getApplicationContext(), MemberActivity.class);
                         } else if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
-                            myIntent = new Intent(getApplicationContext(), MainMenu.class);
-                            myIntent.putExtra("key_view", "main_menu");
+                            myIntent = new Intent(getApplicationContext(), HomeMenu.class);
+                            myIntent.putExtra("key_view", "home_menu");
 //                        startService(new Intent(getApplicationContext(), MyServiceNative.class));
 //                        startService(new Intent(getApplicationContext(), MyTrackingLocationService.class));
                         }

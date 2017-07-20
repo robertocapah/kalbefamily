@@ -1,6 +1,7 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Adapter.MyAdapter;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Models.TitleChild;
 import kalbefamily.crm.kalbe.kalbefamily.Models.TitleCreator;
 import kalbefamily.crm.kalbe.kalbefamily.Models.TitleParent;
@@ -28,6 +31,15 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 public class CardViewActivity extends AppCompatActivity {
     RecyclerView recyclerView;
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(CardViewActivity.this, MemberActivity.class);
+        DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+        helper.refreshData();
+        finish();
+        startActivity(intent);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -65,7 +77,7 @@ public class CardViewActivity extends AppCompatActivity {
         int i = 0;
         for(TitleParent title:titles ) {
             List<Object> childList = new ArrayList<>();
-            childList.add(new TitleChild("Member : " +dataMember.get(i).txtMemberId ,"Nama : " +dataMember.get(i).txtNama));
+            childList.add(new TitleChild("Alamat : " +dataMember.get(i).txtAlamat ,"Jenis Kelamin : " +dataMember.get(i).txtJenisKelamin));
             title.setChildObjectList(childList);
             parentObject.add(title);
             i++;

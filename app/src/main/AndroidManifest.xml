@@ -71,7 +71,7 @@
         <activity android:name=".MemberActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".CardViewActivity" />
-        <activity android:name=".KontakDetailActivity" />
+        <activity android:name=".HomeMenu" />
     </application>
 
 </manifest>
