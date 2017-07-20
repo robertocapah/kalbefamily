@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
-        app:menu="@menu/drawer"
+        app:menu="@menu/drawer_contact"
         />
 
 </android.support.v4.widget.DrawerLayout>

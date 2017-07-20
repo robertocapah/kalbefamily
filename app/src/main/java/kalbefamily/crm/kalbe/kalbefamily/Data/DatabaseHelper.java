@@ -105,6 +105,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    public void refreshData(){
+        Log.i(DatabaseHelper.class.getName(), "onUpgrade");
+        try {
+            TableUtils.clearTable(connectionSource, clsUserMember.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void clearDataAfterLogout(){
         try {
             TableUtils.clearTable(connectionSource, clsUserLoginData.class);

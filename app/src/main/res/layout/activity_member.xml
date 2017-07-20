@@ -48,12 +48,12 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Member Id"
+                android:inputType="number"
+                android:hint="Phone Number"
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:id="@+id/txtMemberId"
+                android:id="@+id/txtNoTelp"
                 android:background="@drawable/bg_edtext"
                 android:drawableRight="@mipmap/ic_username"
                 />

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/groupListMenu">
+
+        <item
+            android:id="@+id/contact"
+            android:checked="true"
+            android:icon="@drawable/ic_home_black"
+            android:orderInCategory="0"
+            android:title="Contact"
+            app:actionLayout="@layout/menu_counter"/>
+
+        <item
+            android:id="@+id/logoutContact"
+            android:orderInCategory="0"
+            android:title="Logout"
+            app:actionLayout="@layout/menu_counter"/>
+
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/groupVersion">
+
+    </group>
+</menu>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,12 +46,12 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsmVersionAppRepo;
  * Created by Rian Andrivani on 7/17/2017.
  */
 
-public class MemberActivity extends clsActivity {
-    private EditText txtMemberID;
+public class MemberActivity extends AppCompatActivity {
+    private EditText txtNoTelp;
     private clsWarning _clsWarning;
     private GoogleApiClient client;
 
-    private String txtMember;
+    private String txtTelp;
     private String role = "Role";
     private String[] roles = new String[1];
     ProgressDialog progress;
@@ -80,10 +81,11 @@ public class MemberActivity extends clsActivity {
 
             public void onClick(DialogInterface dialog, int which) {
                 finish();
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                System.exit(0);
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
             }
         });
 
@@ -116,8 +118,8 @@ public class MemberActivity extends clsActivity {
         imgBanner.setScaleType(ImageView.ScaleType.CENTER_CROP);
         txtHDId = (TextView) findViewById(R.id.txtHDId);
         txtHDId2 = (TextView) findViewById(R.id.txtHDId2);
-        txtMemberID = (EditText) findViewById(R.id.txtMemberId);
-        txtMemberID.setOnKeyListener(new View.OnKeyListener() {
+        txtNoTelp = (EditText) findViewById(R.id.txtNoTelp);
+        txtNoTelp.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -138,15 +140,12 @@ public class MemberActivity extends clsActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 intProcesscancel = 0;
-                if (txtMemberID.getText().length() == 0) {
+                if (txtNoTelp.getText().length() == 0) {
 //                    showToast(LoginActivity.this, "Please input username");
                     Toast.makeText(getApplicationContext(), "Please input Username", Toast.LENGTH_LONG).show();
 
                 } else {
-                    txtMember = txtMemberID.getText().toString();
-//                    Intent myIntent = new Intent(LoginActivity.this, MainMenu.class);
-//                    myIntent.putExtra("keyMainMenu", "main_menu");
-//                    startActivity(myIntent);
+                    txtTelp = txtNoTelp.getText().toString();
                     UserMember();
                 }
             }
@@ -221,7 +220,7 @@ public class MemberActivity extends clsActivity {
     public void UserMember() {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        txtMember = txtMemberID.getText().toString();
+        txtTelp = txtNoTelp.getText().toString();
         String strLinkAPI = "http://10.171.11.98/WebApi2/KF/GetDetailKontak";
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
@@ -237,7 +236,7 @@ public class MemberActivity extends clsActivity {
         try {
 //            resJson.put("TxtVersion", dataInfoVersion.get(0).getTxtVersion());
 //            resJson.put("TxtGUI_mVersionApp", dataInfoVersion.get(0).getTxtGUI());
-            resJson.put("txtMemberIdOrTelpId", txtMember);
+            resJson.put("txtMemberIdOrTelpId", txtTelp);
             resJson.put("TxtModel", dataInfo.get(0).getTxtModel());
             resJson.put("TxtDevice", dataInfo.get(0).getTxtDevice());
         } catch (JSONException e) {
@@ -278,54 +277,18 @@ public class MemberActivity extends clsActivity {
                                 dataUser.setTxtAlamat(txtAlamat);
                                 dataUser.setTxtJenisKelamin(txtJenisKelamin);
 
-//                                repoUserMember = new clsUserMemberRepo(getApplicationContext());
+                                repoUserMember = new clsUserMemberRepo(getApplicationContext());
 //
-//                                int h = 0;
-//                                h = repoUserMember.createOrUpdate(dataUser);
-//                                if(h > -1)
-//                                {
-//                                    Log.d("Data info", "Data info berhasil di simpan");
+                                int h = 0;
+                                h = repoUserMember.createOrUpdate(dataUser);
+                                if(h > -1) {
+                                    Log.d("Data info", "Data member valid");
 //                                    status = true;
-//                                }
+                                }
                             }
-//                            String nameApp = null;
-//                            try {
-//                                List<clsmVersionApp> appInfo = (List<clsmVersionApp>) repoVersionApp.findAll();
-//                                nameApp = appInfo.get(0).getTxtNameApp();
-//                            } catch (SQLException e) {
-//                                e.printStackTrace();
-//                            }
-//                            String TxtGUI = jsonDataUserLogin.getString("TxtGUI");
-//                            String TxtUserID = jsonDataUserLogin.getString("TxtUserID");
-//                            String TxtUserName = jsonDataUserLogin.getString("TxtUserName");
-//                            String TxtName = jsonDataUserLogin.getString("TxtName");
-//                            String TxtEmail = jsonDataUserLogin.getString("TxtEmail");
-//                            String TxtEmpID = jsonDataUserLogin.getString("TxtEmpID");
-//                            String DtLastLogin = jsonDataUserLogin.getString("DtLastLogin");
-//                            String TxtDeviceId = jsonDataUserLogin.getString("TxtDeviceId");
-//                            clsUserLoginData data = new clsUserLoginData();
-//                            data.setTxtNameApp(nameApp);
-//                            data.setTxtGUI(TxtGUI);
-//                            data.setTxtUserID(TxtUserID);
-//                            data.setIdUserLogin(1);
-//                            data.setTxtUserName(TxtUserName);
-//                            data.setTxtName(TxtName);
-//                            data.setTxtEmail(TxtEmail);
-//                            data.setEmployeeId(TxtEmpID);
-////                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-////                            Calendar cal = Calendar.getInstance();
-//                            data.setDtLastLogin(DtLastLogin);
-//                            data.setTxtDeviceId(TxtDeviceId);
-//
-//                            repoLogin = new clsUserLoginRepo(getApplicationContext());
-//                            int i = 0;
-//                            i = repoLogin.createOrUpdate(data);
-//                            if (i > -1) {
-//                                Log.d("Data info", "Data info berhasil di simpan");
-//                                Intent myIntent = new Intent(MemberActivity.this, MainMenu.class);
-//                                myIntent.putExtra("keyMainMenu", "main_menu");
-//                                startActivity(myIntent);
-//                            }
+                            Intent intent = new Intent(MemberActivity.this, CardViewActivity.class);
+                            finish();
+                            startActivity(intent);
                         } else {
                             new clsActivity().showCustomToast(getApplicationContext(), warn, false);
                         }
