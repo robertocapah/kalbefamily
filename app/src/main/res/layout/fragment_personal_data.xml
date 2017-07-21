@@ -1,0 +1,329 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:background="#ffffff"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical|top"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp" >
+
+    <ScrollView
+        android:id="@+id/scroll_personalData"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/lnQuantity"
+            android:padding="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtHDId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="txthdId"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtKontakId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kontak ID"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <TextView
+                android:id="@+id/etKontakId"
+                android:layout_below="@+id/txtKontakId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kontak ID Member"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/etKontakId"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtMemberId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Member ID"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <TextView
+                android:id="@+id/etMemberId"
+                android:layout_below="@+id/txtMemberId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ID_Member"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/etMemberId"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etNama"
+                android:layout_below="@+id/txtNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="15dp"
+                android:inputType="textMultiLine"
+                android:background="@drawable/bg_edtext"
+                android:drawableRight="@mipmap/ic_action_assignment"/>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_below="@+id/txtNoKtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="*Masukan Email"
+                android:textSize="15dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/bg_edtext"
+                android:drawableRight="@mipmap/ic_action_assignment" />
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtTelpon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Telpon"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etTelpon"
+                android:layout_below="@+id/txtTelpon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="*Masukan No Telpon"
+                android:textSize="15dp"
+                android:inputType="number"
+                android:background="@drawable/bg_edtext"
+                android:drawableRight="@mipmap/ic_action_assignment" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtAlamat"
+                android:layout_below="@id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alamat"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etAlamat"
+                android:layout_below="@+id/txtAlamat"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:ems="10"
+                android:textSize="15dp"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:background="@drawable/bg_edtext" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_below="@+id/txtviewDateQuantity"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtJenisKelamin"
+                android:layout_below="@id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jenis Kelamin"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Laki-Laki"
+                    android:layout_below="@+id/radioGroup"
+                    android:layout_alignLeft="@+id/radioGroup" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="90dp"
+                    android:paddingRight="@dimen/action_button_margin"
+                    android:text="Perempuan"
+                    android:layout_below="@+id/radioGroup"
+                    android:layout_alignLeft="@+id/radioGroup" />
+
+            </RadioGroup>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/etMemberId"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
+                android:id="@+id/txtNoKtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No KTP"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etNoKTP"
+                android:layout_below="@+id/txtNoKtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="*Masukan No KTP"
+                android:textSize="15dp"
+                android:inputType="number"
+                android:background="@drawable/bg_edtext"
+                android:drawableRight="@mipmap/ic_action_assignment" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#bfbfbf" />
+
+            <LinearLayout
+                android:background="@drawable/bg_rounded_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Foto KTP"/>
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/ic_maps_local_see"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_weight="1"/>
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/ic_maps_local_see"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view5"
+                android:layout_below="@+id/radioButton2"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#bfbfbf" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnUpdate"
+                    android:layout_below="@+id/view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/white"
+                    android:text="Update Personal Data"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/btn_download_all"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

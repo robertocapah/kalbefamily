@@ -15,6 +15,15 @@
             app:actionLayout="@layout/menu_counter"/>
 
         <item
+            android:id="@+id/personalData"
+            android:checked="true"
+            android:icon="@drawable/ic_person"
+            android:orderInCategory="0"
+            android:title="Personal Data"
+            app:actionLayout="@layout/menu_counter"
+            />
+
+        <item
             android:id="@+id/logoutContact"
             android:orderInCategory="0"
             android:title="Logout"

@@ -125,7 +125,11 @@ public class HomeMenu extends AppCompatActivity {
         }
 
         tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
-        tvEmail.setText(dataMember.get(0).getTxtMemberId());
+        if (dataMember.get(0).getTxtEmail().equals("")) {
+            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
+        } else {
+            tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        }
 
         Menu header = navigationView.getMenu();
         SubMenu subMenuVersion = header.addSubMenu(R.id.groupVersion, 0, 3, "Version");
@@ -171,7 +175,7 @@ public class HomeMenu extends AppCompatActivity {
                         alertD.show();
                         return true;
                     case R.id.contact:
-                        toolbar.setTitle("Contact Detail");
+                        toolbar.setTitle("Home");
 
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
@@ -182,6 +186,16 @@ public class HomeMenu extends AppCompatActivity {
                         selectedId = 99;
 
                         return true;
+                    case R.id.personalData:
+                        toolbar.setTitle("Personal data");
+
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
+                        FragmentPersonalData fragmentPersonalData = new FragmentPersonalData();
+                        FragmentTransaction fragmentTransactionPersonalData = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionPersonalData.replace(R.id.frame, fragmentPersonalData);
+                        fragmentTransactionPersonalData.commit();
+                        selectedId = 99;
                 }
                 return false;
             }

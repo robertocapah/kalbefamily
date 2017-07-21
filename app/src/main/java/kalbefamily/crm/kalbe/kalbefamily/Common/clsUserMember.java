@@ -50,6 +50,30 @@ public class clsUserMember implements Serializable {
         this.txtJenisKelamin = txtJenisKelamin;
     }
 
+    public String getTxtEmail() {
+        return txtEmail;
+    }
+
+    public void setTxtEmail(String txtEmail) {
+        this.txtEmail = txtEmail;
+    }
+
+    public String getTxtNoTelp() {
+        return txtNoTelp;
+    }
+
+    public void setTxtNoTelp(String txtNoTelp) {
+        this.txtNoTelp = txtNoTelp;
+    }
+
+    public String getTxtNoKTP() {
+        return txtNoKTP;
+    }
+
+    public void setTxtNoKTP(String txtNoKTP) {
+        this.txtNoKTP = txtNoKTP;
+    }
+
     @DatabaseField(id = true,columnName = "txtKontakId")
     public String txtKontakId;
     @DatabaseField(columnName = "txtMemberId")
@@ -60,6 +84,12 @@ public class clsUserMember implements Serializable {
     public String txtAlamat;
     @DatabaseField(columnName = "txtJenisKelamin")
     public String txtJenisKelamin;
+    @DatabaseField(columnName = "txtEmail")
+    public String txtEmail;
+    @DatabaseField(columnName = "txtNoTelp")
+    public String txtNoTelp;
+    @DatabaseField(columnName = "txtNoKTP")
+    public String txtNoKTP;
 
     public String Property_txtKontakId = "txtKontakId";
     public String Property_txtMemberId = "txtMemberId";

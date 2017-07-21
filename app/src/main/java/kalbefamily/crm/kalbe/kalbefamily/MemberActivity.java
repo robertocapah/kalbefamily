@@ -269,6 +269,9 @@ public class MemberActivity extends AppCompatActivity {
                                 String txtNama = jsonobject.getString("TxtNama");
                                 String txtAlamat = jsonobject.getString("TxtAlamat");
                                 String txtJenisKelamin = jsonobject.getString("TxtJenisKelamin");
+                                String txtEmail = jsonobject.getString("TxtEmail");
+                                String txtTelp = jsonobject.getString("TxtTelp");
+                                String txtNoKTP = jsonobject.getString("TxtNoKTP");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
@@ -276,6 +279,9 @@ public class MemberActivity extends AppCompatActivity {
                                 dataUser.setTxtNama(txtNama);
                                 dataUser.setTxtAlamat(txtAlamat);
                                 dataUser.setTxtJenisKelamin(txtJenisKelamin);
+                                dataUser.setTxtEmail(txtEmail);
+                                dataUser.setTxtNoTelp(txtTelp);
+                                dataUser.setTxtNoKTP(txtNoKTP);
 
                                 repoUserMember = new clsUserMemberRepo(getApplicationContext());
 //

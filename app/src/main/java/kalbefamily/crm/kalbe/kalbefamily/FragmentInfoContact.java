@@ -48,7 +48,12 @@ public class FragmentInfoContact extends Fragment {
         }
         tvUsername.setText(dataMember.get(0).getTxtNama().toString());
         tvAlamat.setText(dataMember.get(0).getTxtAlamat().toString());
-        tvMember.setText(dataMember.get(0).getTxtMemberId().toString());
+        if (dataMember.get(0).getTxtEmail().equals("")) {
+            tvMember.setText(dataMember.get(0).getTxtMemberId().toString());
+        } else {
+            tvMember.setText(dataMember.get(0).getTxtEmail().toString());
+        }
+
 //        if (data != null){
 //            tvUsername.setText(data.getTxtName().toString());
 //            tvEmail.setText(data.getTxtEmail().toString());
