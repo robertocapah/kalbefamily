@@ -142,7 +142,7 @@ public class MemberActivity extends AppCompatActivity {
                 intProcesscancel = 0;
                 if (txtNoTelp.getText().length() == 0) {
 //                    showToast(LoginActivity.this, "Please input username");
-                    Toast.makeText(getApplicationContext(), "Please input Username", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please input Mobile phone", Toast.LENGTH_LONG).show();
 
                 } else {
                     txtTelp = txtNoTelp.getText().toString();

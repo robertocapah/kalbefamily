@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -37,6 +39,9 @@ import org.json.JSONObject;
 import java.sql.SQLException;
 import java.util.List;
 
+import jim.h.common.android.lib.zxing.config.ZXingLibConfig;
+import jim.h.common.android.lib.zxing.integrator.IntentIntegrator;
+import jim.h.common.android.lib.zxing.integrator.IntentResult;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
@@ -63,6 +68,7 @@ public class HomeMenu extends AppCompatActivity {
 
     private GoogleApiClient client;
     clsActivity _clsMainActivity = new clsActivity();
+    private ZXingLibConfig zxingLibConfig;
 
     @Override
     public void onBackPressed() {
@@ -196,6 +202,13 @@ public class HomeMenu extends AppCompatActivity {
                         fragmentTransactionPersonalData.replace(R.id.frame, fragmentPersonalData);
                         fragmentTransactionPersonalData.commit();
                         selectedId = 99;
+
+                        return true;
+                    case R.id.scanQrCode:
+                        IntentIntegrator.initiateScan(HomeMenu.this, zxingLibConfig);
+
+                        return true;
+
                 }
                 return false;
             }
@@ -258,5 +271,24 @@ public class HomeMenu extends AppCompatActivity {
         helper.clearDataAfterLogout();
         finish();
         startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        boolean status = false;
+
+        if (requestCode == IntentIntegrator.REQUEST_CODE) {
+            IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (scanResult.getContents() == null && scanResult.getFormatName() == null) {
+                return;
+            }
+            final String result = scanResult.getContents();
+            if (result != null) {
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+//                new clsActivity().showCustomToast(context.getApplicationContext(), result, true);
+            }
+        }
     }
 }

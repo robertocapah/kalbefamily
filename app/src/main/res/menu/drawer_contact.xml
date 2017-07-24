@@ -24,15 +24,23 @@
             />
 
         <item
-            android:id="@+id/logoutContact"
+            android:id="@+id/scanQrCode"
+            android:checked="true"
+            android:icon="@drawable/zxinglib_icon"
             android:orderInCategory="0"
-            android:title="Logout"
-            app:actionLayout="@layout/menu_counter"/>
+            android:title="Start Scan QR-Code"
+            app:actionLayout="@layout/menu_counter"
+            />
 
     </group>
     <group
         android:checkableBehavior="single"
         android:id="@+id/groupVersion">
 
+        <item
+            android:id="@+id/logoutContact"
+            android:orderInCategory="0"
+            android:title="Logout"
+            app:actionLayout="@layout/menu_counter"/>
     </group>
 </menu>
