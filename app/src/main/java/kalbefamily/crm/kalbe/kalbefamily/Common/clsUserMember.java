@@ -74,6 +74,22 @@ public class clsUserMember implements Serializable {
         this.txtNoKTP = txtNoKTP;
     }
 
+    public String getTxtNamaKeluarga() {
+        return txtNamaKeluarga;
+    }
+
+    public void setTxtNamaKeluarga(String txtNamaKeluarga) {
+        this.txtNamaKeluarga = txtNamaKeluarga;
+    }
+
+    public String getTxtNamaPanggilan() {
+        return txtNamaPanggilan;
+    }
+
+    public void setTxtNamaPanggilan(String txtNamaPanggilan) {
+        this.txtNamaPanggilan = txtNamaPanggilan;
+    }
+
     @DatabaseField(id = true,columnName = "txtKontakId")
     public String txtKontakId;
     @DatabaseField(columnName = "txtMemberId")
@@ -90,6 +106,10 @@ public class clsUserMember implements Serializable {
     public String txtNoTelp;
     @DatabaseField(columnName = "txtNoKTP")
     public String txtNoKTP;
+    @DatabaseField(columnName = "txtNamaKeluarga")
+    public String txtNamaKeluarga;
+    @DatabaseField(columnName = "txtNamaPanggilan")
+    public String txtNamaPanggilan;
 
     public String Property_txtKontakId = "txtKontakId";
     public String Property_txtMemberId = "txtMemberId";

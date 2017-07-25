@@ -287,6 +287,9 @@ public class HomeMenu extends AppCompatActivity {
             final String result = scanResult.getContents();
             if (result != null) {
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), HomeMenu.class);
+                finish();
+                startActivity(intent);
 //                new clsActivity().showCustomToast(context.getApplicationContext(), result, true);
             }
         }

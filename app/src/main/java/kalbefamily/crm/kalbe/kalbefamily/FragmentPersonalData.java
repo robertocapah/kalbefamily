@@ -3,24 +3,43 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 /**
@@ -29,15 +48,31 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 public class FragmentPersonalData extends Fragment {
     View v;
-    EditText etNama, etEmail, etAlamat, etTelpon, etNoKTP;
+    EditText etNama, etEmail, etAlamat, etTelpon, etNoKTP, etNamaPanggilan, etNamaKeluarga;
     TextView etKontakId, etMemberId;
     RadioButton radioPria, radiowanita;
     RadioGroup radioGenderGroup;
     Button btnUpdate;
+    private ImageView image1, image2;
     Context context;
+    private Uri uriImage;
+
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_REQUEST2 = 1889;
+    private static final String IMAGE_DIRECTORY_NAME = "Image Personal";
+
+    private static Bitmap photoImage1, photoImage2;
+    private static ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private static byte[] phtImage1;
+    private static byte[] phtImage2;
+    private static Bitmap mybitmap1;
+    private static Bitmap mybitmap2;
 
     List<clsUserMember> dataMember = null;
+    List<clsUserMemberImage> dataMemberImage = null;
     clsUserMemberRepo repoUserMember = null;
+    clsUserMemberImageRepo repoUserMemberImage = null;
+    clsUserMemberImage dtImage;
     boolean validate = true;
 
     @Nullable
@@ -49,6 +84,8 @@ public class FragmentPersonalData extends Fragment {
         etKontakId = (TextView) v.findViewById(R.id.etKontakId);
         etMemberId = (TextView) v.findViewById(R.id.etMemberId);
         etNama = (EditText) v.findViewById(R.id.etNama);
+        etNamaKeluarga = (EditText) v.findViewById(R.id.etNamaKeluarga);
+        etNamaPanggilan = (EditText) v.findViewById(R.id.etNamaPanggilan);
         etEmail = (EditText) v.findViewById(R.id.etEmail);
         etTelpon = (EditText) v.findViewById(R.id.etTelpon);
         etAlamat = (EditText) v.findViewById(R.id.etAlamat);
@@ -56,6 +93,8 @@ public class FragmentPersonalData extends Fragment {
         radioPria = (RadioButton) v.findViewById(R.id.radioButton1);
         radiowanita = (RadioButton) v.findViewById(R.id.radioButton2);
         etNoKTP = (EditText) v.findViewById(R.id.etNoKTP);
+        image1 = (ImageView) v.findViewById(R.id.image1);
+        image2 = (ImageView) v.findViewById(R.id.image2);
         btnUpdate = (Button) v.findViewById(R.id.btnUpdate);
 
         try {
@@ -72,10 +111,23 @@ public class FragmentPersonalData extends Fragment {
         etEmail.setText(dataMember.get(0).getTxtEmail().toString());
         etTelpon.setText(dataMember.get(0).getTxtNoTelp().toString());
 
+
         if (dataMember.get(0).getTxtNoKTP().toString().equals("null")) {
             etNoKTP.setText("");
         } else {
             etNoKTP.setText(dataMember.get(0).getTxtNoKTP().toString());
+        }
+
+        if (dataMember.get(0).getTxtNamaKeluarga().toString().equals("null")) {
+            etNamaKeluarga.setText("");
+        } else {
+            etNamaKeluarga.setText(dataMember.get(0).getTxtNamaKeluarga().toString());
+        }
+
+        if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
+            etNamaPanggilan.setText("");
+        } else {
+            etNamaPanggilan.setText(dataMember.get(0).getTxtNamaPanggilan().toString());
         }
 
         if (dataMember.get(0).txtJenisKelamin.equals("Perempuan")) {
@@ -85,6 +137,46 @@ public class FragmentPersonalData extends Fragment {
             radioPria.setChecked(true);
             radiowanita.setChecked(false);
         }
+
+        try {
+            repoUserMemberImage = new clsUserMemberImageRepo(context);
+            dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (dataMemberImage.size() > 0) {
+            viewImage();
+        }
+
+        phtImage1 = null;
+        phtImage2 = null;
+
+        if (photoImage1 != null){
+            image1.setImageBitmap(photoImage1);
+            photoImage1.compress(Bitmap.CompressFormat.PNG, 100, output);
+            phtImage1 = output.toByteArray();
+        }
+
+        if (photoImage2 != null){
+            image2.setImageBitmap(photoImage2);
+            photoImage2.compress(Bitmap.CompressFormat.PNG, 100, output);
+            phtImage2 = output.toByteArray();
+        }
+
+        image1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage1();
+            }
+        });
+
+        image2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage2();
+            }
+        });
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +193,8 @@ public class FragmentPersonalData extends Fragment {
                         dataUser.setTxtNama(etNama.getText().toString());
                         dataUser.setTxtAlamat(etAlamat.getText().toString());
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
+                        dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
+                        dataUser.setTxtNamaKeluarga(etNamaKeluarga.getText().toString());
 
                         if(!isValidEmail(etEmail.getText().toString())){
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -119,6 +213,9 @@ public class FragmentPersonalData extends Fragment {
 
                             repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                             repoUserMember.createOrUpdate(dataUser);
+
+                            savePicture1();
+                            savePicture2();
 
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
                             Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
@@ -141,11 +238,256 @@ public class FragmentPersonalData extends Fragment {
         return v;
     }
 
+    private void viewImage() {
+        try {
+            repoUserMemberImage = new clsUserMemberImageRepo(context);
+            dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata");
+        folder.mkdir();
+
+        for (clsUserMemberImage imgDt : dataMemberImage){
+            final byte[] imgFile = imgDt.getTxtImg();
+            if (imgFile != null) {
+                if (imgDt.getTxtPosition().equals("1")) {
+                    mybitmap1 = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                    Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap1, 150, 150, true);
+                    image1.setImageBitmap(bitmap);
+
+                    File file = null;
+                    try {
+                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/Kalbespgmobile/tempdata"));
+                        FileOutputStream out = new FileOutputStream(file);
+                        out.write(imgFile);
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            final byte[] imgFile2 = imgDt.getTxtImg();
+            if (imgFile2 != null) {
+                if (imgDt.getTxtPosition().equals("2")) {
+                    mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
+                    Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
+                    image2.setImageBitmap(bitmap);
+
+                    File file = null;
+                    try {
+                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/Kalbespgmobile/tempdata"));
+                        FileOutputStream out = new FileOutputStream(file);
+                        out.write(imgFile2);
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    // put image from camera
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST) {
+            if (resultCode == -1) {
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    String uri = uriImage.getPath().toString();
+
+                    bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
+
+                    previewCaptureImage1(bitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else if (resultCode == 0) {
+                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+            }  else {
+                try {
+                    photoImage1 = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (requestCode == CAMERA_REQUEST2) {
+            if (resultCode == -1) {
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    String uri = uriImage.getPath().toString();
+
+                    bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
+
+                    previewCaptureImage2(bitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else if (resultCode == 0) {
+                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+            }  else {
+                try {
+                    photoImage2 = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // preview image 1
+    private void previewCaptureImage1(Bitmap photo){
+        try {
+            Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+            image1.setVisibility(View.VISIBLE);
+            output = null;
+            try {
+                output = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (output != null){
+                        output.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+            phtImage1 = output.toByteArray();
+            image1.setImageBitmap(photo_view);
+
+            if (dtImage == null){
+                dtImage.setTxtImg(phtImage1);
+            } else {
+                dtImage.setTxtImg(phtImage1);
+            }
+            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // preview image 2
+    private void previewCaptureImage2(Bitmap photo){
+        try {
+            Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+            image2.setVisibility(View.VISIBLE);
+            output = null;
+            try {
+                output = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (output != null){
+                        output.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+            phtImage2 = output.toByteArray();
+            image2.setImageBitmap(photo_view);
+
+            if (dtImage == null){
+                dtImage.setTxtImg(phtImage2);
+            } else {
+                dtImage.setTxtImg(phtImage2);
+            }
+            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Uri getOutputMediaFileUri() {
+        return Uri.fromFile(getOutputMediaFile());
+    }
+
     public final static boolean isValidEmail(CharSequence target) {
         if (target == null) {
             return false;
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+    private File getOutputMediaFile() {
+        // External sdcard location
+
+        File mediaStorageDir = new File(new clsHardCode().txtFolderData + File.separator);
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(IMAGE_DIRECTORY_NAME, "Failed create " + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "tmp_act"  + ".png");
+        return mediaFile;
+    }
+
+    protected void captureImage1() {
+        uriImage = getOutputMediaFileUri();
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    protected void captureImage2() {
+        uriImage = getOutputMediaFileUri();
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST2);
+    }
+
+    protected void savePicture1() {
+        clsUserMemberImage dataImage = new clsUserMemberImage();
+
+        if (phtImage1 != null) {
+            dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+            dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+            dataImage.setTxtImg(phtImage1);
+            dataImage.setTxtPosition("1");
+
+            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+            repoUserMemberImage.createOrUpdate(dataImage);
+        }
+    }
+
+    protected void savePicture2() {
+        clsUserMemberImage dataImage = new clsUserMemberImage();
+
+        if (phtImage2 != null) {
+            dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+            dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+            dataImage.setTxtImg(phtImage2);
+            dataImage.setTxtPosition("2");
+
+            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+            repoUserMemberImage.createOrUpdate(dataImage);
         }
     }
 
