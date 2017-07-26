@@ -32,6 +32,15 @@
             app:actionLayout="@layout/menu_counter"
             />
 
+        <item
+            android:id="@+id/rewardCard"
+            android:checked="true"
+            android:icon="@drawable/ic_action_name"
+            android:orderInCategory="0"
+            android:title="Reward Card"
+            app:actionLayout="@layout/menu_counter"
+            />
+
     </group>
     <group
         android:checkableBehavior="single"

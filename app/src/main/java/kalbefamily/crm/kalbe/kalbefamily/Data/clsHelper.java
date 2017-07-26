@@ -23,7 +23,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Common.dataJson;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 /**
  * Created by Rian Andrivani on 6/22/2017.
@@ -54,6 +62,37 @@ public class clsHelper {
         myOutput.flush();
         myOutput.close();
         myInput.close();
+    }
+
+    public clsSendData sendData(String versionName, Context context){
+        clsSendData dtclsSendData = new clsSendData();
+        dataJson dtSend = new dataJson();
+        HashMap<String, byte[]> FileUpload = null;
+        clsUserMemberRepo _ClsUserMemberRepo = new clsUserMemberRepo(context);
+        clsUserMemberImageRepo _ClsUserMemberImageRepo = new clsUserMemberImageRepo(context);
+        List<clsUserMember> ListOfUserMember = _ClsUserMemberRepo.getAllDataToSendData(context);
+        List<clsUserMemberImage> ListOfUserMemberImage = _ClsUserMemberImageRepo.getAllDataToSendData(context);
+        FileUpload = new HashMap<String, byte[]>();
+        if (ListOfUserMemberImage != null) {
+            dtSend.setListDataUserMemberImage(ListOfUserMemberImage);
+            for (clsUserMemberImage dttUserMemberImage : ListOfUserMemberImage) {
+                if (dttUserMemberImage.getTxtImg() != null) {
+                    if (dttUserMemberImage.getTxtPosition().equals("1")) {
+                        FileUpload.put("FUMember-1", dttUserMemberImage.getTxtImg());
+                    }
+                    if (dttUserMemberImage.getTxtPosition().equals("2")) {
+                        FileUpload.put("FUMember-2", dttUserMemberImage.getTxtImg());
+                    }
+                }
+            }
+        }
+        if (ListOfUserMember != null) {
+            dtSend.setListDataUserMember(ListOfUserMember);
+        }
+
+        dtclsSendData.setDtdataJson(dtSend);
+        dtclsSendData.setFileUpload(FileUpload);
+        return dtclsSendData;
     }
 
     public String volleyImplement(final Context context, final String mRequestBody, String strLinkAPI, Activity activity){

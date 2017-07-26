@@ -52,6 +52,16 @@ public class clsUserMemberImage implements Serializable {
     @DatabaseField(columnName = "txtPosition")
     public String txtPosition;
 
+    public String Property_txtGuiId = "txtGuiId";
+    public String Property_txtHeaderId = "txtKontakID";
+    public String Property_txtImg = "txtImageName";
+    public String Property_txtPosition = "txtType";
+    public String Property_ListOfMemberImage = "ListOfObjectDataImage";
+    public String Property_All=Property_txtGuiId +","+
+            Property_txtHeaderId +","+
+            Property_txtImg+","+
+            Property_txtPosition;
+
     public clsUserMemberImage(){
 
     }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_reward_card">
+
+    <LinearLayout
+        android:layout_marginTop="180dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/etreward1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Texview 1"
+            android:textSize="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/etreward2"
+            android:layout_below="@+id/etreward1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Texview 2"
+            android:textSize="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/etreward3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Texview 3"
+            android:textSize="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

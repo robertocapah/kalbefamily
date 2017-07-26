@@ -169,7 +169,8 @@ public class HomeMenu extends AppCompatActivity {
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         logout();
-                                        new clsActivity().showCustomToast(getApplicationContext(), "Logout, Success", true);
+//                                        new clsActivity().showCustomToast(getApplicationContext(), "Logout, Success", true);
+//                                        Toast.makeText(getApplicationContext(), "Logout, Success", Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -206,6 +207,18 @@ public class HomeMenu extends AppCompatActivity {
                         return true;
                     case R.id.scanQrCode:
                         IntentIntegrator.initiateScan(HomeMenu.this, zxingLibConfig);
+
+                        return true;
+                    case R.id.rewardCard:
+                        toolbar.setTitle("Reward Card");
+
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
+                        FragmentRewardCard fragmentRewardCard = new FragmentRewardCard();
+                        FragmentTransaction fragmentTransactionRewardCard= getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionRewardCard.replace(R.id.frame, fragmentRewardCard);
+                        fragmentTransactionRewardCard.commit();
+                        selectedId = 99;
 
                         return true;
 
@@ -266,7 +279,7 @@ public class HomeMenu extends AppCompatActivity {
     }
 
     private void logout() {
-        Intent intent = new Intent(HomeMenu.this, MemberActivity.class);
+        Intent intent = new Intent(HomeMenu.this, FlashActivity.class);
         DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
         helper.clearDataAfterLogout();
         finish();

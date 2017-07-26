@@ -3,8 +3,10 @@ package kalbefamily.crm.kalbe.kalbefamily.Repo;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
@@ -91,5 +93,27 @@ public class clsUserMemberImageRepo implements crud {
             e.printStackTrace();
         }
         return items;
+    }
+
+    public List<clsUserMemberImage> getAllDataToSendData(Context context){
+        QueryBuilder<clsUserMemberImage, Integer> queryBuilder = null;
+        List<clsUserMemberImage> data = null;
+        try {
+            data = (List<clsUserMemberImage>) helper.getUserMemberImageDao().queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clsUserMemberImage dt = new clsUserMemberImage();
+        List<clsUserMemberImage> listData = new ArrayList<>();
+
+        if (data.size() > 0) {
+            try {
+                queryBuilder = helper.getUserMemberImageDao().queryBuilder();
+                listData = queryBuilder.query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listData;
     }
 }

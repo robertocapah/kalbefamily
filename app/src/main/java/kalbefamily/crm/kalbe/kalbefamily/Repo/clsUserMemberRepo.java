@@ -3,10 +3,12 @@ package kalbefamily.crm.kalbe.kalbefamily.Repo;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -94,6 +96,28 @@ public class clsUserMemberRepo implements crud {
             e.printStackTrace();
         }
         return items;
+    }
+
+    public List<clsUserMember> getAllDataToSendData(Context context){
+        QueryBuilder<clsUserMember, Integer> queryBuilder = null;
+        List<clsUserMember> data = null;
+        try {
+            data = (List<clsUserMember>) helper.getUserMemberDao().queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clsUserMember dt = new clsUserMember();
+        List<clsUserMember> listData = new ArrayList<>();
+
+        if (data.size() > 0) {
+            try {
+                queryBuilder = helper.getUserMemberDao().queryBuilder();
+                listData = queryBuilder.query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listData;
     }
 
 //    public clsUserMember getDataLogin(Context context){

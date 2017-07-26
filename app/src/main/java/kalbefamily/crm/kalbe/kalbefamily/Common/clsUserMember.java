@@ -111,16 +111,27 @@ public class clsUserMember implements Serializable {
     @DatabaseField(columnName = "txtNamaPanggilan")
     public String txtNamaPanggilan;
 
-    public String Property_txtKontakId = "txtKontakId";
+    public String Property_txtKontakId = "txtKontakID";
     public String Property_txtMemberId = "txtMemberId";
-    public String Property_txtNama = "txtNama";
+    public String Property_txtNama = "txtNamaDepan";
     public String Property_txtAlamat = "txtAlamat";
     public String Property_txtJenisKelamin = "txtJenisKelamin";
+    public String Property_txtEmail = "txtEmail";
+    public String Property_txtNoTelp = "txtTelp";
+    public String Property_txtNoKTP = "txtNoKTP";
+    public String Property_txtNamaKeluarga = "txtNamaKeluarga";
+    public String Property_txtNamaPanggilan = "txtNamaPanggilan";
+    public String Property_ListOfUserMember = "ListOfObjectData";
     public String Property_All=Property_txtKontakId +","+
             Property_txtMemberId +","+
             Property_txtNama+","+
             Property_txtAlamat+","+
-            Property_txtJenisKelamin;
+            Property_txtJenisKelamin+","+
+            Property_txtEmail+","+
+            Property_txtNoTelp+","+
+            Property_txtNoKTP+","+
+            Property_txtNamaKeluarga+","+
+            Property_txtNamaPanggilan;
 
     public clsUserMember() {
 

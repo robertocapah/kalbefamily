@@ -3,6 +3,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,17 +31,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by Rian Andrivani on 7/20/2017.
@@ -216,6 +222,7 @@ public class FragmentPersonalData extends Fragment {
 
                             savePicture1();
                             savePicture2();
+                            sendData();
 
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
                             Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
@@ -245,7 +252,7 @@ public class FragmentPersonalData extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata");
+        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP");
         folder.mkdir();
 
         for (clsUserMemberImage imgDt : dataMemberImage){
@@ -258,7 +265,7 @@ public class FragmentPersonalData extends Fragment {
 
                     File file = null;
                     try {
-                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/Kalbespgmobile/tempdata"));
+                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
                         FileOutputStream out = new FileOutputStream(file);
                         out.write(imgFile);
                         out.close();
@@ -277,7 +284,7 @@ public class FragmentPersonalData extends Fragment {
 
                     File file = null;
                     try {
-                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/Kalbespgmobile/tempdata"));
+                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
                         FileOutputStream out = new FileOutputStream(file);
                         out.write(imgFile2);
                         out.close();
@@ -423,14 +430,6 @@ public class FragmentPersonalData extends Fragment {
         return Uri.fromFile(getOutputMediaFile());
     }
 
-    public final static boolean isValidEmail(CharSequence target) {
-        if (target == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
-    }
-
     private File getOutputMediaFile() {
         // External sdcard location
 
@@ -488,6 +487,43 @@ public class FragmentPersonalData extends Fragment {
 
             repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
             repoUserMemberImage.createOrUpdate(dataImage);
+        }
+    }
+
+    private void sendData() {
+        String versionName = "";
+        clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
+        if (dtJson != null) {
+            try {
+                String strLinkAPI = "http://10.171.11.98/WebApi2/KF/UpdateDataKontak";
+                final String mRequestBody = "[" + dtJson.toString() + "]";
+
+                new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        String error;
+                    }
+
+                    @Override
+                    public void onResponse(String response, Boolean status, String strErrorMsg) {
+                        String res = response;
+
+                        Log.i(TAG, "Ski data from server - " + response);
+                        clsUserMember userMemberData = new clsUserMember();
+                    }
+                });
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
 
