@@ -469,7 +469,7 @@ public class FragmentPersonalData extends Fragment {
             dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
             dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
             dataImage.setTxtImg(phtImage1);
-            dataImage.setTxtPosition("1");
+            dataImage.setTxtPosition("txtFileName1");
 
             repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
             repoUserMemberImage.createOrUpdate(dataImage);
@@ -483,7 +483,7 @@ public class FragmentPersonalData extends Fragment {
             dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
             dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
             dataImage.setTxtImg(phtImage2);
-            dataImage.setTxtPosition("2");
+            dataImage.setTxtPosition("txtFileName2");
 
             repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
             repoUserMemberImage.createOrUpdate(dataImage);

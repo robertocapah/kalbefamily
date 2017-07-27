@@ -100,11 +100,11 @@ public class VolleyUtils {
                 Map<String, DataPart> params = new HashMap<>();
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
-                if (mRequestBody.getFileUpload().get("FUKTP-1") != null){
-                    params.put("image1", new DataPart("file_image1.jpg", mRequestBody.getFileUpload().get("FUKTP-1"), "image/jpeg"));
+                if (mRequestBody.getFileUpload().get("txtFileName1") != null){
+                    params.put("file_image1.jpg", new DataPart("file_image1.jpg", mRequestBody.getFileUpload().get("txtFileName1"), "image/jpeg"));
                 }
-                if (mRequestBody.getFileUpload().get("FUKTP-2") != null){
-                    params.put("image2", new DataPart("file_image2.jpg", mRequestBody.getFileUpload().get("FUKTP-2"), "image/jpeg"));
+                if (mRequestBody.getFileUpload().get("txtFileName2") != null){
+                    params.put("file_image2.jpg", new DataPart("file_image2.jpg", mRequestBody.getFileUpload().get("txtFileName2"), "image/jpeg"));
                 }
 
                 return params;

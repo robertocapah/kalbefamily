@@ -77,11 +77,11 @@ public class clsHelper {
             dtSend.setListDataUserMemberImage(ListOfUserMemberImage);
             for (clsUserMemberImage dttUserMemberImage : ListOfUserMemberImage) {
                 if (dttUserMemberImage.getTxtImg() != null) {
-                    if (dttUserMemberImage.getTxtPosition().equals("1")) {
-                        FileUpload.put("FUMember-1", dttUserMemberImage.getTxtImg());
+                    if (dttUserMemberImage.getTxtPosition().equals("txtFileName1")) {
+                        FileUpload.put("txtFileName1", dttUserMemberImage.getTxtImg());
                     }
-                    if (dttUserMemberImage.getTxtPosition().equals("2")) {
-                        FileUpload.put("FUMember-2", dttUserMemberImage.getTxtImg());
+                    if (dttUserMemberImage.getTxtPosition().equals("txtFileName2")) {
+                        FileUpload.put("txtFileName2", dttUserMemberImage.getTxtImg());
                     }
                 }
             }
