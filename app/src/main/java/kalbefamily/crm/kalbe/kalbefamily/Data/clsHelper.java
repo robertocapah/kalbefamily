@@ -26,10 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsQRCodeData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Common.dataJson;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsQRCodeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -92,6 +94,21 @@ public class clsHelper {
 
         dtclsSendData.setDtdataJson(dtSend);
         dtclsSendData.setFileUpload(FileUpload);
+        return dtclsSendData;
+    }
+
+    public clsSendData sendDataQRCode(String versionName, Context context){
+        clsSendData dtclsSendData = new clsSendData();
+        dataJson dtSend = new dataJson();
+        HashMap<String, byte[]> FileUpload = null;
+        clsQRCodeRepo _ClsQRCodeRepo = new clsQRCodeRepo(context);
+        List<clsQRCodeData> ListOfClsQRCodeData = _ClsQRCodeRepo.getAllDataToSendData(context);
+
+        if (ListOfClsQRCodeData != null) {
+            dtSend.setLisClsQRCodeData(ListOfClsQRCodeData);
+        }
+
+        dtclsSendData.setDtdataJson(dtSend);
         return dtclsSendData;
     }
 

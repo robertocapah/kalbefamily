@@ -258,7 +258,7 @@ public class FragmentPersonalData extends Fragment {
         for (clsUserMemberImage imgDt : dataMemberImage){
             final byte[] imgFile = imgDt.getTxtImg();
             if (imgFile != null) {
-                if (imgDt.getTxtPosition().equals("1")) {
+                if (imgDt.getTxtPosition().equals("txtFileName1")) {
                     mybitmap1 = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
                     Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap1, 150, 150, true);
                     image1.setImageBitmap(bitmap);
@@ -277,7 +277,7 @@ public class FragmentPersonalData extends Fragment {
 
             final byte[] imgFile2 = imgDt.getTxtImg();
             if (imgFile2 != null) {
-                if (imgDt.getTxtPosition().equals("2")) {
+                if (imgDt.getTxtPosition().equals("txtFileName2")) {
                     mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
                     Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
                     image2.setImageBitmap(bitmap);
@@ -495,7 +495,7 @@ public class FragmentPersonalData extends Fragment {
         clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
         if (dtJson != null) {
             try {
-                String strLinkAPI = "http://10.171.11.98/WebApi2/KF/UpdateDataKontak";
+                String strLinkAPI = "http://10.171.10.27/WebApi2/KF/UpdateDataKontak";
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
                 new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {

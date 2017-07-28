@@ -15,6 +15,7 @@ import java.util.List;
 public class dataJson {
     public List<clsUserMember> ListDataUserMember;
     public List<clsUserMemberImage> ListDataUserMemberImage;
+    public List<clsQRCodeData> LisClsQRCodeData;
 
     public synchronized List<clsUserMember> getListDataUserMember() {
         return ListDataUserMember;
@@ -30,6 +31,14 @@ public class dataJson {
 
     public synchronized void setListDataUserMemberImage(List<clsUserMemberImage> listDataUserMemberImage) {
         ListDataUserMemberImage = listDataUserMemberImage;
+    }
+
+    public synchronized List<clsQRCodeData> getLisClsQRCodeData() {
+        return LisClsQRCodeData;
+    }
+
+    public synchronized void setLisClsQRCodeData(List<clsQRCodeData> lisClsQRCodeData) {
+        LisClsQRCodeData = lisClsQRCodeData;
     }
 
     public JSONObject txtJSON() throws JSONException {
@@ -64,6 +73,22 @@ public class dataJson {
                 itemsListJquey.add(resJson);
             }
 //            resJson.put(dtUserMemberImage.Property_ListOfMemberImage, new JSONArray(itemsListJquey));
+        }
+
+        return resJson;
+    }
+
+    public JSONObject txtJSONqrCode() throws JSONException {
+        JSONObject resJson = new JSONObject();
+        Collection<JSONObject> itemsListJquey = new ArrayList<JSONObject>();
+        if (this.getLisClsQRCodeData() != null) {
+            clsQRCodeData dtQRCodeData = new clsQRCodeData();
+            itemsListJquey = new ArrayList<JSONObject>();
+            for (clsQRCodeData data : this.getLisClsQRCodeData()) {
+                resJson.put(dtQRCodeData.Property_IntQRCodeID, String.valueOf(data.getIntQRCodeID()));
+                resJson.put(dtQRCodeData.Property_txtKontakID, String.valueOf(data.getTxtKontakID()));
+                itemsListJquey.add(resJson);
+            }
         }
 
         return resJson;
