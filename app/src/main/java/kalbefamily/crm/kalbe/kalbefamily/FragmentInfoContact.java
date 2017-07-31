@@ -100,12 +100,12 @@ public class FragmentInfoContact extends Fragment {
         }
 
         txtMember = dataMember.get(0).getTxtMemberId();
-        String strLinkAPI = "http://10.171.10.27/WebApi2/KF/GetDetailKontak";
+        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/GetDetailKontakCustomer";
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
 
         try {
-            resJson.put("txtMemberIdOrTelpId", txtMember);
+            resJson.put("txtMemberId", txtMember);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -141,6 +141,7 @@ public class FragmentInfoContact extends Fragment {
                                 String txtNoKTP = jsonobject.getString("TxtNoKTP");
                                 String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
+                                String intBasePoin = jsonobject.getString("IntBasePoin");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
@@ -153,13 +154,14 @@ public class FragmentInfoContact extends Fragment {
                                 dataUser.setTxtNoKTP(txtNoKTP);
                                 dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
+                                dataUser.setIntBasePoin(intBasePoin);
 
                                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
 //
                                 int h = 0;
                                 h = repoUserMember.createOrUpdate(dataUser);
                                 if(h > -1) {
-                                    Log.d("Data info", "Data member Updated");
+                                    Log.d("Data info", "Data Member berhasil di update");
 //                                    status = true;
                                 }
 
@@ -182,15 +184,16 @@ public class FragmentInfoContact extends Fragment {
 
                                     if (logoImage != null) {
                                         dataImage.setTxtImg(logoImage);
-                                    }
 
-                                    imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
+                                        imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
 
-                                    int k = 0;
-                                    k = imageRepo.createOrUpdate(dataImage);
-                                    if(k > -1) {
-                                        Log.d("Data info", "Data Image's Member Updated");
+                                        int k = 0;
+                                        k = imageRepo.createOrUpdate(dataImage);
+                                        if(k > -1) {
+                                            Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+                                            Log.d("Data info", "Data Member Image berhasil di update");
 //                                    status = true;
+                                        }
                                     }
                                 }
                             }

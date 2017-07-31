@@ -2,11 +2,13 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +54,32 @@ public class QrCodeActivity extends AppCompatActivity {
     Context context;
 
     @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Exit");
+        builder.setMessage("Do you want to exit?");
+
+        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code);
@@ -60,10 +88,12 @@ public class QrCodeActivity extends AppCompatActivity {
         toolbar.setTitle("Scan QR-Code");
         setSupportActionBar(toolbar);
 
+        // set enable toolbar button back
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         statusQRCode = (TextView) findViewById(R.id.statusQRCode);
 
+        // toolbar button for move to before screen
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +157,7 @@ public class QrCodeActivity extends AppCompatActivity {
         clsSendData dtJson = new clsHelper().sendDataQRCode(versionName, getApplicationContext());
         if (dtJson != null) {
             try {
-                String strLinkAPI = "http://10.171.10.27/WebApi2/KF/ScanQRCode";
+                String strLinkAPI = "http://10.171.11.70/WebApi2/KF/ScanQRCode";
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
                 new VolleyUtils().makeJsonObjectRequestSendDataQRCode(getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {

@@ -290,6 +290,33 @@
                 android:layout_height="1dp"
                 android:background="#bfbfbf" />
             <TextView
+                android:id="@+id/intBasePoin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Base Point"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"/>
+            <EditText
+                android:id="@+id/etBasePoin"
+                android:layout_below="@+id/intBasePoin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="*No Point"
+                android:textSize="15dp"
+                android:inputType="number"
+                android:background="@drawable/bg_edtext"
+                android:drawableRight="@mipmap/ic_action_assignment" />
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/etMemberId"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#bfbfbf" />
+            <TextView
                 android:id="@+id/txtNoKtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

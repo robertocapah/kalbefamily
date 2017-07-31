@@ -54,7 +54,7 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class FragmentPersonalData extends Fragment {
     View v;
-    EditText etNama, etEmail, etAlamat, etTelpon, etNoKTP, etNamaPanggilan, etNamaKeluarga;
+    EditText etNama, etEmail, etAlamat, etTelpon, etNoKTP, etNamaPanggilan, etNamaKeluarga, etBasePoin;
     TextView etKontakId, etMemberId;
     RadioButton radioPria, radiowanita;
     RadioGroup radioGenderGroup;
@@ -102,6 +102,7 @@ public class FragmentPersonalData extends Fragment {
         image1 = (ImageView) v.findViewById(R.id.image1);
         image2 = (ImageView) v.findViewById(R.id.image2);
         btnUpdate = (Button) v.findViewById(R.id.btnUpdate);
+        etBasePoin = (EditText) v.findViewById(R.id.etBasePoin);
 
         try {
             repoUserMember = new clsUserMemberRepo(context);
@@ -116,6 +117,7 @@ public class FragmentPersonalData extends Fragment {
         etAlamat.setText(dataMember.get(0).getTxtAlamat().toString());
         etEmail.setText(dataMember.get(0).getTxtEmail().toString());
         etTelpon.setText(dataMember.get(0).getTxtNoTelp().toString());
+        etBasePoin.setText(dataMember.get(0).getIntBasePoin().toString());
 
 
         if (dataMember.get(0).getTxtNoKTP().toString().equals("null")) {
@@ -201,6 +203,7 @@ public class FragmentPersonalData extends Fragment {
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
                         dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
                         dataUser.setTxtNamaKeluarga(etNamaKeluarga.getText().toString());
+                        dataUser.setIntBasePoin(etBasePoin.getText().toString());
 
                         if(!isValidEmail(etEmail.getText().toString())){
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -495,7 +498,7 @@ public class FragmentPersonalData extends Fragment {
         clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
         if (dtJson != null) {
             try {
-                String strLinkAPI = "http://10.171.10.27/WebApi2/KF/UpdateDataKontak";
+                String strLinkAPI = "http://10.171.11.70/WebApi2/KF/UpdateDataKontak";
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
                 new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {

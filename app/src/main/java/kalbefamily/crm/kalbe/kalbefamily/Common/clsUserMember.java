@@ -90,6 +90,14 @@ public class clsUserMember implements Serializable {
         this.txtNamaPanggilan = txtNamaPanggilan;
     }
 
+    public String getIntBasePoin() {
+        return intBasePoin;
+    }
+
+    public void setIntBasePoin(String intBasePoin) {
+        this.intBasePoin = intBasePoin;
+    }
+
     @DatabaseField(id = true,columnName = "txtKontakId")
     public String txtKontakId;
     @DatabaseField(columnName = "txtMemberId")
@@ -110,6 +118,8 @@ public class clsUserMember implements Serializable {
     public String txtNamaKeluarga;
     @DatabaseField(columnName = "txtNamaPanggilan")
     public String txtNamaPanggilan;
+    @DatabaseField(columnName = "intBasePoin")
+    public String intBasePoin;
 
     public String Property_txtKontakId = "txtKontakID";
     public String Property_txtMemberId = "txtMemberId";
@@ -121,6 +131,7 @@ public class clsUserMember implements Serializable {
     public String Property_txtNoKTP = "txtNoKTP";
     public String Property_txtNamaKeluarga = "txtNamaKeluarga";
     public String Property_txtNamaPanggilan = "txtNamaPanggilan";
+    public String Property_intBasePoin = "intBasePoin";
     public String Property_ListOfUserMember = "ListOfObjectData";
     public String Property_All=Property_txtKontakId +","+
             Property_txtMemberId +","+
@@ -131,7 +142,8 @@ public class clsUserMember implements Serializable {
             Property_txtNoTelp+","+
             Property_txtNoKTP+","+
             Property_txtNamaKeluarga+","+
-            Property_txtNamaPanggilan;
+            Property_txtNamaPanggilan+","+
+            Property_intBasePoin;
 
     public clsUserMember() {
 

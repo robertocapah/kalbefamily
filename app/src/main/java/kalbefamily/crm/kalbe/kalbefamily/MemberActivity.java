@@ -221,7 +221,7 @@ public class MemberActivity extends AppCompatActivity {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         txtTelp = txtNoTelp.getText().toString();
-        String strLinkAPI = "http://10.171.10.27/WebApi2/KF/GetDetailKontak";
+        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/GetDetailKontak";
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
         List<clsmVersionApp> dataInfoVersion = null;
@@ -316,7 +316,7 @@ public class MemberActivity extends AppCompatActivity {
     public void checkVersion() {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String strLinkAPI = "http://10.171.10.27/WebApi2/KF/CheckVersionApp";
+        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/CheckVersionApp";
         // http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J
         JSONObject resJson = new JSONObject();
         try {
