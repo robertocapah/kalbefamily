@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0"
+    android:orientation="vertical"
+    android:screenOrientation="landscape">
+
+    <AbsoluteLayout
+        android:id="@+id/absoluteLayout"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/kartu_virtual_new" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="25dp"
+            android:layout_y="175dp"
+            android:fontFamily="monospace"
+            android:text="1234 5678 9012"
+            android:textColor="#f1c40f"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_nama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="25dp"
+            android:layout_y="200dp"
+            android:fontFamily="monospace"
+            android:text="ARICK ANJASMARA"
+            android:textColor="#f1c40f"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="25dp"
+            android:layout_y="225dp"
+            android:fontFamily="sans-serif"
+            android:text="BERLAKU\nSEJAK"
+            android:textColor="#f1c40f"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="25dp"
+            android:layout_y="250dp"
+            android:fontFamily="sans-serif"
+            android:text="(poin akan hangus setiap tahun sejak periode kartu berlaku)"
+            android:textColor="#f1c40f"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/textView_expire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="74dp"
+            android:layout_y="230dp"
+            android:fontFamily="monospace"
+            android:text="JUN 2017"
+            android:textColor="#f1c40f"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </AbsoluteLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#CCF0F0F0"
+        android:padding="3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
+            android:text="© Kalbe Nutritionals 2017" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
+            android:text="Arick Anjasmara" />
+
+        <Spinner
+            android:id="@+id/spnProductQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
+            android:text="Arick Anjasmara"
+            android:background="@drawable/bg_edtext"/>
+
+    </RelativeLayout>
+</RelativeLayout>

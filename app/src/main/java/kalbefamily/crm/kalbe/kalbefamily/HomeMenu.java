@@ -26,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,10 +50,8 @@ import jim.h.common.android.lib.zxing.config.ZXingLibConfig;
 import jim.h.common.android.lib.zxing.integrator.IntentIntegrator;
 import jim.h.common.android.lib.zxing.integrator.IntentResult;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsmVersionApp;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
@@ -232,15 +229,18 @@ public class HomeMenu extends AppCompatActivity {
 
                         return true;
                     case R.id.rewardCard:
-                        toolbar.setTitle("Reward Card");
+//                        toolbar.setTitle("Reward Card");
+//
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+//                        FragmentRewardCard fragmentRewardCard = new FragmentRewardCard();
+//                        FragmentTransaction fragmentTransactionRewardCard= getSupportFragmentManager().beginTransaction();
+//                        fragmentTransactionRewardCard.replace(R.id.frame, fragmentRewardCard);
+//                        fragmentTransactionRewardCard.commit();
+//                        selectedId = 99;
 
-                        FragmentRewardCard fragmentRewardCard = new FragmentRewardCard();
-                        FragmentTransaction fragmentTransactionRewardCard= getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionRewardCard.replace(R.id.frame, fragmentRewardCard);
-                        fragmentTransactionRewardCard.commit();
-                        selectedId = 99;
+                        Intent intentReward = new Intent(getApplicationContext(), RewardCardActivity.class);
+                        startActivity(intentReward);
 
                         return true;
 

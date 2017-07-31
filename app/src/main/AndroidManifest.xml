@@ -73,6 +73,8 @@
         <activity android:name=".CardViewActivity" />
         <activity android:name=".HomeMenu" />
         <activity android:name=".QrCodeActivity"></activity>
+        <activity android:name=".RewardCardActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
