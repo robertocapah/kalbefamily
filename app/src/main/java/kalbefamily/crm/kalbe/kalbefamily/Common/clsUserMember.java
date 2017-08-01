@@ -98,6 +98,22 @@ public class clsUserMember implements Serializable {
         this.intBasePoin = intBasePoin;
     }
 
+    public String getTxtTglAwal() {
+        return txtTglAwal;
+    }
+
+    public void setTxtTglAwal(String txtTglAwal) {
+        this.txtTglAwal = txtTglAwal;
+    }
+
+    public String getTxtTglBerlaku() {
+        return txtTglBerlaku;
+    }
+
+    public void setTxtTglBerlaku(String txtTglBerlaku) {
+        this.txtTglBerlaku = txtTglBerlaku;
+    }
+
     @DatabaseField(id = true,columnName = "txtKontakId")
     public String txtKontakId;
     @DatabaseField(columnName = "txtMemberId")
@@ -120,6 +136,10 @@ public class clsUserMember implements Serializable {
     public String txtNamaPanggilan;
     @DatabaseField(columnName = "intBasePoin")
     public String intBasePoin;
+    @DatabaseField(columnName = "txtTglAwal")
+    public String txtTglAwal;
+    @DatabaseField(columnName = "txtTglBerlaku")
+    public String txtTglBerlaku;
 
     public String Property_txtKontakId = "txtKontakID";
     public String Property_txtMemberId = "txtMemberId";

@@ -142,6 +142,8 @@ public class FragmentInfoContact extends Fragment {
                                 String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
                                 String intBasePoin = jsonobject.getString("IntBasePoin");
+                                String txtTglAwal = jsonobject.getString("DtTglAwal");
+                                String txtTglBerlaku = jsonobject.getString("TxttglBerlaku");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
@@ -155,6 +157,8 @@ public class FragmentInfoContact extends Fragment {
                                 dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
                                 dataUser.setIntBasePoin(intBasePoin);
+                                dataUser.setTxtTglAwal(txtTglAwal);
+                                dataUser.setTxtTglBerlaku(txtTglBerlaku);
 
                                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
 //

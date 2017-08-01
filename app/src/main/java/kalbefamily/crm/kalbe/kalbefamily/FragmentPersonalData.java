@@ -118,6 +118,7 @@ public class FragmentPersonalData extends Fragment {
         etEmail.setText(dataMember.get(0).getTxtEmail().toString());
         etTelpon.setText(dataMember.get(0).getTxtNoTelp().toString());
         etBasePoin.setText(dataMember.get(0).getIntBasePoin().toString());
+        etBasePoin.setEnabled(false);
 
 
         if (dataMember.get(0).getTxtNoKTP().toString().equals("null")) {
