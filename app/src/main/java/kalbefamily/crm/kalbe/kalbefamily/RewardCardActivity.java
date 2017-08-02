@@ -37,7 +37,7 @@ public class RewardCardActivity extends AppCompatActivity {
         etNumber =(TextView) findViewById(R.id.textView7);
         etNama = (TextView) findViewById(R.id.textView_nama);
         etTglBerlaku = (TextView) findViewById(R.id.textView_berlaku);
-        spinNama = (Spinner) findViewById(R.id.spnNama);
+//        spinNama = (Spinner) findViewById(R.id.spnNama);
 
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
         try {
@@ -47,15 +47,15 @@ public class RewardCardActivity extends AppCompatActivity {
         }
 
         // spinner name member
-        List<String> dataMemberName = new ArrayList<>();
-        if (dataMember.size() > 0) {
-            for (clsUserMember data : dataMember) {
-                dataMemberName.add(data.getTxtNama());
-            }
-        }
-
-        ArrayAdapter<String> adapterMemberName = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataMemberName);
-        spinNama.setAdapter(adapterMemberName);
+//        List<String> dataMemberName = new ArrayList<>();
+//        if (dataMember.size() > 0) {
+//            for (clsUserMember data : dataMember) {
+//                dataMemberName.add(data.getTxtNama());
+//            }
+//        }
+//
+//        ArrayAdapter<String> adapterMemberName = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dataMemberName);
+//        spinNama.setAdapter(adapterMemberName);
 
         String sub, sub2, sub3;
         String member1 = dataMember.get(0).getTxtMemberId();
