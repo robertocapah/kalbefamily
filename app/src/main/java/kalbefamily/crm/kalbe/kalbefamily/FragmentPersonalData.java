@@ -499,7 +499,7 @@ public class FragmentPersonalData extends Fragment {
         clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
         if (dtJson != null) {
             try {
-                String strLinkAPI = "http://10.171.11.70/WebApi2/KF/UpdateDataKontak";
+                String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
                 new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {

@@ -37,6 +37,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsWarning;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsmVersionApp;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsDeviceInfoRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
@@ -221,7 +222,7 @@ public class MemberActivity extends AppCompatActivity {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         txtTelp = txtNoTelp.getText().toString();
-        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/GetDetailKontak";
+        String strLinkAPI = new clsHardCode().linkLogin;
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
         List<clsmVersionApp> dataInfoVersion = null;
@@ -316,7 +317,7 @@ public class MemberActivity extends AppCompatActivity {
     public void checkVersion() {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/CheckVersionApp";
+        String strLinkAPI = new clsHardCode().linkCheckVersion;
         // http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J
         JSONObject resJson = new JSONObject();
         try {
