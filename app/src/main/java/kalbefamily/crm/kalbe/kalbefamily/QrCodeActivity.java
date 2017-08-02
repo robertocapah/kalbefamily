@@ -35,6 +35,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsQRCodeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
@@ -157,7 +158,7 @@ public class QrCodeActivity extends AppCompatActivity {
         clsSendData dtJson = new clsHelper().sendDataQRCode(versionName, getApplicationContext());
         if (dtJson != null) {
             try {
-                String strLinkAPI = "http://10.171.11.70/WebApi2/KF/ScanQRCode";
+                String strLinkAPI = new clsHardCode().linkScanQRCode;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
                 new VolleyUtils().makeJsonObjectRequestSendDataQRCode(getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {

@@ -104,14 +104,14 @@
             <!--android:fontFamily="sans-serif"-->
             <!--android:text="Arick Anjasmara" />-->
 
-        <Spinner
-            android:id="@+id/spnNama"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:fontFamily="sans-serif"
-            android:background="@drawable/bg_edtext"/>
+        <!--<Spinner-->
+            <!--android:id="@+id/spnNama"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:background="@drawable/bg_edtext"/>-->
 
     </RelativeLayout>
 </RelativeLayout>

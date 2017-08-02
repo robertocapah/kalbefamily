@@ -33,6 +33,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -100,7 +101,7 @@ public class FragmentInfoContact extends Fragment {
         }
 
         txtMember = dataMember.get(0).getTxtMemberId();
-        String strLinkAPI = "http://10.171.11.70/WebApi2/KF/GetDetailKontakCustomer";
+        String strLinkAPI = new clsHardCode().linkGetDetailCustomer;
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
 
