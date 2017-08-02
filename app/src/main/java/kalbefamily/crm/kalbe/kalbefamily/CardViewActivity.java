@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 
@@ -27,6 +30,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 public class CardViewActivity extends AppCompatActivity {
     RecyclerView recyclerView;
+    private Toolbar toolbar;
 
     @Override
     public void onBackPressed() {
@@ -47,6 +51,24 @@ public class CardViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_view);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbarCardView);
+        toolbar.setTitle("Pilih salah satu member");
+        setSupportActionBar(toolbar);
+
+        // set enable toolbar button back
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // toolbar button for move to before screen
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MemberActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        });
 
         recyclerView = (RecyclerView)findViewById(R.id.myRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
