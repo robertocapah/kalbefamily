@@ -69,12 +69,14 @@ public class MyAdapter extends ExpandableRecyclerAdapter<TitleParentViewHolder,T
         TitleChild title = (TitleChild)o;
         titleChildViewHolder.option1.setText(title.getOption1());
         titleChildViewHolder.option2.setText(title.getOption2());
+        final String txtId = title.txtId;
+
         titleChildViewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     clsUserMemberRepo repoUserMember = new clsUserMemberRepo(context2);
-                    dataMember = (List<clsUserMember>) repoUserMember.findAll();
+                    dataMember = (List<clsUserMember>) repoUserMember.findByIdString(txtId);
                     DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
                     helper.refreshData();
                 } catch (SQLException e) {
@@ -82,16 +84,16 @@ public class MyAdapter extends ExpandableRecyclerAdapter<TitleParentViewHolder,T
                 }
 
                 clsUserMember dataUser = new clsUserMember();
-                dataUser.setTxtKontakId(dataMember.get(i-1).txtKontakId);
-                dataUser.setTxtMemberId(dataMember.get(i-1).txtMemberId);
-                dataUser.setTxtNama(dataMember.get(i-1).txtNama);
-                dataUser.setTxtAlamat(dataMember.get(i-1).txtAlamat);
-                dataUser.setTxtJenisKelamin(dataMember.get(i-1).txtJenisKelamin);
-                dataUser.setTxtEmail(dataMember.get(i-1).getTxtEmail().toString());
-                dataUser.setTxtNoTelp(dataMember.get(i-1).getTxtNoTelp().toString());
-                dataUser.setTxtNoKTP(dataMember.get(i-1).getTxtNoKTP().toString());
-                dataUser.setTxtNamaKeluarga(dataMember.get(i-1).getTxtNamaKeluarga().toString());
-                dataUser.setTxtNamaPanggilan(dataMember.get(i-1).getTxtNamaPanggilan().toString());
+                dataUser.setTxtKontakId(dataMember.get(0).txtKontakId);
+                dataUser.setTxtMemberId(dataMember.get(0).txtMemberId);
+                dataUser.setTxtNama(dataMember.get(0).txtNama);
+                dataUser.setTxtAlamat(dataMember.get(0).txtAlamat);
+                dataUser.setTxtJenisKelamin(dataMember.get(0).txtJenisKelamin);
+                dataUser.setTxtEmail(dataMember.get(0).txtEmail);
+                dataUser.setTxtNoTelp(dataMember.get(0).txtNoTelp);
+                dataUser.setTxtNoKTP(dataMember.get(0).txtNoKTP);
+                dataUser.setTxtNamaKeluarga(dataMember.get(0).txtNamaKeluarga);
+                dataUser.setTxtNamaPanggilan(dataMember.get(0).txtNamaPanggilan);
 
                 repoUserMember = new clsUserMemberRepo(context2.getApplicationContext());
 

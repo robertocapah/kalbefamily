@@ -1,14 +1,10 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 
@@ -77,7 +73,7 @@ public class CardViewActivity extends AppCompatActivity {
         int i = 0;
         for(TitleParent title:titles ) {
             List<Object> childList = new ArrayList<>();
-            childList.add(new TitleChild("Alamat : " +dataMember.get(i).txtAlamat ,"Jenis Kelamin : " +dataMember.get(i).txtJenisKelamin));
+            childList.add(new TitleChild("Alamat : " +dataMember.get(i).txtAlamat ,"Jenis Kelamin : " +dataMember.get(i).txtJenisKelamin, dataMember.get(i).txtKontakId));
             title.setChildObjectList(childList);
             parentObject.add(title);
             i++;

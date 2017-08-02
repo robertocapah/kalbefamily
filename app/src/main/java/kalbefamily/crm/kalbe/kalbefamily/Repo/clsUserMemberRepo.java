@@ -6,10 +6,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
@@ -81,6 +78,16 @@ public class clsUserMemberRepo implements crud {
         clsUserMember item = null;
         try{
             item = helper.getUserMemberDao().queryForId(id);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+    public Object findByIdString(String id) throws SQLException {
+        List<clsUserMember> item = null;
+        try{
+            item = helper.getUserMemberDao().queryBuilder().where().eq("txtKontakId", id).query();
         }catch (SQLException e){
             e.printStackTrace();
         }
