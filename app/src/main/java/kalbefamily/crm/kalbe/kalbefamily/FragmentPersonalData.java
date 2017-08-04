@@ -1,17 +1,25 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,6 +55,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
+import static android.app.Activity.RESULT_OK;
 import static com.android.volley.VolleyLog.TAG;
 
 /**
@@ -61,7 +71,7 @@ public class FragmentPersonalData extends Fragment {
     Button btnUpdate;
     private ImageView image1, image2;
     Context context;
-    private Uri uriImage;
+    private Uri uriImage, selectedImage;
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int CAMERA_REQUEST2 = 1889;
@@ -73,6 +83,10 @@ public class FragmentPersonalData extends Fragment {
     private static byte[] phtImage2;
     private static Bitmap mybitmap1;
     private static Bitmap mybitmap2;
+    final int PIC_CROP = 2;
+    final int PIC_CROP2 = 3;
+    final int SELECT_FILE = 1;
+    final int SELECT_FILE2 = 4;
 
     List<clsUserMember> dataMember = null;
     List<clsUserMemberImage> dataMemberImage = null;
@@ -176,14 +190,16 @@ public class FragmentPersonalData extends Fragment {
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureImage1();
+//                captureImage1();
+                selectImage1();
             }
         });
 
         image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureImage2();
+//                captureImage2();
+                selectImage2();
             }
         });
 
@@ -312,7 +328,9 @@ public class FragmentPersonalData extends Fragment {
 
                     bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
 
-                    previewCaptureImage1(bitmap);
+                    // crop image
+                    performCrop();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -329,7 +347,19 @@ public class FragmentPersonalData extends Fragment {
                     e.printStackTrace();
                 }
             }
-        } else if (requestCode == CAMERA_REQUEST2) {
+        } else if (requestCode == PIC_CROP) {
+            if (resultCode == -1) {
+                //get the returned data
+                Bundle extras = data.getExtras();
+                //get the cropped bitmap
+                Bitmap thePic = extras.getParcelable("data");
+
+                previewCaptureImage1(thePic);
+            } else if (resultCode == 0) {
+                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+            }
+        }
+        else if (requestCode == CAMERA_REQUEST2) {
             if (resultCode == -1) {
                 try {
                     Bitmap bitmap;
@@ -338,7 +368,9 @@ public class FragmentPersonalData extends Fragment {
 
                     bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
 
-                    previewCaptureImage2(bitmap);
+                    performCrop2();
+
+//                    previewCaptureImage2(bitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -352,6 +384,45 @@ public class FragmentPersonalData extends Fragment {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (requestCode == PIC_CROP2) {
+            if (resultCode == -1) {
+                //get the returned data
+                Bundle extras = data.getExtras();
+                //get the cropped bitmap
+                Bitmap thePic = extras.getParcelable("data");
+
+                previewCaptureImage2(thePic);
+            } else if (resultCode == 0) {
+                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+            }
+        } else if (requestCode == SELECT_FILE) {
+            if(resultCode == RESULT_OK){
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    selectedImage = data.getData();
+                    String uri = selectedImage.getPath().toString();
+                    bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
+
+                    performCropGallery();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (requestCode == SELECT_FILE2) {
+            if(resultCode == RESULT_OK){
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    selectedImage = data.getData();
+                    String uri = selectedImage.getPath().toString();
+                    bitmap = BitmapFactory.decodeFile(uri, bitmapOptions);
+
+                    performCropGallery2();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -521,6 +592,215 @@ public class FragmentPersonalData extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    // crop image after user take image from camera or gallery
+    private void performCrop(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(uriImage, "image/*");
+//            cropIntent.setDataAndType(selectedImage, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private void performCropGallery(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(selectedImage, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private void performCrop2(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(uriImage, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP2);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private void performCropGallery2(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(selectedImage, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP2);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    // select take image from camera or gallery
+    private void selectImage1() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result=Utility.checkPermission(getActivity());
+                if (items[item].equals("Take Photo")) {
+                    if(result)
+                        captureImage1();
+                } else if (items[item].equals("Choose from Library")) {
+                    if(result)
+                        galleryIntent();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void selectImage2() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result=Utility.checkPermission(getActivity());
+                if (items[item].equals("Take Photo")) {
+                    if(result)
+                        captureImage2();
+                } else if (items[item].equals("Choose from Library")) {
+                    if(result)
+                        galleryIntent2();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public static class Utility {
+        public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        public static boolean checkPermission(final Context context)
+        {
+            int currentAPIVersion = Build.VERSION.SDK_INT;
+            if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
+            {
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                        alertBuilder.setCancelable(true);
+                        alertBuilder.setTitle("Permission necessary");
+                        alertBuilder.setMessage("External storage permission is necessary");
+                        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                            }
+                        });
+                        AlertDialog alert = alertBuilder.create();
+                        alert.show();
+                    } else {
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+    }
+
+    // choose image from gallery
+    private void galleryIntent() {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.setType("image/*");
+//        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , SELECT_FILE);//one can be replaced with any action code
+    }
+
+    private void galleryIntent2() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , SELECT_FILE2);//one can be replaced with any action code
     }
 
     public final static boolean isValidEmail(CharSequence target) {

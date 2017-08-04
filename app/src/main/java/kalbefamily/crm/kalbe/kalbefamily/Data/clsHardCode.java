@@ -9,6 +9,7 @@ import java.io.File;
  */
 
 public class clsHardCode {
+    public String txtPathApp= Environment.getExternalStorageDirectory()+File.separator+"data"+File.separator+"data"+File.separator+"KalbeFamily"+File.separator+"app_database"+File.separator;
     public String dbName = "KalbeFamily.db";
     public String txtFolderData = Environment.getExternalStorageDirectory()+ File.separator+"Android"+File.separator+"data"+File.separator+"KalbeFamily"+File.separator+"image_Person"+File.separator;
     public String txtFolderAbsen = Environment.getExternalStorageDirectory()+ File.separator+"Android"+File.separator+"data"+File.separator+"KalbeFamily"+File.separator+"image_Person"+File.separator;

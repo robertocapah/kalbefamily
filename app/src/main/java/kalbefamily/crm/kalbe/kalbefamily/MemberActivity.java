@@ -289,13 +289,8 @@ public class MemberActivity extends AppCompatActivity {
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
 
                                 repoUserMember = new clsUserMemberRepo(getApplicationContext());
-//
-                                int h = 0;
-                                h = repoUserMember.createOrUpdate(dataUser);
-                                if(h > -1) {
-                                    Log.d("Data info", "Data member valid");
-//                                    status = true;
-                                }
+                                repoUserMember.createOrUpdate(dataUser);
+                                Log.d("Data info", "Data member valid");
                             }
                             Intent intent = new Intent(MemberActivity.this, CardViewActivity.class);
                             finish();

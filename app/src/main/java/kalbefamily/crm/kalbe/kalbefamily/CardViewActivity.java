@@ -64,6 +64,8 @@ public class CardViewActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+                helper.refreshData();
                 Intent intent = new Intent(getApplicationContext(), MemberActivity.class);
                 finish();
                 startActivity(intent);
@@ -97,6 +99,7 @@ public class CardViewActivity extends AppCompatActivity {
             List<Object> childList = new ArrayList<>();
             childList.add(new TitleChild("Alamat : " +dataMember.get(i).txtAlamat ,"Jenis Kelamin : " +dataMember.get(i).txtJenisKelamin, dataMember.get(i).txtKontakId));
             title.setChildObjectList(childList);
+            title.setTitle("Nama : " +dataMember.get(i).txtNama);
             parentObject.add(title);
             i++;
         }

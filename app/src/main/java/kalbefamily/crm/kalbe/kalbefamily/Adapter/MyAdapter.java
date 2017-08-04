@@ -96,12 +96,9 @@ public class MyAdapter extends ExpandableRecyclerAdapter<TitleParentViewHolder,T
                 dataUser.setTxtNamaPanggilan(dataMember.get(0).txtNamaPanggilan);
 
                 repoUserMember = new clsUserMemberRepo(context2.getApplicationContext());
+                repoUserMember.createOrUpdate(dataUser);
+                Log.d("Data info", "Data member Berhasil Disimpan");
 
-                int h = 0;
-                h = repoUserMember.createOrUpdate(dataUser);
-                if(h > -1) {
-                    Log.d("Data info", "Data member Berhasil Disimpan");
-                }
 //                System.exit(0);
                 Intent intent = new Intent(context2, HomeMenu.class);
                 activity.finish();

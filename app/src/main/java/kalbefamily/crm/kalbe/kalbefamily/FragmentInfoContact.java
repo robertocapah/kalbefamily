@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -34,6 +35,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -76,6 +78,11 @@ public class FragmentInfoContact extends Fragment {
             tvMember.setText(dataMember.get(0).getTxtEmail().toString());
         }
 
+//        try {
+//            new clsHelper().copydb(context.getApplicationContext());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         UserMember();
 //        if (data != null){
 //            tvUsername.setText(data.getTxtName().toString());
@@ -170,37 +177,41 @@ public class FragmentInfoContact extends Fragment {
 //                                    status = true;
                                 }
 
-                                JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
-                                for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
-                                    JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
-                                    String txtGuiID = jsonobjectImage.getString("TxtDataID");
-                                    String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-                                    String txtImageName = jsonobjectImage.getString("TxtImageName");
-                                    String txtType = jsonobjectImage.getString("TxtType");
+                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
+                                if (listtkontakImage != "null") {
+                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
+                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+                                        String txtType = jsonobjectImage.getString("TxtType");
 
-                                    clsUserMemberImage dataImage = new clsUserMemberImage();
-                                    dataImage.setTxtGuiId(txtGuiID);
-                                    dataImage.setTxtHeaderId(txtKontakIDImage);
-                                    dataImage.setTxtPosition(txtType);
+                                        clsUserMemberImage dataImage = new clsUserMemberImage();
+                                        dataImage.setTxtGuiId(txtGuiID);
+                                        dataImage.setTxtHeaderId(txtKontakIDImage);
+                                        dataImage.setTxtPosition(txtType);
 
-                                    String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
 
-                                    byte[] logoImage = getLogoImage(url);
+                                        byte[] logoImage = getLogoImage(url);
 
-                                    if (logoImage != null) {
-                                        dataImage.setTxtImg(logoImage);
+                                        if (logoImage != null) {
+                                            dataImage.setTxtImg(logoImage);
 
-                                        imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
+                                            imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
 
-                                        int k = 0;
-                                        k = imageRepo.createOrUpdate(dataImage);
-                                        if(k > -1) {
-                                            Log.d("Data info", "Image " +txtType+ " Berhasil di update");
-                                            Log.d("Data info", "Data Member Image berhasil di update");
+                                            int k = 0;
+                                            k = imageRepo.createOrUpdate(dataImage);
+                                            if(k > -1) {
+                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+                                                Log.d("Data info", "Data Member Image berhasil di update");
 //                                    status = true;
+                                            }
                                         }
                                     }
                                 }
+
                             }
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {

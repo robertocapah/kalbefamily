@@ -24,8 +24,6 @@ public class TitleCreator extends AppCompatActivity {
         try {
             clsUserMemberRepo repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
-            String kontakId = null;
-            kontakId = dataMember.get(0).txtKontakId;
         } catch (SQLException e) {
             e.printStackTrace();
         }

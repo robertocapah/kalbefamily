@@ -3,6 +3,7 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +19,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +67,31 @@ public class clsHelper {
         myOutput.flush();
         myOutput.close();
         myInput.close();
+    }
+
+    public String copydb(Context context) throws  IOException{
+        String CURRENT_DATABASE_PATH = _path.txtPathApp+"backupDbKalbeFamily";
+
+        try {
+            File dbFile = new File(CURRENT_DATABASE_PATH);
+            FileInputStream fis = new FileInputStream(dbFile);
+            String txtPathUserData= Environment.getExternalStorageDirectory()+File.separator+"backupDbKalbeFamily";
+            File yourFile = new File(txtPathUserData);
+            yourFile.createNewFile();
+            OutputStream output = new FileOutputStream(yourFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+            output.flush();
+            output.close();
+            fis.close();
+        } catch (Exception e) {
+            String s= "hahaha";
+        }
+
+        return "hehe";
     }
 
     public clsSendData sendData(String versionName, Context context){
