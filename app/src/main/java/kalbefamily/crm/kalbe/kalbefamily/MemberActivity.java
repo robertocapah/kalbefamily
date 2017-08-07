@@ -222,7 +222,7 @@ public class MemberActivity extends AppCompatActivity {
         final ProgressDialog Dialog = new ProgressDialog(MemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         txtTelp = txtNoTelp.getText().toString();
-        String strLinkAPI = new clsHardCode().linkLogin;
+        String strLinkAPI = new clsHardCode().linkGetDetailKontak;
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
         List<clsmVersionApp> dataInfoVersion = null;
