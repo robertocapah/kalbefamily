@@ -183,7 +183,20 @@ public class HomeMenu extends AppCompatActivity {
                                 .setCancelable(false)
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        logout();
+                                        final ProgressDialog dialog2 = new ProgressDialog(HomeMenu.this, ProgressDialog.STYLE_SPINNER);
+                                        dialog2.setIndeterminate(true);
+                                        dialog2.setMessage("Logging out...");
+                                        dialog2.show();
+
+                                        new android.os.Handler().postDelayed(
+                                                new Runnable() {
+                                                    public void run() {
+                                                        // On complete call either onLoginSuccess or onLoginFailed
+                                                        logout();
+                                                        // onLoginFailed();
+                                                        dialog2.dismiss();
+                                                    }
+                                                }, 3000);
 //                                        new clsActivity().showCustomToast(getApplicationContext(), "Logout, Success", true);
 //                                        Toast.makeText(getApplicationContext(), "Logout, Success", Toast.LENGTH_SHORT).show();
                                     }
