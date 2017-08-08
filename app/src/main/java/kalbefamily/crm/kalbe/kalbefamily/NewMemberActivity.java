@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,6 +100,10 @@ public class NewMemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_member);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_theme));
+        }
 
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -134,7 +139,7 @@ public class NewMemberActivity extends AppCompatActivity {
                 intProcesscancel = 0;
                 if (txtMemberId.getText().length() == 0) {
 //                    showToast(LoginActivity.this, "Please input username");
-                    Toast.makeText(getApplicationContext(), "Please input Mobile phone", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please input Member ID", Toast.LENGTH_LONG).show();
 
                 } else {
                     txtMember = txtMemberId.getText().toString();

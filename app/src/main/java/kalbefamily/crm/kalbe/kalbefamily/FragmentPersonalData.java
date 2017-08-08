@@ -283,15 +283,15 @@ public class FragmentPersonalData extends Fragment {
                     Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap1, 150, 150, true);
                     image1.setImageBitmap(bitmap);
 
-                    File file = null;
-                    try {
-                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
-                        FileOutputStream out = new FileOutputStream(file);
-                        out.write(imgFile);
-                        out.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    File file = null;
+//                    try {
+//                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        out.write(imgFile);
+//                        out.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
 
@@ -302,15 +302,15 @@ public class FragmentPersonalData extends Fragment {
                     Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
                     image2.setImageBitmap(bitmap);
 
-                    File file = null;
-                    try {
-                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
-                        FileOutputStream out = new FileOutputStream(file);
-                        out.write(imgFile2);
-                        out.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    File file = null;
+//                    try {
+//                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        out.write(imgFile2);
+//                        out.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
         }

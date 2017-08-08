@@ -221,14 +221,14 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
                         final AlertDialog alertD = alertDialogBuilder.create();
                         alertD.show();
                         return true;
-                    case R.id.absen:
-                        toolbar.setTitle("Absen");
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                        FragmentAbsen fragmentAbsen = new FragmentAbsen();
-                        FragmentTransaction fragmentTransactionKuesioner = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionKuesioner.replace(R.id.frame, fragmentAbsen);
-                        fragmentTransactionKuesioner.commit();
-                        return true;
+//                    case R.id.absen:
+//                        toolbar.setTitle("Absen");
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                        FragmentAbsen fragmentAbsen = new FragmentAbsen();
+//                        FragmentTransaction fragmentTransactionKuesioner = getSupportFragmentManager().beginTransaction();
+//                        fragmentTransactionKuesioner.replace(R.id.frame, fragmentAbsen);
+//                        fragmentTransactionKuesioner.commit();
+//                        return true;
                     case R.id.home:
                         toolbar.setTitle("Home");
 
