@@ -77,7 +77,8 @@
             android:name=".RewardCardActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".NewMemberActivity" />
-        <activity android:name=".NewLoginActivity"></activity>
+        <activity android:name=".NewLoginActivity" />
+        <activity android:name=".CreatePasswordActivity"></activity>
     </application>
 
 </manifest>
