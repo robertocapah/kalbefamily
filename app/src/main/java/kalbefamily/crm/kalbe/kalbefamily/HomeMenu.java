@@ -253,6 +253,7 @@ public class HomeMenu extends AppCompatActivity {
 //                        selectedId = 99;
 
                         Intent intentReward = new Intent(getApplicationContext(), RewardCardActivity.class);
+                        finish();
                         startActivity(intentReward);
 
                         return true;

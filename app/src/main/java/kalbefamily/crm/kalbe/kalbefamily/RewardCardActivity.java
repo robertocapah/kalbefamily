@@ -1,6 +1,9 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,6 +28,12 @@ public class RewardCardActivity extends AppCompatActivity {
     Spinner spinNama;
 
     List<clsUserMember> dataMember = null;
+
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeMenu.class);
+        finish();
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
