@@ -129,6 +129,7 @@ public class NewMemberActivity extends AppCompatActivity {
                 return false;
             }
         });
+        checkVersion();
 
         txtVersionLogin = (TextView) findViewById(R.id.txtVersionLogin);
         txtVersionLogin.setText(pInfo.versionName);
@@ -209,13 +210,13 @@ public class NewMemberActivity extends AppCompatActivity {
         final ProgressDialog Dialog = new ProgressDialog(NewMemberActivity.this);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         txtMember = txtMemberId.getText().toString();
-        String strLinkAPI = new clsHardCode().linkGetDetailKontak;
+        String strLinkAPI = new clsHardCode().linkGetDatadMembership;
         JSONObject resJson = new JSONObject();
         List<clsmVersionApp> dataInfoVersion = null;
         List<clsDeviceInfoData> dataInfo = null;
 
         try {
-            resJson.put("txtMemberIdOrTelpId", txtMember);
+            resJson.put("txtMemberID", txtMember);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -242,8 +243,8 @@ public class NewMemberActivity extends AppCompatActivity {
                             for(int i=0; i < jsonDataUserMember.length(); i++) {
                                 JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
                                 String txtKontakId = jsonobject.getString("TxtKontakId");
-                                String memberID = jsonobject.getString("TxtMemberId");
-                                String txtNama = jsonobject.getString("TxtNama");
+                                String txtMemberID = jsonobject.getString("TxtMemberId");
+                                String txtNama = jsonobject.getString("txtNamaKartu");
                                 String txtAlamat = jsonobject.getString("TxtAlamat");
                                 String txtJenisKelamin = jsonobject.getString("TxtJenisKelamin");
                                 String txtEmail = jsonobject.getString("TxtEmail");
@@ -254,7 +255,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
-                                dataUser.setTxtMemberId(memberID);
+                                dataUser.setTxtMemberId(txtMemberID);
                                 dataUser.setTxtNama(txtNama);
                                 dataUser.setTxtAlamat(txtAlamat);
                                 dataUser.setTxtJenisKelamin(txtJenisKelamin);
@@ -268,16 +269,113 @@ public class NewMemberActivity extends AppCompatActivity {
 //                                repoUserMember.createOrUpdate(dataUser);
 //                                Log.d("Data info", "Data member valid");
                             }
-                            Toast.makeText(getApplicationContext(), "Your Member ID is valid", Toast.LENGTH_LONG).show();
-//                            Intent intent = new Intent(NewMemberActivity.this, CardViewActivity.class);
-//                            finish();
-//                            startActivity(intent);
+//                            Toast.makeText(getApplicationContext(), "Your Member ID is valid", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(NewMemberActivity.this, NewLoginActivity.class);
+                            intent.putExtra("memberID", txtMember);
+                            finish();
+                            startActivity(intent);
                         } else {
                             new clsActivity().showCustomToast(getApplicationContext(), warn, false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+    }
+
+    public void checkVersion() {
+        final ProgressDialog Dialog = new ProgressDialog(NewMemberActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String strLinkAPI = new clsHardCode().linkCheckVersion;
+        // http://prm.kalbenutritionals.web.id/VisitPlan/API/VisitPlanAPI/CheckVersionApp_J
+        JSONObject resJson = new JSONObject();
+        try {
+            resJson.put("TxtNameApp", "Kalbe Family");
+            resJson.put("TxtType", "Android");
+            resJson.put("txtVersion", "1.0.0.1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+//        String result = new clsHelper().volleyImplement(getApplicationContext(),mRequestBody,strLinkAPI,Login.this);
+//
+
+        new VolleyUtils().makeJsonObjectRequest(NewMemberActivity.this, strLinkAPI, mRequestBody, "Checking Version !", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null){
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("validJson");
+
+                        String result = jsonObject2.getString("IntResult");
+                        String txtWarn = jsonObject2.getString("TxtMessage");
+                        if (result.equals("1")){
+                            JSONArray jsonObject3 = jsonObject2.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonObject3.length(); i++) {
+                                JSONObject jsonobject = jsonObject3.getJSONObject(i);
+                                String intMApplication = jsonobject.getString("IntMApplication");
+                                String txtName = jsonobject.getString("TxtName");
+                                String txtType = jsonobject.getString("TxtType");
+                                String txtVersion = jsonobject.getString("TxtVersion");
+                                String txtLink = jsonobject.getString("TxtLink");
+                                String bitActive = jsonobject.getString("BitActive");
+
+                                clsDeviceInfoData data = new clsDeviceInfoData();
+                                data.setIntMApplication(intMApplication);
+                                data.setTxtNameApp(txtName);
+                                data.setTxtDevice(android.os.Build.DEVICE);
+                                data.setTxtType(txtType);
+                                data.setTxtVersion(txtVersion);
+                                data.setBitActive(bitActive);
+                                data.setIdDevice("");
+                                data.setTxtLink(txtLink);
+                                data.setTxtModel(android.os.Build.MANUFACTURER+" "+android.os.Build.MODEL);
+
+                                clsmVersionApp dataVersion = new clsmVersionApp();
+                                dataVersion.setIntMApplication(intMApplication);
+                                dataVersion.setTxtNameApp(txtName);
+                                dataVersion.setTxtVersion(txtVersion);
+                                dataVersion.setTxtType(txtType);
+                                dataVersion.setBitActive(bitActive);
+                                dataVersion.setTxtLink(txtLink);
+
+                                repoDeviceInfo =new clsDeviceInfoRepo(getApplicationContext());
+                                repoVersionApp = new clsmVersionAppRepo(getApplicationContext());
+                                int h = 0;
+                                int j = 0;
+                                try {
+                                    h = repoDeviceInfo.createOrUpdate(data);
+                                    j = repoVersionApp.createOrUpdate(dataVersion);
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                                if(h > -1)
+                                {
+                                    Log.d("Data info", "Data info berhasil di simpan");
+                                    status = true;
+                                }
+                            }
+//                            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//                            String imeiNumber = tm.getDeviceId();
+
+                        }else{
+                            Toast.makeText(getApplicationContext(), txtWarn, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(!status){
+                    new clsActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
                 }
             }
         });

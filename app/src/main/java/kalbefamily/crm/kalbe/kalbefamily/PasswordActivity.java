@@ -13,7 +13,7 @@ import android.widget.Toast;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 
-public class CreatePasswordActivity extends AppCompatActivity {
+public class PasswordActivity extends AppCompatActivity {
     EditText password, confirmPassword;
     String txtPassword, txtConfirmPassword;
     Button submit;

@@ -78,7 +78,7 @@
             android:screenOrientation="landscape" />
         <activity android:name=".NewMemberActivity" />
         <activity android:name=".NewLoginActivity" />
-        <activity android:name=".CreatePasswordActivity"></activity>
+        <activity android:name=".PasswordActivity"></activity>
     </application>
 
 </manifest>
