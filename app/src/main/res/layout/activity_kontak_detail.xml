@@ -13,11 +13,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dip"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#4CAF50"
             android:gravity="center"
             android:layout_weight="1.5">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/profile" />
 
             <TextView
                 android:id="@+id/tvUsername"
@@ -32,7 +40,7 @@
                 android:textColor="@color/white"/>
 
             <TextView
-                android:id="@+id/tvMember"
+                android:id="@+id/tvBasePoint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -41,44 +49,190 @@
                 android:text="arick_anjasmara@ymail.com"
                 android:textColor="@color/white"/>
 
-            <TextView
-                android:id="@+id/tvAlamat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center"
-                android:text="Jakarta"
-                android:textColor="@color/white"/>
+            <!--<TextView-->
+                <!--android:id="@+id/tvAlamat"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Jakarta"-->
+                <!--android:textColor="@color/white"/>-->
         </LinearLayout>
 
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_marginTop="20dp">-->
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="status :"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center"/>-->
-        <!--<com.owater.library.CircleTextView-->
-        <!--android:id="@+id/status"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_weight="0.33"-->
-        <!--android:gravity="center"-->
-        <!--android:text="checkout"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--android:textSize="15dp"-->
-        <!--app:ct_backgroundColor="#FFFFFF"-->
-        <!--app:ct_border_alpha="0.5"-->
-        <!--app:ct_border_color="@color/colorAccent"-->
-        <!--app:ct_border_width="10dp"-->
-        <!--app:ct_type="shadow_alpha" />-->
-        <!--</LinearLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/ivContactItem1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_phone_black" />
+
+                <TextView
+                    android:id="@+id/tvNumber1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_toEndOf="@id/ivContactItem1"
+                    android:text="(123) 456-7890"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#212121" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvNumber1"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/ivContactItem1"
+                    android:text="Home"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#727272" />
+
+                <ToggleButton
+                    android:id="@+id/chkState1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/toggle_selector"
+                    android:checked="true"
+                    android:padding="6dp"
+                    android:textOff=""
+                    android:textOn="" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/item_divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/ivContactItem3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_email_black" />
+
+                <TextView
+                    android:id="@+id/tvNumber3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_toEndOf="@id/ivContactItem3"
+                    android:layout_toStartOf="@+id/chkState3"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="chintan@letsnurture.com"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#212121" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvNumber3"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/ivContactItem3"
+                    android:text="Work"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#727272" />
+
+                <ToggleButton
+                    android:id="@+id/chkState3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/toggle_selector"
+                    android:checked="true"
+                    android:padding="6dp"
+                    android:textOff=""
+                    android:textOn="" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/item_divider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/ivContactItem5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_location_on_black" />
+
+                <TextView
+                    android:id="@+id/tvNumber5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_toEndOf="@id/ivContactItem5"
+                    android:layout_toStartOf="@+id/chkState5"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="202 Park Street, Los Angeles"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#212121" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvNumber5"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/ivContactItem5"
+                    android:text="Home"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#727272"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+                <ToggleButton
+                    android:id="@+id/chkState5"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/toggle_selector"
+                    android:checked="true"
+                    android:padding="6dp"
+                    android:textOff=""
+                    android:textOn="" />
+
+            </RelativeLayout>
+
+
+
+            <include layout="@layout/item_divider" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -184,121 +338,121 @@
 
         </LinearLayout>
 
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:padding="10dp"
-            android:layout_weight="1.3"
-            android:background="@color/white"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dip"-->
+            <!--android:padding="10dp"-->
+            <!--android:layout_weight="1.3"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="horizontal">-->
 
-            <TableLayout
-                android:id="@+id/tlAbesen"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/textView19">
+            <!--<TableLayout-->
+                <!--android:id="@+id/tlAbesen"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_below="@+id/textView19">-->
 
-                <TableRow
-                    android:background="#4CAF50"
-                    android:padding="5dp"
-                    android:gravity="center_horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Type"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Unpushed"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pushed"
-                        android:layout_weight="1"
-                        />
-                </TableRow>
+                <!--<TableRow-->
+                    <!--android:background="#4CAF50"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_horizontal">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Type"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Unpushed"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Pushed"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                <!--</TableRow>-->
 
-                <TableRow
-                    android:background="#f0f0f0"
-                    android:padding="5dp"
-                    android:gravity="center_horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reso"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_reso1"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_reso2"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                </TableRow>
-                <TableRow
-                    android:background="#f0f0f0"
-                    android:padding="5dp"
-                    android:gravity="center_horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Activity"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_act1"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_act2"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                </TableRow>
-                <TableRow
-                    android:background="#f0f0f0"
-                    android:padding="5dp"
-                    android:gravity="center_horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Customer Base"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_cb1"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_cb2"
-                        android:text=""
-                        android:layout_weight="1"
-                        />
-                </TableRow>
-            </TableLayout>
-        </LinearLayout>-->
+                <!--<TableRow-->
+                    <!--android:background="#f0f0f0"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_horizontal">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Reso"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_reso1"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_reso2"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                <!--</TableRow>-->
+                <!--<TableRow-->
+                    <!--android:background="#f0f0f0"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_horizontal">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Activity"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_act1"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_act2"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                <!--</TableRow>-->
+                <!--<TableRow-->
+                    <!--android:background="#f0f0f0"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_horizontal">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Customer Base"-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_cb1"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/tv_cb2"-->
+                        <!--android:text=""-->
+                        <!--android:layout_weight="1"-->
+                        <!--/>-->
+                <!--</TableRow>-->
+            <!--</TableLayout>-->
+        <!--</LinearLayout>&ndash;&gt;-->
 
     </LinearLayout>
 

@@ -158,6 +158,7 @@ public class NewLoginActivity extends AppCompatActivity {
                                 String txtNoKTP = jsonobject.getString("TxtNoKTP");
                                 String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
+                                String txtBasePoint = jsonobject.getString("IntBasePoin");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
@@ -168,6 +169,7 @@ public class NewLoginActivity extends AppCompatActivity {
                                 dataUser.setTxtEmail(txtEmail);
                                 dataUser.setTxtNoTelp(txtTelp);
                                 dataUser.setTxtNoKTP(txtNoKTP);
+                                dataUser.setTxtBasePoin(txtBasePoint);
                                 dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
 

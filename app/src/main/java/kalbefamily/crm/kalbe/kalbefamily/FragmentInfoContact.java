@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -35,7 +34,6 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
-import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -45,7 +43,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 public class FragmentInfoContact extends Fragment {
     View v;
-    TextView tvUsername, tvAlamat, tvMember;
+    TextView tvUsername, tvPhone, tvEmail, tvAddress, tvBasePoint;
     Context context;
     CircleTextView ctvStatus;
     List<clsUserMember> dataMember = null;
@@ -59,8 +57,10 @@ public class FragmentInfoContact extends Fragment {
         v = inflater.inflate(R.layout.activity_kontak_detail,container,false);
         context = getActivity().getApplicationContext();
         tvUsername = (TextView) v.findViewById(R.id.tvUsername);
-        tvAlamat = (TextView) v.findViewById(R.id.tvAlamat);
-        tvMember = (TextView) v.findViewById(R.id.tvMember);
+        tvPhone = (TextView) v.findViewById(R.id.tvNumber1);
+        tvEmail = (TextView) v.findViewById(R.id.tvNumber3);
+        tvAddress = (TextView) v.findViewById(R.id.tvNumber5);
+        tvBasePoint = (TextView) v.findViewById(R.id.tvBasePoint);
 //        ctvStatus = (CircleTextView) v.findViewById(R.id.status);
 //        clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
 //        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
@@ -71,13 +71,14 @@ public class FragmentInfoContact extends Fragment {
             e.printStackTrace();
         }
         tvUsername.setText(dataMember.get(0).getTxtNama().toString());
-        tvAlamat.setText(dataMember.get(0).getTxtAlamat().toString());
-        if (dataMember.get(0).getTxtEmail().equals("")) {
-            tvMember.setText(dataMember.get(0).getTxtMemberId().toString());
+        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
+        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
+        if (dataMember.get(0).getTxtBasePoin().equals("null")) {
+            tvBasePoint.setText("(Base Point : 0 )");
         } else {
-            tvMember.setText(dataMember.get(0).getTxtEmail().toString());
+            tvBasePoint.setText("(Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
         }
-
 //        try {
 //            new clsHelper().copydb(context.getApplicationContext());
 //        } catch (IOException e) {
@@ -164,7 +165,7 @@ public class FragmentInfoContact extends Fragment {
                                 dataUser.setTxtNoKTP(txtNoKTP);
                                 dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
-                                dataUser.setIntBasePoin(intBasePoin);
+                                dataUser.setTxtBasePoin(intBasePoin);
                                 dataUser.setTxtTglAwal(txtTglAwal);
                                 dataUser.setTxtTglBerlaku(txtTglBerlaku);
 

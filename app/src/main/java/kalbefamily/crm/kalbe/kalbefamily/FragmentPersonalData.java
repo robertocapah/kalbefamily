@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -131,7 +129,7 @@ public class FragmentPersonalData extends Fragment {
         etAlamat.setText(dataMember.get(0).getTxtAlamat().toString());
         etEmail.setText(dataMember.get(0).getTxtEmail().toString());
         etTelpon.setText(dataMember.get(0).getTxtNoTelp().toString());
-        etBasePoin.setText(dataMember.get(0).getIntBasePoin().toString());
+        etBasePoin.setText(dataMember.get(0).getTxtBasePoin().toString());
         etBasePoin.setEnabled(false);
 
 
@@ -220,7 +218,7 @@ public class FragmentPersonalData extends Fragment {
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
                         dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
                         dataUser.setTxtNamaKeluarga(etNamaKeluarga.getText().toString());
-                        dataUser.setIntBasePoin(etBasePoin.getText().toString());
+                        dataUser.setTxtBasePoin(etBasePoin.getText().toString());
 
                         if(!isValidEmail(etEmail.getText().toString())){
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);

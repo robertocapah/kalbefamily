@@ -290,7 +290,7 @@
                 android:layout_height="1dp"
                 android:background="#bfbfbf" />
             <TextView
-                android:id="@+id/intBasePoin"
+                android:id="@+id/txtBasePoin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Base Point"
@@ -300,7 +300,7 @@
                 android:textColor="#000"/>
             <EditText
                 android:id="@+id/etBasePoin"
-                android:layout_below="@+id/intBasePoin"
+                android:layout_below="@+id/txtBasePoin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

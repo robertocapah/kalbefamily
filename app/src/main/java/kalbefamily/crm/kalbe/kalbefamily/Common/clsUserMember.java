@@ -90,12 +90,12 @@ public class clsUserMember implements Serializable {
         this.txtNamaPanggilan = txtNamaPanggilan;
     }
 
-    public String getIntBasePoin() {
-        return intBasePoin;
+    public String getTxtBasePoin() {
+        return txtBasePoin;
     }
 
-    public void setIntBasePoin(String intBasePoin) {
-        this.intBasePoin = intBasePoin;
+    public void setTxtBasePoin(String txtBasePoin) {
+        this.txtBasePoin = txtBasePoin;
     }
 
     public String getTxtTglAwal() {
@@ -134,8 +134,8 @@ public class clsUserMember implements Serializable {
     public String txtNamaKeluarga;
     @DatabaseField(columnName = "txtNamaPanggilan")
     public String txtNamaPanggilan;
-    @DatabaseField(columnName = "intBasePoin")
-    public String intBasePoin;
+    @DatabaseField(columnName = "txtBasePoin")
+    public String txtBasePoin;
     @DatabaseField(columnName = "txtTglAwal")
     public String txtTglAwal;
     @DatabaseField(columnName = "txtTglBerlaku")
@@ -151,7 +151,7 @@ public class clsUserMember implements Serializable {
     public String Property_txtNoKTP = "txtNoKTP";
     public String Property_txtNamaKeluarga = "txtNamaKeluarga";
     public String Property_txtNamaPanggilan = "txtNamaPanggilan";
-    public String Property_intBasePoin = "intBasePoin";
+    public String Property_intBasePoin = "txtBasePoin";
     public String Property_ListOfUserMember = "ListOfObjectData";
     public String Property_All=Property_txtKontakId +","+
             Property_txtMemberId +","+
