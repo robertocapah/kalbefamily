@@ -75,9 +75,9 @@ public class FragmentInfoContact extends Fragment {
         tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
         tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
         if (dataMember.get(0).getTxtBasePoin().equals("null")) {
-            tvBasePoint.setText("(Base Point : 0 )");
+            tvBasePoint.setText("( Base Point : 0 )");
         } else {
-            tvBasePoint.setText("(Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
+            tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
         }
 //        try {
 //            new clsHelper().copydb(context.getApplicationContext());

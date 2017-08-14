@@ -13,36 +13,23 @@
         layout="@layout/tool_bar"
         />
 
+    <ImageView android:layout_width="290dp"
+        android:layout_height="140dp"
+        android:background="@drawable/scan"
+        android:layout_gravity="center"
+        android:id="@+id/imageScanner" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <Button
-            android:id="@+id/buttonScan"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:text="Start Scan"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/btn_download_all"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="50dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="status :"
-                android:textSize="25dp"
-                android:layout_weight="1"
-                android:gravity="center"/>
+            android:layout_marginTop="20dp">
             <com.owater.library.CircleTextView
                 android:id="@+id/statusQRCode"
                 android:layout_marginTop="20dp"
@@ -60,5 +47,26 @@
                 app:ct_type="shadow_alpha" />
         </LinearLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/buttonScan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/white"
+            android:text="Start Scan"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center|bottom"
+            android:background="@drawable/btn_download_all"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
