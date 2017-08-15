@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -28,6 +29,7 @@ import java.net.URLConnection;
 import java.sql.SQLException;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
@@ -44,6 +46,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 public class FragmentInfoContact extends Fragment {
     View v;
     TextView tvUsername, tvPhone, tvEmail, tvAddress, tvBasePoint;
+    CircleImageView ivProfile;
     Context context;
     CircleTextView ctvStatus;
     List<clsUserMember> dataMember = null;
@@ -56,6 +59,7 @@ public class FragmentInfoContact extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_kontak_detail,container,false);
         context = getActivity().getApplicationContext();
+        ivProfile = (CircleImageView) v.findViewById(R.id.profile_image);
         tvUsername = (TextView) v.findViewById(R.id.tvUsername);
         tvPhone = (TextView) v.findViewById(R.id.tvNumber1);
         tvEmail = (TextView) v.findViewById(R.id.tvNumber3);
@@ -70,6 +74,14 @@ public class FragmentInfoContact extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                new clsActivity().zoomImage(mybitmap2, getActivity());
+            }
+        });
+
         tvUsername.setText(dataMember.get(0).getTxtNama().toString());
         tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
         tvEmail.setText(dataMember.get(0).getTxtEmail().toString());

@@ -226,7 +226,7 @@ public class HomeMenu extends AppCompatActivity {
 
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-                        FragmentPersonalData fragmentPersonalData = new FragmentPersonalData();
+                        FragmentNewPersonalData fragmentPersonalData = new FragmentNewPersonalData();
                         FragmentTransaction fragmentTransactionPersonalData = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionPersonalData.replace(R.id.frame, fragmentPersonalData);
                         fragmentTransactionPersonalData.commit();

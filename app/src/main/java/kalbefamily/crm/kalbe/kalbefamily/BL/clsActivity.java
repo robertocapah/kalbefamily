@@ -1,7 +1,9 @@
 package kalbefamily.crm.kalbe.kalbefamily.BL;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,6 +34,7 @@ import java.util.UUID;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.enum_mconfig;
 import kalbefamily.crm.kalbe.kalbefamily.R;
+import kalbefamily.crm.kalbe.kalbefamily.addons.zoomview.CustomZoomView;
 
 /**
  * Created by rhezaTesar on 3/6/2017.
@@ -228,6 +231,37 @@ public class clsActivity extends Activity {
         }
 
         return greeting;
+    }
+
+    public void zoomImage (Bitmap bitmap, Context context){
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        final View promptView = layoutInflater.inflate(R.layout.custom_zoom_image, null);
+        final TextView tv_desc = (TextView) promptView.findViewById(R.id.desc_act);
+
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
+//        params.gravity = Gravity.BOTTOM;
+//        params.gravity = Gravity.CENTER;
+
+        CustomZoomView customZoomView ;
+        customZoomView = (CustomZoomView)promptView.findViewById(R.id.customImageVIew1);
+        customZoomView.setBitmap(bitmap);
+//        customZoomView.setLayoutParams(params);
+
+//        tv_desc.setText(description);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+
     }
 //    public JSONObject callPushDataReturnJson(String link, String txtMethod, String txtJson) {
 //        JSONObject _JSONObject = null;
