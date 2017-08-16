@@ -49,12 +49,14 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -89,6 +91,7 @@ public class FragmentNewPersonalData extends Fragment {
     private static byte[] phtImage2;
     private static Bitmap mybitmap1;
     private static Bitmap mybitmap2;
+    private static Bitmap mybitmapImageProfile;
     final int PIC_CROP = 2;
     final int PIC_CROP2 = 3;
     final int SELECT_FILE = 1;
@@ -98,9 +101,12 @@ public class FragmentNewPersonalData extends Fragment {
 
     List<clsUserMember> dataMember = null;
     List<clsUserMemberImage> dataMemberImage = null;
+    List<clsUserImageProfile> dataUserImageProfile = null;
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo repoUserMemberImage = null;
+    clsUserImageProfileRepo repoUserImageProfile = null;
     clsUserMemberImage dtImage;
+    clsUserImageProfile dtImageProfile;
     boolean validate = true;
 
     @Nullable
@@ -229,7 +235,7 @@ public class FragmentNewPersonalData extends Fragment {
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(context,"Success",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context,"Success",Toast.LENGTH_LONG).show();
                         etNamaKeluarga.setText(input.getText().toString());
                         dialogInterface.dismiss();
                     }
@@ -399,6 +405,17 @@ public class FragmentNewPersonalData extends Fragment {
             e.printStackTrace();
         }
 
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(context);
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (dataUserImageProfile.size() > 0) {
+            viewImageProfile();
+        }
+
         if (dataMemberImage.size() > 0) {
             viewImage();
         }
@@ -487,6 +504,7 @@ public class FragmentNewPersonalData extends Fragment {
 
                             savePicture1();
                             savePicture2();
+                            savePictureProfile();
                             sendData();
 
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
@@ -557,6 +575,26 @@ public class FragmentNewPersonalData extends Fragment {
 //                        e.printStackTrace();
 //                    }
                 }
+            }
+        }
+    }
+
+    private void viewImageProfile() {
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(context);
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
+        folder.mkdir();
+
+        for (clsUserImageProfile imgDt : dataUserImageProfile){
+            final byte[] imgFile = imgDt.getTxtImg();
+            if (imgFile != null) {
+                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+                ivProfile.setImageBitmap(bitmap);
             }
         }
     }
@@ -803,7 +841,7 @@ public class FragmentNewPersonalData extends Fragment {
         }
     }
 
-    // preview image 2
+    // preview image profile
     private void previewCaptureImageProfile(Bitmap photo){
         try {
             Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
@@ -827,12 +865,12 @@ public class FragmentNewPersonalData extends Fragment {
             phtProfile = output.toByteArray();
             ivProfile.setImageBitmap(photo_view);
 
-//            if (dtImage == null){
-//                dtImage.setTxtImg(phtImage2);
-//            } else {
-//                dtImage.setTxtImg(phtImage2);
-//            }
-//            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+            if (dtImageProfile == null){
+                dtImageProfile.setTxtImg(phtProfile);
+            } else {
+                dtImageProfile.setTxtImg(phtProfile);
+            }
+            repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
 
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -907,6 +945,19 @@ public class FragmentNewPersonalData extends Fragment {
 
             repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
             repoUserMemberImage.createOrUpdate(dataImage);
+        }
+    }
+
+    protected void savePictureProfile() {
+        clsUserImageProfile dataImageProfile = new clsUserImageProfile();
+
+        if (phtProfile != null) {
+            dataImageProfile.setTxtGuiId(new clsActivity().GenerateGuid());
+            dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
+            dataImageProfile.setTxtImg(phtProfile);
+
+            repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
+            repoUserImageProfile.createOrUpdate(dataImageProfile);
         }
     }
 

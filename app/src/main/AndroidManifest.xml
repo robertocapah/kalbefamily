@@ -79,6 +79,7 @@
         <activity android:name=".NewMemberActivity" />
         <activity android:name=".NewLoginActivity" />
         <activity android:name=".PasswordActivity"></activity>
+        <activity android:name=".ExpandablePoinActivity" />
     </application>
 
 </manifest>

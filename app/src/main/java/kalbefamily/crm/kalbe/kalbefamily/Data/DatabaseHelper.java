@@ -14,9 +14,11 @@ import java.sql.SQLException;
 
 //import kalbefamily.crm.kalbe.kalbefamily.Common.Mobile_mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsAbsenData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsAvailablePoin;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDisplayPicture;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsQRCodeData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
@@ -53,8 +55,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     protected Dao<clsUserMemberImage, Integer> userMemberImageDao;
     protected RuntimeExceptionDao<clsUserMemberImage, Integer> userMemberImageRuntimeDao = null;
 
+    protected Dao<clsUserImageProfile, Integer> userImageProfileDao;
+    protected RuntimeExceptionDao<clsUserImageProfile, Integer> userImageProfileIntegerRuntimeDao;
+
     protected Dao<clsQRCodeData, Integer> userQRCodeDao;
     protected RuntimeExceptionDao<clsQRCodeData, Integer> userQRCodeRuntimeDao = null;
+
+    protected Dao<clsAvailablePoin, Integer> availablePoinDao;
+    protected RuntimeExceptionDao<clsAvailablePoin, Integer> availablePoinRuntimeDao;
 
     protected Dao<clsDisplayPicture, Integer> displayPictureDao;
     protected RuntimeExceptionDao<clsDisplayPicture, Integer> displayPictureRuntimeDao = null;
@@ -71,7 +79,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTableIfNotExists(connectionSource, clsmVersionApp.class);
             TableUtils.createTableIfNotExists(connectionSource, clsUserMember.class);
             TableUtils.createTableIfNotExists(connectionSource, clsUserMemberImage.class);
+            TableUtils.createTableIfNotExists(connectionSource, clsUserImageProfile.class);
             TableUtils.createTableIfNotExists(connectionSource, clsQRCodeData.class);
+            TableUtils.createTableIfNotExists(connectionSource, clsAvailablePoin.class);
             TableUtils.createTableIfNotExists(connectionSource, clsDisplayPicture.class);
             TableUtils.createTableIfNotExists(connectionSource, mConfigData.class);
             TableUtils.createTableIfNotExists(connectionSource, clsAbsenData.class);
@@ -89,7 +99,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, clsmVersionApp.class, true);
             TableUtils.dropTable(connectionSource, clsUserMember.class, true);
             TableUtils.dropTable(connectionSource, clsUserMemberImage.class, true);
+            TableUtils.dropTable(connectionSource, clsUserImageProfile.class, true);
             TableUtils.dropTable(connectionSource, clsQRCodeData.class, true);
+            TableUtils.dropTable(connectionSource, clsAvailablePoin.class, true);
             TableUtils.dropTable(connectionSource, clsDisplayPicture.class, true);
             TableUtils.dropTable(connectionSource, mConfigData.class, true);
             TableUtils.dropTable(connectionSource, clsAbsenData.class, true);
@@ -110,7 +122,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.clearTable(connectionSource, clsmVersionApp.class);
             TableUtils.clearTable(connectionSource, clsUserMember.class);
             TableUtils.clearTable(connectionSource, clsUserMemberImage.class);
+            TableUtils.clearTable(connectionSource, clsUserImageProfile.class);
             TableUtils.clearTable(connectionSource, clsQRCodeData.class);
+            TableUtils.clearTable(connectionSource, clsAvailablePoin.class);
             TableUtils.clearTable(connectionSource, clsDisplayPicture.class);
             TableUtils.clearTable(connectionSource, mConfigData.class);
             TableUtils.clearTable(connectionSource, clsAbsenData.class);
@@ -128,13 +142,24 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    public void refreshData2(){
+        Log.i(DatabaseHelper.class.getName(), "onUpgrade");
+        try {
+            TableUtils.clearTable(connectionSource, clsAvailablePoin.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void clearDataAfterLogout(){
         try {
             TableUtils.clearTable(connectionSource, clsUserLoginData.class);
             TableUtils.clearTable(connectionSource, clsmVersionApp.class);
             TableUtils.clearTable(connectionSource, clsUserMember.class);
             TableUtils.clearTable(connectionSource, clsUserMemberImage.class);
+            TableUtils.clearTable(connectionSource, clsUserImageProfile.class);
             TableUtils.clearTable(connectionSource, clsQRCodeData.class);
+            TableUtils.clearTable(connectionSource, clsAvailablePoin.class);
             TableUtils.clearTable(connectionSource, clsDisplayPicture.class);
             TableUtils.clearTable(connectionSource, clsAbsenData.class);
             // after we drop the old databases, we create the new ones
@@ -193,11 +218,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return userMemberImageDao;
     }
 
+    public Dao<clsUserImageProfile, Integer> getUserImageProfileDao() throws SQLException {
+        if (userImageProfileDao == null) {
+            userImageProfileDao = getDao(clsUserImageProfile.class);
+        }
+        return userImageProfileDao;
+    }
+
     public Dao<clsQRCodeData, Integer> getUserQRCodeDao() throws SQLException {
         if (userQRCodeDao == null) {
             userQRCodeDao = getDao(clsQRCodeData.class);
         }
         return userQRCodeDao;
+    }
+
+    public Dao<clsAvailablePoin, Integer> getAvailablePoinDao() throws SQLException {
+        if (availablePoinDao == null) {
+            availablePoinDao = getDao(clsAvailablePoin.class);
+        }
+        return availablePoinDao;
     }
 
     public Dao<clsDisplayPicture, Integer> getDisplayPictureDao() throws SQLException {
@@ -242,11 +281,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return userMemberImageRuntimeDao;
     }
 
+    public RuntimeExceptionDao<clsUserImageProfile, Integer> getUserImageProfileIntegerRuntimeDao() {
+        if (userImageProfileIntegerRuntimeDao == null) {
+            userImageProfileIntegerRuntimeDao = getRuntimeExceptionDao(clsUserImageProfile.class);
+        }
+        return userImageProfileIntegerRuntimeDao;
+    }
+
     public RuntimeExceptionDao<clsQRCodeData, Integer> getUserQRCodeRuntimeDao() {
         if (userQRCodeRuntimeDao == null) {
             userQRCodeRuntimeDao = getRuntimeExceptionDao(clsQRCodeData.class);
         }
         return userQRCodeRuntimeDao;
+    }
+
+    public RuntimeExceptionDao<clsAvailablePoin, Integer> getAvailablePoinRuntimeDao() {
+        if (availablePoinRuntimeDao == null) {
+            availablePoinRuntimeDao = getRuntimeExceptionDao(clsAvailablePoin.class);
+        }
+        return availablePoinRuntimeDao;
     }
 
     public RuntimeExceptionDao<clsDisplayPicture, Integer> getDisplayPictureRuntimeDao() {
@@ -263,7 +316,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         mVersionAppsDao = null;
         userMemberDao = null;
         userMemberImageDao = null;
+        userImageProfileDao = null;
         userQRCodeDao = null;
+        availablePoinDao = null;
         displayPictureDao = null;
         mConfigDao = null;
     }

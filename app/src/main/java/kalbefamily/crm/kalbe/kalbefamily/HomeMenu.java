@@ -50,12 +50,15 @@ import jim.h.common.android.lib.zxing.config.ZXingLibConfig;
 import jim.h.common.android.lib.zxing.integrator.IntentIntegrator;
 import jim.h.common.android.lib.zxing.integrator.IntentResult;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsAvailablePoin;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsAvailablePoinRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -79,9 +82,11 @@ public class HomeMenu extends AppCompatActivity {
     clsActivity _clsMainActivity = new clsActivity();
     private ZXingLibConfig zxingLibConfig;
 
+    private String txtKontakID;
     private String txtMember;
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
+    clsAvailablePoinRepo repoAvailablePoin;
 
     @Override
     public void onBackPressed() {
@@ -257,6 +262,19 @@ public class HomeMenu extends AppCompatActivity {
                         startActivity(intentReward);
 
                         return true;
+                    case R.id.availablePont:
+//                        toolbar.setTitle("Available Point Customer");
+//
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+//
+//                        FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
+//                        FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
+//                        fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
+//                        fragmentTransactionAvailablePoint.commit();
+//                        selectedId = 99;
+                        availablePoin();
+
+                        return true;
 
                 }
                 return false;
@@ -325,12 +343,12 @@ public class HomeMenu extends AppCompatActivity {
         }
 
         txtMember = dataMember.get(0).getTxtMemberId();
-        String strLinkAPI = "http://10.171.10.27/WebApi2/KF/GetDetailKontak";
+        String strLinkAPI = new clsHardCode().linkGetDetailCustomer;
 //        String nameRole = selectedRole;
         JSONObject resJson = new JSONObject();
 
         try {
-            resJson.put("txtMemberIdOrTelpId", txtMember);
+            resJson.put("txtMemberId", txtMember);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -366,6 +384,9 @@ public class HomeMenu extends AppCompatActivity {
                                 String txtNoKTP = jsonobject.getString("TxtNoKTP");
                                 String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
+                                String intBasePoin = jsonobject.getString("IntBasePoin");
+                                String txtTglAwal = jsonobject.getString("DtTglAwal");
+                                String txtTglBerlaku = jsonobject.getString("TxttglBerlaku");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
@@ -378,46 +399,54 @@ public class HomeMenu extends AppCompatActivity {
                                 dataUser.setTxtNoKTP(txtNoKTP);
                                 dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
+                                dataUser.setTxtBasePoin(intBasePoin);
+                                dataUser.setTxtTglAwal(txtTglAwal);
+                                dataUser.setTxtTglBerlaku(txtTglBerlaku);
 
                                 repoUserMember = new clsUserMemberRepo(getApplicationContext());
 //
                                 int h = 0;
                                 h = repoUserMember.createOrUpdate(dataUser);
                                 if(h > -1) {
-                                    Log.d("Data info", "Data member Updated");
+                                    Log.d("Data info", "Data Member berhasil di update");
 //                                    status = true;
                                 }
 
-                                JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
-                                for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
-                                    JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
-                                    String txtGuiID = jsonobjectImage.getString("TxtDataID");
-                                    String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-                                    String txtImageName = jsonobjectImage.getString("TxtImageName");
-                                    String txtType = jsonobjectImage.getString("TxtType");
+                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
+                                if (listtkontakImage != "null") {
+                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
+                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+                                        String txtType = jsonobjectImage.getString("TxtType");
 
-                                    clsUserMemberImage dataImage = new clsUserMemberImage();
-                                    dataImage.setTxtGuiId(txtGuiID);
-                                    dataImage.setTxtHeaderId(txtKontakIDImage);
-                                    dataImage.setTxtPosition(txtType);
+                                        clsUserMemberImage dataImage = new clsUserMemberImage();
+                                        dataImage.setTxtGuiId(txtGuiID);
+                                        dataImage.setTxtHeaderId(txtKontakIDImage);
+                                        dataImage.setTxtPosition(txtType);
 
-                                    String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
 
-                                    byte[] logoImage = getLogoImage(url);
+                                        byte[] logoImage = getLogoImage(url);
 
-                                    if (logoImage != null) {
-                                        dataImage.setTxtImg(logoImage);
-                                    }
+                                        if (logoImage != null) {
+                                            dataImage.setTxtImg(logoImage);
 
-                                    imageRepo = new clsUserMemberImageRepo(getApplicationContext());
+                                            imageRepo = new clsUserMemberImageRepo(getApplicationContext());
 
-                                    int k = 0;
-                                    k = imageRepo.createOrUpdate(dataImage);
-                                    if(k > -1) {
-                                        Log.d("Data info", "Data Image's Member Updated");
+                                            int k = 0;
+                                            k = imageRepo.createOrUpdate(dataImage);
+                                            if(k > -1) {
+                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+                                                Log.d("Data info", "Data Member Image berhasil di update");
 //                                    status = true;
+                                            }
+                                        }
                                     }
                                 }
+
                             }
                             new clsActivity().showCustomToast(getApplicationContext(), "Update Data, Success", true);
                         } else {
@@ -492,5 +521,79 @@ public class HomeMenu extends AppCompatActivity {
 //                new clsActivity().showCustomToast(context.getApplicationContext(), result, true);
             }
         }
+    }
+
+    public void availablePoin() {
+        final ProgressDialog Dialog = new ProgressDialog(HomeMenu.this);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+        helper.refreshData2();
+        clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
+        try {
+            dataMember = (List<clsUserMember>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        txtKontakID = dataMember.get(0).getTxtKontakId();
+        String strLinkAPI = new clsHardCode().linkAvailablePoin;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtKontakID", "1110-8885986");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(HomeMenu.this, strLinkAPI, mRequestBody, "Getting Data, Please wait !", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String txtDescription = jsonobject.getString("TxtDescription");
+                                String txtPoint = jsonobject.getString("TxtPoint");
+                                String txtPeriodePoint = jsonobject.getString("TxtPeriodePoint");
+
+                                clsAvailablePoin dataPoin = new clsAvailablePoin();
+                                dataPoin.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataPoin.setTxtPoint(txtPoint);
+                                dataPoin.setTxtPeriodePoint(txtPeriodePoint);
+                                dataPoin.setTxtDescription(txtDescription);
+
+                                repoAvailablePoin = new clsAvailablePoinRepo(getApplicationContext());
+                                repoAvailablePoin.createOrUpdate(dataPoin);
+                            }
+                            Intent intent = new Intent(HomeMenu.this, ExpandablePoinActivity.class);
+                            finish();
+                            startActivity(intent);
+                        } else {
+                            new clsActivity().showCustomToast(getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
     }
 }

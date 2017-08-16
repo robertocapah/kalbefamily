@@ -68,6 +68,9 @@ public class FragmentInfoContact extends Fragment {
 //        ctvStatus = (CircleTextView) v.findViewById(R.id.status);
 //        clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
 //        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
+
+        UserMember();
+
         try {
             repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
@@ -96,7 +99,6 @@ public class FragmentInfoContact extends Fragment {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        UserMember();
 //        if (data != null){
 //            tvUsername.setText(data.getTxtName().toString());
 //            tvEmail.setText(data.getTxtEmail().toString());
@@ -182,13 +184,14 @@ public class FragmentInfoContact extends Fragment {
                                 dataUser.setTxtTglBerlaku(txtTglBerlaku);
 
                                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                                repoUserMember.createOrUpdate(dataUser);
 //
-                                int h = 0;
-                                h = repoUserMember.createOrUpdate(dataUser);
-                                if(h > -1) {
-                                    Log.d("Data info", "Data Member berhasil di update");
-//                                    status = true;
-                                }
+//                                int h = 0;
+//                                h = repoUserMember.createOrUpdate(dataUser);
+//                                if(h > -1) {
+//                                    Log.d("Data info", "Data Member berhasil di update");
+////                                    status = true;
+//                                }
 
                                 String listtkontakImage = jsonobject.getString("ListtkontakImage");
                                 if (listtkontakImage != "null") {

@@ -41,6 +41,15 @@
             app:actionLayout="@layout/menu_counter"
             />
 
+        <item
+            android:id="@+id/availablePont"
+            android:checked="true"
+            android:icon="@drawable/ic_folder_open_black_48dp"
+            android:orderInCategory="0"
+            android:title="Available Point"
+            app:actionLayout="@layout/menu_counter"
+            />
+
     </group>
     <group
         android:checkableBehavior="single"
