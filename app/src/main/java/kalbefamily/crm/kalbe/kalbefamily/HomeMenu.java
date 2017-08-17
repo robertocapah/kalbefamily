@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -501,6 +504,12 @@ public class HomeMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onSelectImageClick(View view) {
+        CropImage.activity(null)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(this);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -519,6 +528,15 @@ public class HomeMenu extends AppCompatActivity {
                 finish();
                 startActivity(intent);
 //                new clsActivity().showCustomToast(context.getApplicationContext(), result, true);
+            }
+        }
+        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                ((ImageView) findViewById(R.id.image1Crop)).setImageURI(result.getUri());
+                Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }

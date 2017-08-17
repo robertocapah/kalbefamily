@@ -408,6 +408,55 @@
                 </LinearLayout>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="false"
+                android:visibility="gone"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/ivContactItem9"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/b_camera" />
+
+                <LinearLayout
+                    android:background="@drawable/bg_rounded_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/ivContactItem9"
+                    android:layout_marginTop="7dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="Foto KTP"/>
+                    <ImageView
+                        android:id="@+id/image1Crop"
+                        android:layout_marginLeft="5dp"
+                        android:background="@mipmap/ic_maps_local_see"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_weight="1"
+                        android:onClick="onSelectImageClick"/>
+                    <ImageView
+                        android:id="@+id/image2Crop"
+                        android:layout_marginLeft="5dp"
+                        android:background="@mipmap/ic_maps_local_see"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/btnUpdate"
                 android:layout_below="@+id/view3"
