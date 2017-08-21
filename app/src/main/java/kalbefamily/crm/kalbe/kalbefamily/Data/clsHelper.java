@@ -70,7 +70,7 @@ public class clsHelper {
     }
 
     public String copydb(Context context) throws  IOException{
-        String CURRENT_DATABASE_PATH = _path.txtPathApp+"backupDbKalbeFamily";
+        String CURRENT_DATABASE_PATH = "data/data/" + context.getPackageName() + "/databases/"+ new clsHardCode().dbName;
 
         try {
             File dbFile = new File(CURRENT_DATABASE_PATH);

@@ -20,6 +20,6 @@ public class clsHardCode {
     public String linkSendData = "http://10.171.11.86/WebApi2/KF/UpdateDataKontak";
     public String linkGetDetailCustomer = "http://10.171.11.86/WebApi2/KF/GetDetailKontakCustomer";
     public String linkScanQRCode = "http://10.171.11.86/WebApi2/KF/ScanQRCode";
-    public String linkGetDatadMembership = "http://10.171.11.86/WebApi2/KF/GetDatadMembership";
+    public String linkGetDatadMembership = "http://10.171.10.13/WebApi2/KF/GetDatadMembership";
     public String linkAvailablePoin = "http://10.171.11.86/WebApi2/KF/AvailablePoinCustomer";
 }

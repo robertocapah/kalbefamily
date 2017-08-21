@@ -3,9 +3,12 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.provider.SyncStateContract;
+import android.util.Base64;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -13,13 +16,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
+
+import static android.provider.Telephony.Carriers.PASSWORD;
 
 /**
  * Created by arick.anjasmara on 22/06/2017.
@@ -48,15 +55,40 @@ public class VolleyUtils {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                finalDialog1.dismiss();
-                listener.onError(error.getMessage());
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                    // HTTP Status Code: 401 Unauthorized
+                    new clsActivity().showCustomToast(activity.getApplicationContext(), "401", false);
+                    finalDialog1.dismiss();
+                    if (error.getMessage() != null) {
+                        listener.onError(error.getMessage());
+                    }
+                }
             }
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                finalDialog1.dismiss();
+//                listener.onError(error.getMessage());
+//            }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("txtParam", mRequestBody);
                 return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<String, String>();
+//                String creds = String.format("%s:%s","test","test");
+//                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+//                params.put("Authorization", auth);
+//                return params;
+                String credentials = "test2" + ":" + "test";
+                String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Basic " + base64EncodedCredentials);
+                return headers;
             }
         };
         req.setRetryPolicy(new

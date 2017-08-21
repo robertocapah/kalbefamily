@@ -3,6 +3,8 @@ package kalbefamily.crm.kalbe.kalbefamily.Repo;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.dao.RawRowMapper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -87,6 +89,53 @@ public class clsAvailablePoinRepo implements crud {
         List<clsAvailablePoin> items = null;
         try{
             items = helper.getAvailablePoinDao().queryForAll();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public void findByIdString() throws SQLException {
+
+        try{
+            long item = helper.getAvailablePoinDao().queryBuilder().groupByRaw("txtPeriodePoint").countOf();
+
+            GenericRawResults<clsAvailablePoin> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select * from clsAvailablePoin group by txtPeriodePoint",
+                            new RawRowMapper<clsAvailablePoin>() {
+                                public clsAvailablePoin mapRow(String[] columnNames,
+                                                     String[] resultColumns) {
+                                    clsAvailablePoin dt = new clsAvailablePoin();
+                                    dt.txtDescription = resultColumns[0];
+                                    return dt;
+                                }
+                            });
+
+            List<clsAvailablePoin> askdjhad = rawResults.getResults();
+
+            String a = "";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public List<?> findPeriode() throws SQLException {
+        List<clsAvailablePoin> items = null;
+        try{
+            GenericRawResults<clsAvailablePoin> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select * from clsAvailablePoin group by txtPeriodePoint",
+                            new RawRowMapper<clsAvailablePoin>() {
+                                public clsAvailablePoin mapRow(String[] columnNames,
+                                                               String[] resultColumns) {
+                                    clsAvailablePoin dt = new clsAvailablePoin();
+                                    dt.txtPeriodePoint = resultColumns[2];
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
         }catch (SQLException e){
             e.printStackTrace();
         }

@@ -266,6 +266,7 @@ public class HomeMenu extends AppCompatActivity {
 
                         return true;
                     case R.id.availablePont:
+                        availablePoin();
 //                        toolbar.setTitle("Available Point Customer");
 //
 //                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
@@ -274,8 +275,7 @@ public class HomeMenu extends AppCompatActivity {
 //                        FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
 //                        fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
 //                        fragmentTransactionAvailablePoint.commit();
-//                        selectedId = 99;
-                        availablePoin();
+                        selectedId = 99;
 
                         return true;
 
@@ -598,9 +598,13 @@ public class HomeMenu extends AppCompatActivity {
                                 repoAvailablePoin = new clsAvailablePoinRepo(getApplicationContext());
                                 repoAvailablePoin.createOrUpdate(dataPoin);
                             }
-                            Intent intent = new Intent(HomeMenu.this, ExpandablePoinActivity.class);
-                            finish();
-                            startActivity(intent);
+//                            Intent intent = new Intent(HomeMenu.this, ExpandablePoinActivity.class);
+//                            finish();
+//                            startActivity(intent);
+                            FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
+                            FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
+                            fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
+                            fragmentTransactionAvailablePoint.commit();
                         } else {
                             new clsActivity().showCustomToast(getApplicationContext(), warn, false);
                         }

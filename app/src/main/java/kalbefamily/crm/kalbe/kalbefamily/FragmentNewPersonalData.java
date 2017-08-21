@@ -1001,11 +1001,13 @@ public class FragmentNewPersonalData extends Fragment {
             //set crop properties
             cropIntent.putExtra("crop", "true");
             //indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("aspectX", 3);
+            cropIntent.putExtra("aspectY", 4);
             //indicate output X and Y
             cropIntent.putExtra("outputX", 256);
             cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("scale", true);
+            cropIntent.putExtra("scaleUpIfNeeded", true);
             //retrieve data on return
             cropIntent.putExtra("return-data", true);
             //start the activity - we handle returning in onActivityResult
