@@ -49,8 +49,8 @@ public class VolleyUtils {
             public void onResponse(String response) {
                 Boolean status = false;
                 String errorMessage = null;
-                finalDialog.dismiss();
                 listener.onResponse(response, status, errorMessage);
+                finalDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override

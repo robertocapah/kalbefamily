@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -43,6 +46,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -90,6 +95,15 @@ public class HomeMenu extends AppCompatActivity {
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
     clsAvailablePoinRepo repoAvailablePoin;
+    clsUserMemberImageRepo repoUserMemberImage = null;
+    clsUserMemberImage dtImage;
+
+    private static ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private ImageView image1, image2;
+    private static Bitmap photoImage1, photoImage2;
+    private static byte[] phtImage1;
+    private static byte[] phtImage2;
+    private Uri uriImage;
 
     @Override
     public void onBackPressed() {
@@ -146,6 +160,7 @@ public class HomeMenu extends AppCompatActivity {
         View vwHeader = navigationView.getHeaderView(0);
         tvUsername = (TextView) vwHeader.findViewById(R.id.username);
         tvEmail = (TextView) vwHeader.findViewById(R.id.email);
+        image1 = (ImageView) findViewById(R.id.image1Crop);
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
         try {
             dataMember = (List<clsUserMember>) repo.findAll();
@@ -158,6 +173,12 @@ public class HomeMenu extends AppCompatActivity {
             tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
         } else {
             tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        }
+
+        if (photoImage1 != null){
+            image1.setImageBitmap(photoImage1);
+            photoImage1.compress(Bitmap.CompressFormat.PNG, 100, output);
+            phtImage1 = output.toByteArray();
         }
 
         Menu header = navigationView.getMenu();
@@ -266,14 +287,14 @@ public class HomeMenu extends AppCompatActivity {
 
                         return true;
                     case R.id.availablePont:
-                        availablePoin();
-//
-//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-//
-//                        FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
-//                        FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
-//                        fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
-//                        fragmentTransactionAvailablePoint.commit();
+//                        availablePoin();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
+                        toolbar.setTitle("Available Point Customer");
+                        FragmentGetPoint fragmentAvailablePoin = new FragmentGetPoint();
+                        FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
+                        fragmentTransactionAvailablePoint.commit();
                         selectedId = 99;
 
                         return true;
@@ -503,12 +524,6 @@ public class HomeMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onSelectImageClick(View view) {
-        CropImage.activity(null)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .start(this);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -529,93 +544,5 @@ public class HomeMenu extends AppCompatActivity {
 //                new clsActivity().showCustomToast(context.getApplicationContext(), result, true);
             }
         }
-        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                ((ImageView) findViewById(R.id.image1Crop)).setImageURI(result.getUri());
-                Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
-
-    public void availablePoin() {
-        final ProgressDialog Dialog = new ProgressDialog(HomeMenu.this);
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
-        helper.refreshData2();
-        clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
-        try {
-            dataMember = (List<clsUserMember>) repo.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        txtKontakID = dataMember.get(0).getTxtKontakId();
-        String strLinkAPI = new clsHardCode().linkAvailablePoin;
-//        String nameRole = selectedRole;
-        JSONObject resJson = new JSONObject();
-
-        try {
-            resJson.put("txtKontakID", "1110-8885986");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        final String mRequestBody = "[" + resJson.toString() + "]";
-
-        new VolleyUtils().makeJsonObjectRequest(HomeMenu.this, strLinkAPI, mRequestBody, "Getting Data, Please wait !", new VolleyResponseListener() {
-            @Override
-            public void onError(String response) {
-                new clsActivity().showCustomToast(getApplicationContext(), response, false);
-            }
-
-            @Override
-            public void onResponse(String response, Boolean status, String strErrorMsg) {
-                if (response != null) {
-                    try {
-                        JSONObject jsonObject1 = new JSONObject(response);
-                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
-                        String warn = jsn.getString("TxtMessage");
-                        String result = jsn.getString("IntResult");
-
-                        if (result.equals("1")) {
-                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
-                            for(int i=0; i < jsonDataUserMember.length(); i++) {
-                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
-                                String txtDescription = jsonobject.getString("TxtDescription");
-                                String txtPoint = jsonobject.getString("TxtPoint");
-                                String txtPeriodePoint = jsonobject.getString("TxtPeriodePoint");
-
-                                clsAvailablePoin dataPoin = new clsAvailablePoin();
-                                dataPoin.setTxtGuiId(new clsActivity().GenerateGuid());
-                                dataPoin.setTxtPoint(txtPoint);
-                                dataPoin.setTxtPeriodePoint(txtPeriodePoint);
-                                dataPoin.setTxtDescription(txtDescription);
-
-                                repoAvailablePoin = new clsAvailablePoinRepo(getApplicationContext());
-                                repoAvailablePoin.createOrUpdate(dataPoin);
-                            }
-//                            Intent intent = new Intent(HomeMenu.this, ExpandablePoinActivity.class);
-//                            finish();
-//                            startActivity(intent);
-                            toolbar.setTitle("Available Point Customer");
-                            FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
-                            FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
-                            fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
-                            fragmentTransactionAvailablePoint.commit();
-                        } else {
-                            new clsActivity().showCustomToast(getApplicationContext(), warn, false);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-//                if(!status){
-//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
-//                }
-            }
-        });
     }
 }

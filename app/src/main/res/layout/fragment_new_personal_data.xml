@@ -101,7 +101,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
 
             </RelativeLayout>
@@ -142,7 +142,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
 
             </RelativeLayout>
@@ -183,7 +183,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
 
             </RelativeLayout>
@@ -224,7 +224,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
 
             </RelativeLayout>
@@ -266,7 +266,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
             </RelativeLayout>
 
@@ -355,7 +355,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/icon_edit"
+                    android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
             </RelativeLayout>
 
@@ -452,7 +452,8 @@
                         android:background="@mipmap/ic_maps_local_see"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:onClick="onSelectImageClick2"/>
 
                 </LinearLayout>
             </RelativeLayout>
