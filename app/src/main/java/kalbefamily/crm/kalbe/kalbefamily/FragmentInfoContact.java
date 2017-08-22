@@ -84,16 +84,6 @@ public class FragmentInfoContact extends Fragment {
 //                new clsActivity().zoomImage(mybitmap2, getActivity());
             }
         });
-
-        tvUsername.setText(dataMember.get(0).getTxtNama().toString());
-        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
-        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
-        tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
-        if (dataMember.get(0).getTxtBasePoin().equals("null")) {
-            tvBasePoint.setText("( Base Point : 0 )");
-        } else {
-            tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
-        }
 //        try {
 //            new clsHelper().copydb(context.getApplicationContext());
 //        } catch (IOException e) {
@@ -235,6 +225,21 @@ public class FragmentInfoContact extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }
+                    clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
+                    try {
+                        dataMember = (List<clsUserMember>) repo.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    tvUsername.setText(dataMember.get(0).getTxtNama().toString());
+                    tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
+                    tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+                    tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
+                    if (dataMember.get(0).getTxtBasePoin().equals("null")) {
+                        tvBasePoint.setText("( Base Point : 0 )");
+                    } else {
+                        tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
                     }
                 }
 //                if(!status){
