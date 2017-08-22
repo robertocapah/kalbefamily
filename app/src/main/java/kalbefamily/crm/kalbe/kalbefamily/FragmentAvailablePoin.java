@@ -70,27 +70,24 @@ public class FragmentAvailablePoin extends Fragment {
 
         try {
             repoAvailablePoin = new clsAvailablePoinRepo(getContext());
-            dataPoin = (List<clsAvailablePoin>) repoAvailablePoin.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        int i = 0;
-        String txtPeriodePoint = dataPoin.get(i).txtPeriodePoint.toString();
-
-        try {
-            repoAvailablePoin = new clsAvailablePoinRepo(getContext());
-            repoAvailablePoin.findByIdString();
             dataPoinByPeriode = (List<clsAvailablePoin>) repoAvailablePoin.findPeriode();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        // parent
         for (clsAvailablePoin data : dataPoinByPeriode) {
             Map<String, String> curGroupMap = new HashMap<String, String>();
             groupData.add(curGroupMap);
             curGroupMap.put(NAME, data.getTxtPeriodePoint().toString());
             curGroupMap.put(IS_EVEN, "This group is even" + "This group is odd");
+
+            // child
+            try {
+                dataPoin = (List<clsAvailablePoin>) repoAvailablePoin.findDataChild(data.getTxtPeriodePoint().toString());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             List<Map<String, String>> children = new ArrayList<Map<String, String>>();
             for (clsAvailablePoin dataChild : dataPoin) {

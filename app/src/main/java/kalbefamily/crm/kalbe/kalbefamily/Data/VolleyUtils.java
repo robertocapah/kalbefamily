@@ -84,7 +84,7 @@ public class VolleyUtils {
 //                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
 //                params.put("Authorization", auth);
 //                return params;
-                String credentials = "test2" + ":" + "test";
+                String credentials = "test" + ":" + "test";
                 String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Basic " + base64EncodedCredentials);

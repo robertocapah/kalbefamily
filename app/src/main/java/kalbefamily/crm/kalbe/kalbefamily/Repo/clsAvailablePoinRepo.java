@@ -105,7 +105,7 @@ public class clsAvailablePoinRepo implements crud {
                             "select * from clsAvailablePoin group by txtPeriodePoint",
                             new RawRowMapper<clsAvailablePoin>() {
                                 public clsAvailablePoin mapRow(String[] columnNames,
-                                                     String[] resultColumns) {
+                                                               String[] resultColumns) {
                                     clsAvailablePoin dt = new clsAvailablePoin();
                                     dt.txtDescription = resultColumns[0];
                                     return dt;
@@ -131,6 +131,31 @@ public class clsAvailablePoinRepo implements crud {
                                                                String[] resultColumns) {
                                     clsAvailablePoin dt = new clsAvailablePoin();
                                     dt.txtPeriodePoint = resultColumns[2];
+                                    dt.txtPoint = resultColumns[3];
+                                    dt.txtDescription = resultColumns[0];
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findDataChild(String txtPeriodePoint) throws SQLException {
+        List<clsAvailablePoin> items = null;
+        try{
+            GenericRawResults<clsAvailablePoin> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select * from clsAvailablePoin where txtPeriodePoint='"+txtPeriodePoint+"'",
+                            new RawRowMapper<clsAvailablePoin>() {
+                                public clsAvailablePoin mapRow(String[] columnNames,
+                                                               String[] resultColumns) {
+                                    clsAvailablePoin dt = new clsAvailablePoin();
+                                    dt.txtPoint = resultColumns[3];
+                                    dt.txtDescription = resultColumns[0];
                                     return dt;
                                 }
                             });

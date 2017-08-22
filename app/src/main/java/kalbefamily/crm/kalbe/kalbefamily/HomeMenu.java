@@ -267,7 +267,6 @@ public class HomeMenu extends AppCompatActivity {
                         return true;
                     case R.id.availablePont:
                         availablePoin();
-//                        toolbar.setTitle("Available Point Customer");
 //
 //                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 //
@@ -601,6 +600,7 @@ public class HomeMenu extends AppCompatActivity {
 //                            Intent intent = new Intent(HomeMenu.this, ExpandablePoinActivity.class);
 //                            finish();
 //                            startActivity(intent);
+                            toolbar.setTitle("Available Point Customer");
                             FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
                             FragmentTransaction fragmentTransactionAvailablePoint = getSupportFragmentManager().beginTransaction();
                             fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
