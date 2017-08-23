@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -47,6 +48,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -54,11 +56,13 @@ import java.net.URLConnection;
 import java.sql.SQLException;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jim.h.common.android.lib.zxing.config.ZXingLibConfig;
 import jim.h.common.android.lib.zxing.integrator.IntentIntegrator;
 import jim.h.common.android.lib.zxing.integrator.IntentResult;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsAvailablePoin;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
@@ -67,6 +71,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsAvailablePoinRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -81,6 +86,7 @@ public class HomeMenu extends AppCompatActivity {
     private DrawerLayout drawerLayout;
 
     private TextView tvUsername, tvEmail;
+    CircleImageView ivProfile;
     PackageInfo pInfo = null;
     int selectedId;
     Boolean isSubMenu = false;
@@ -95,15 +101,10 @@ public class HomeMenu extends AppCompatActivity {
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
     clsAvailablePoinRepo repoAvailablePoin;
-    clsUserMemberImageRepo repoUserMemberImage = null;
-    clsUserMemberImage dtImage;
+    clsUserImageProfileRepo repoUserImageProfile = null;
+    List<clsUserImageProfile> dataUserImageProfile = null;
+    private static Bitmap mybitmapImageProfile;
 
-    private static ByteArrayOutputStream output = new ByteArrayOutputStream();
-    private ImageView image1, image2;
-    private static Bitmap photoImage1, photoImage2;
-    private static byte[] phtImage1;
-    private static byte[] phtImage2;
-    private Uri uriImage;
 
     @Override
     public void onBackPressed() {
@@ -158,9 +159,9 @@ public class HomeMenu extends AppCompatActivity {
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View vwHeader = navigationView.getHeaderView(0);
+        ivProfile = (CircleImageView) vwHeader.findViewById(R.id.profile_image);
         tvUsername = (TextView) vwHeader.findViewById(R.id.username);
         tvEmail = (TextView) vwHeader.findViewById(R.id.email);
-        image1 = (ImageView) findViewById(R.id.image1Crop);
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
         try {
             dataMember = (List<clsUserMember>) repo.findAll();
@@ -169,16 +170,22 @@ public class HomeMenu extends AppCompatActivity {
         }
 
         tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
-        if (dataMember.get(0).getTxtEmail().equals("")) {
-            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
-        } else {
-            tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
+//        if (dataMember.get(0).getTxtEmail().equals("")) {
+//            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
+//        } else {
+//            tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+//        }
+
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        if (photoImage1 != null){
-            image1.setImageBitmap(photoImage1);
-            photoImage1.compress(Bitmap.CompressFormat.PNG, 100, output);
-            phtImage1 = output.toByteArray();
+        if (dataUserImageProfile.size() > 0) {
+            viewImageProfile();
         }
 
         Menu header = navigationView.getMenu();
@@ -514,6 +521,26 @@ public class HomeMenu extends AppCompatActivity {
             Log.d("ImageManager", "Error: " + e.toString());
         }
         return null;
+    }
+
+    private void viewImageProfile() {
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+//        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
+//        folder.mkdir();
+
+        for (clsUserImageProfile imgDt : dataUserImageProfile){
+            final byte[] imgFile = imgDt.getTxtImg();
+            if (imgFile != null) {
+                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+                ivProfile.setImageBitmap(bitmap);
+            }
+        }
     }
 
     private void logout() {

@@ -19,7 +19,7 @@ public class clsHardCode {
     //    public String linkPushData = "http://10.171.11.87/APIEF2/api/PushData/pushData2";
     public String linkSendData = "http://10.171.10.8/WebApi2/KF/UpdateDataKontak";
     public String linkGetDetailCustomer = "http://10.171.10.13/WebApi2/KF/GetDetailKontakCustomer";
-    public String linkScanQRCode = "http://10.171.10.13/WebApi2/KF/ScanQRCode";
+    public String linkScanQRCode = "http://10.171.10.11/WebApi2/KF/ScanQRCode";
     public String linkGetDatadMembership = "http://10.171.10.13/WebApi2/KF/GetDatadMembership";
-    public String linkAvailablePoin = "http://10.171.10.8/WebApi2/KF/AvailablePoinCustomer";
+    public String linkAvailablePoin = "http://10.171.10.11/WebApi2/KF/AvailablePoinCustomer";
 }

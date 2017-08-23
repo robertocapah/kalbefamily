@@ -2,9 +2,13 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -31,11 +36,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -47,12 +54,16 @@ public class FragmentInfoContact extends Fragment {
     View v;
     TextView tvUsername, tvPhone, tvEmail, tvAddress, tvBasePoint;
     CircleImageView ivProfile;
+    FloatingActionButton refreshButton;
     Context context;
     CircleTextView ctvStatus;
     List<clsUserMember> dataMember = null;
+    List<clsUserImageProfile> dataUserImageProfile = null;
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
+    clsUserImageProfileRepo repoUserImageProfile = null;
     private String txtMember;
+    private static Bitmap mybitmapImageProfile;
 
     @Nullable
     @Override
@@ -65,6 +76,7 @@ public class FragmentInfoContact extends Fragment {
         tvEmail = (TextView) v.findViewById(R.id.tvNumber3);
         tvAddress = (TextView) v.findViewById(R.id.tvNumber5);
         tvBasePoint = (TextView) v.findViewById(R.id.tvBasePoint);
+        refreshButton = (FloatingActionButton) v.findViewById(R.id.fab);
 //        ctvStatus = (CircleTextView) v.findViewById(R.id.status);
 //        clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
 //        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
@@ -77,11 +89,38 @@ public class FragmentInfoContact extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        tvUsername.setText(dataMember.get(0).getTxtNama().toString());
+        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
+        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
+        if (dataMember.get(0).getTxtBasePoin().equals("null")) {
+            tvBasePoint.setText("( Base Point : 0 )");
+        } else {
+            tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
+        }
+
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(context);
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (dataUserImageProfile.size() > 0) {
+            viewImageProfile();
+        }
 
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                new clsActivity().zoomImage(mybitmap2, getActivity());
+            }
+        });
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserMember();
             }
         });
 //        try {
@@ -277,6 +316,26 @@ public class FragmentInfoContact extends Fragment {
             Log.d("ImageManager", "Error: " + e.toString());
         }
         return null;
+    }
+
+    private void viewImageProfile() {
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(context);
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
+        folder.mkdir();
+
+        for (clsUserImageProfile imgDt : dataUserImageProfile){
+            final byte[] imgFile = imgDt.getTxtImg();
+            if (imgFile != null) {
+                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+                ivProfile.setImageBitmap(bitmap);
+            }
+        }
     }
 
 }
