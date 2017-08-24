@@ -154,7 +154,7 @@ public class FlashActivity extends clsActivity {
         anim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         anim.reset();
         ImageView iv = (ImageView) findViewById(R.id.imageView2);
-        iv.setBackgroundResource(R.mipmap.ic_kalbe);
+        iv.setBackgroundResource(R.mipmap.ic_kalbe_2);
         iv.clearAnimation();
         iv.startAnimation(anim);
     }

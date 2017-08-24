@@ -113,7 +113,7 @@ public class FragmentInfoContact extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new clsActivity().zoomImage(mybitmap2, getActivity());
+                new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
             }
         });
 
@@ -123,20 +123,6 @@ public class FragmentInfoContact extends Fragment {
                 UserMember();
             }
         });
-//        try {
-//            new clsHelper().copydb(context.getApplicationContext());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (data != null){
-//            tvUsername.setText(data.getTxtName().toString());
-//            tvEmail.setText(data.getTxtEmail().toString());
-//        }
-//        if (dataAbsen!=null){
-//            ctvStatus.setText("Checkin");
-//        }else{
-//            ctvStatus.setText("Checkout");
-//        }
 
         return v;
     }
