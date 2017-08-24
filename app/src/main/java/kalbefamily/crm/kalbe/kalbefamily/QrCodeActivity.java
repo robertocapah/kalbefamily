@@ -83,7 +83,8 @@ public class QrCodeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HomeMenu.class);
         finish();
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
     @Override
@@ -111,7 +112,8 @@ public class QrCodeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HomeMenu.class);
                 finish();
                 startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
             }
         });
 
