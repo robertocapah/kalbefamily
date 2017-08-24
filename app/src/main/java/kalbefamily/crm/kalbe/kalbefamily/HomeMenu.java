@@ -275,6 +275,7 @@ public class HomeMenu extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), QrCodeActivity.class);
                         finish();
                         startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                         return true;
                     case R.id.rewardCard:

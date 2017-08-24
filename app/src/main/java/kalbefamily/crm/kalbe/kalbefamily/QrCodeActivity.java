@@ -57,28 +57,33 @@ public class QrCodeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        builder.setTitle("Exit");
+//        builder.setMessage("Do you want to exit?");
+//
+//        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int which) {
+//                finish();
+//            }
+//        });
+//
+//        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        AlertDialog alert = builder.create();
+//        alert.show();
 
-        builder.setTitle("Exit");
-        builder.setMessage("Do you want to exit?");
-
-        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
+        Intent intent = new Intent(this, HomeMenu.class);
+        finish();
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
@@ -106,6 +111,7 @@ public class QrCodeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HomeMenu.class);
                 finish();
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

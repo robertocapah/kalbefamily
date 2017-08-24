@@ -13,12 +13,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="-4dp">
             <ImageView
                 android:id="@+id/ivBannerLogin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/banner_kalbe" />
+                android:src="@mipmap/banner" />
         </LinearLayout>
 
 
@@ -30,7 +31,8 @@
             android:orientation="vertical"
             android:id="@+id/llContent"
             android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/batik">
 
             <TextView
                 android:id="@+id/txtHDId"
@@ -62,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/press_go"
+                android:textColor="@color/white"
                 android:id="@+id/textView4" />
             <!--<View
                 android:layout_width="match_parent"
@@ -136,7 +139,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/colorAccent"
+            android:background="@drawable/batik"
             >
 
             <Button

@@ -244,7 +244,7 @@ public class FragmentInfoContact extends Fragment {
                                 }
 
                             }
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
                             new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
                         }

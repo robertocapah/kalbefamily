@@ -79,7 +79,6 @@
         <activity android:name=".NewMemberActivity" />
         <activity android:name=".NewLoginActivity" />
         <activity android:name=".PasswordActivity"></activity>
-        <activity android:name=".ExpandablePoinActivity" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
     </application>
