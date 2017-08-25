@@ -27,12 +27,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -68,15 +72,16 @@ import static com.android.volley.VolleyLog.TAG;
  * Created by Rian Andrivani on 7/20/2017.
  */
 
-public class FragmentNewPersonalData extends Fragment {
+public class FragmentNewPersonalData extends Fragment implements AdapterView.OnItemSelectedListener{
     View v;
-    TextView tvNama, tvMember, etNamaKeluarga, etNamaPanggilan, etEmail, etTelpon, etAlamat, etNoKTP;
+    TextView tvNama, tvMember, etNamaKeluarga, etNamaPanggilan, etEmail, etTelpon, etAlamat, etNoKTP, tvKategori;
     RadioButton radioPria, radiowanita;
     RadioGroup radioGenderGroup;
     Button btnUpdate, btnEditNamaKeluarga, btnEditNamaPanggilan, btnEditEmail, btnEditNoTelp, btnEditAlamat, btnEditNoKTP;
     private ImageView image1, image2;
     CircleImageView ivProfile;
     Context context;
+    Spinner spinner;
     private Uri uriImage, selectedImage;
 
     private static final int CAMERA_REQUEST_PROFILE = 120;
@@ -136,6 +141,8 @@ public class FragmentNewPersonalData extends Fragment {
         btnUpdate = (Button) v.findViewById(R.id.btnUpdate);
         image1 = (ImageView) v.findViewById(R.id.image1);
         image2 = (ImageView) v.findViewById(R.id.image2);
+        spinner = (Spinner) v.findViewById(R.id.spinnerContact);
+        tvKategori = (TextView) v.findViewById(R.id.textViewKategori);
 
         try {
             repoUserMember = new clsUserMemberRepo(context);
@@ -154,13 +161,13 @@ public class FragmentNewPersonalData extends Fragment {
         tvMember.setText(sub +" "+ sub2 +" "+ sub3);
 
         if (dataMember.get(0).getTxtNamaKeluarga().toString().equals("null")) {
-            etNamaKeluarga.setText("Nama Keluarga");
+            etNamaKeluarga.setText("Nama Depan");
         } else {
             etNamaKeluarga.setText(dataMember.get(0).getTxtNamaKeluarga().toString());
         }
 
         if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
-            etNamaPanggilan.setText("Nama Panggilan");
+            etNamaPanggilan.setText("Nama Belakang");
         } else {
             etNamaPanggilan.setText(dataMember.get(0).getTxtNamaPanggilan().toString());
         }
@@ -182,6 +189,8 @@ public class FragmentNewPersonalData extends Fragment {
         } else {
             etNoKTP.setText(dataMember.get(0).getTxtNoKTP().toString());
         }
+
+        tvKategori.setText("(LINE)");
 
         tvNama.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,31 +318,32 @@ public class FragmentNewPersonalData extends Fragment {
         btnEditNoTelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan No Telp Anda");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                input.setTextColor(Color.BLACK);
-                input.setText(etTelpon.getText().toString());
-                input.setInputType(InputType.TYPE_CLASS_PHONE);
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        etTelpon.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
+                popupEditKontak();
+//                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+//                alert.setMessage("Masukan No Telp Anda");
+//
+//                // Layout Dynamic
+//                LinearLayout layout = new LinearLayout(context);
+//                layout.setOrientation(LinearLayout.VERTICAL);
+//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                layoutParams.setMargins(25, 20, 25, 10);
+//
+//                final EditText input = new EditText(context);
+//                input.setTextColor(Color.BLACK);
+//                input.setText(etTelpon.getText().toString());
+//                input.setInputType(InputType.TYPE_CLASS_PHONE);
+//                layout.addView(input, layoutParams);
+//
+//                alert.setView(layout);
+//                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        etTelpon.setText(input.getText().toString());
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//                AlertDialog alertDialog = alert.create();
+//                alertDialog.show();
             }
         });
 
@@ -487,9 +497,32 @@ public class FragmentNewPersonalData extends Fragment {
                         if(!isValidEmail(etEmail.getText().toString())){
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
                             validate = false;
-                        } else if (!isValidMobile(etTelpon.getText().toString())) {
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Telpon harus berupa angka", false);
-                            validate = false;
+                        } else if (tvKategori.getText().toString().equals("(No Telp)")) {
+                            if (!isValidMobile(etTelpon.getText().toString())) {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), "No Telpon tidak Valid", false);
+                                validate = false;
+                            } else {
+                                dataUser.setTxtEmail(etEmail.getText().toString());
+                                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+
+                                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+                                RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
+
+                                dataUser.setTxtJenisKelamin(rbGender.getText().toString());
+
+                                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                                repoUserMember.createOrUpdate(dataUser);
+
+                                savePicture1();
+                                savePicture2();
+                                savePictureProfile();
+                                sendData();
+
+                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+                                getActivity().finish();
+                                startActivity(intent);
+                            }
                         } else {
                             dataUser.setTxtEmail(etEmail.getText().toString());
                             dataUser.setTxtNoTelp(etTelpon.getText().toString());
@@ -525,7 +558,68 @@ public class FragmentNewPersonalData extends Fragment {
             }
         });
 
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("No Telp");
+        categories.add("No HP");
+        categories.add("WhatsApp");
+        categories.add("Line");
+        categories.add("BBM");
+        categories.add("Facebook");
+        categories.add("Twitter");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
         return v;
+    }
+
+    private void popupEditKontak() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        final RadioButton radioButtonPrioritas, radioButtonBknPrioritas, radioButtonActive, radioButtonInActive;
+        final RadioGroup radioGenderradioGroupStatus, radioGenderradioGroupPrioritas;
+        radioGenderradioGroupStatus = (RadioGroup) v.findViewById(R.id.radioGroupStatus);
+        radioGenderradioGroupPrioritas = (RadioGroup) v.findViewById(R.id.radioGroupPrioritas);
+        radioButtonActive = (RadioButton) v.findViewById(R.id.radioButtonActive);
+        radioButtonInActive = (RadioButton) v.findViewById(R.id.radioButtonInActive);
+        radioButtonPrioritas = (RadioButton) v.findViewById(R.id.radioButtonPrioritas);
+        radioButtonBknPrioritas = (RadioButton) v.findViewById(R.id.radioButtonBknPrioritas);
+
+        etKontak.setText(etTelpon.getText().toString());
+//        radioButtonActive.setChecked(true);
+//        radioButtonPrioritas.setChecked(true);
+//        radioButtonInActive.setChecked(false);
+//        radioButtonBknPrioritas.setChecked(false);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                etTelpon.setText(etKontak.getText().toString());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
     }
 
     private void viewImage() {
@@ -1224,6 +1318,32 @@ public class FragmentNewPersonalData extends Fragment {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String kontak = adapterView.getItemAtPosition(i).toString();
+
+        if (kontak =="Line") {
+            tvKategori.setText("(LINE)");
+        } else if (kontak == "BBM") {
+            tvKategori.setText("(BBM)");
+        } else if (kontak == "No Telp") {
+            tvKategori.setText("(No Telp)");
+        } else if (kontak == "No HP") {
+            tvKategori.setText("(No HP)");
+        } else if (kontak == "WhatsApp") {
+            tvKategori.setText("(WhatsApp)");
+        } else if (kontak == "Facebook") {
+            tvKategori.setText("(Facebook)");
+        } else {
+            tvKategori.setText("(Twitter)");
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public static class Utility {

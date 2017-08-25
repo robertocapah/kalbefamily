@@ -90,7 +90,7 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivContactItem1"
-                    android:text="Nama Keluarga"
+                    android:text="Nama Depan"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272" />
 
@@ -131,7 +131,7 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivContactItem2"
-                    android:text="Nama Panggilan"
+                    android:text="Nama Belakang"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272" />
 
@@ -193,17 +193,17 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
                 android:clickable="false"
+                android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView
                     android:id="@+id/ivContactItem4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_phone_black" />
+                    android:src="@drawable/icons8" />
 
                 <TextView
                     android:id="@+id/textVuewNoTelp"
@@ -213,7 +213,18 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivContactItem4"
-                    android:text="No Telp"
+                    android:text="Contact"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#727272" />
+
+                <TextView
+                    android:id="@+id/textViewKategori"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/textVuewNoTelp"
+                    android:text=""
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272" />
 
@@ -226,6 +237,14 @@
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:background="@drawable/ic_edit_"
                     android:padding="6dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerContact"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textVuewNoTelp"
+                    android:layout_toLeftOf="@+id/btnEdit4"
+                    android:layout_toStartOf="@+id/btnEdit4" />
 
             </RelativeLayout>
 

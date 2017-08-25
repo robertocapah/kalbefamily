@@ -113,7 +113,9 @@ public class FragmentInfoContact extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
+                if (dataUserImageProfile.size() > 0) {
+                    new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
+                }
             }
         });
 

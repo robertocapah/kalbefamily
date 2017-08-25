@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,6 +39,8 @@ public class NewLoginActivity extends AppCompatActivity {
     String txtMember, txtPassword;
     Button btnSubmit;
 
+    private int intSet = 1;
+
     clsUserMemberRepo repoUserMember = null;
 
     public void onBackPressed() {
@@ -62,6 +66,21 @@ public class NewLoginActivity extends AppCompatActivity {
 
         memberID.setText(getIntent().getStringExtra("memberID"));
         memberID.setEnabled(false);
+
+        password.requestFocus();
+        password.setOnTouchListener(new DrawableClickListener.RightDrawableClickListener(password) {
+            public boolean onDrawableClick() {
+                if (intSet == 1) {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    intSet = 0;
+                } else {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    intSet = 1;
+                }
+
+                return true;
+            }
+        });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
