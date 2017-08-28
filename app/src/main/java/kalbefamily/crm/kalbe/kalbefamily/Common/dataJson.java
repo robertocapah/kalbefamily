@@ -1,6 +1,5 @@
 package kalbefamily.crm.kalbe.kalbefamily.Common;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +54,7 @@ public class dataJson {
                 resJson.put(dtUserMember.Property_txtJenisKelamin, String.valueOf(data.getTxtJenisKelamin()));
                 resJson.put(dtUserMember.Property_txtNoTelp, String.valueOf(data.getTxtNoTelp()));
                 resJson.put(dtUserMember.Property_txtNoKTP, String.valueOf(data.getTxtNoKTP()));
-                resJson.put(dtUserMember.Property_txtNamaKeluarga, String.valueOf(data.getTxtNamaKeluarga()));
+                resJson.put(dtUserMember.Property_txtNamaBelakang, String.valueOf(data.getTxtNamaBelakang()));
                 resJson.put(dtUserMember.Property_txtNamaPanggilan, String.valueOf(data.getTxtNamaPanggilan()));
                 itemsListJquey.add(resJson);
             }

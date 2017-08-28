@@ -1,7 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -189,7 +187,7 @@ public class NewLoginActivity extends AppCompatActivity {
                                 dataUser.setTxtNoTelp(txtTelp);
                                 dataUser.setTxtNoKTP(txtNoKTP);
                                 dataUser.setTxtBasePoin(txtBasePoint);
-                                dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
+                                dataUser.setTxtNamaBelakang(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
 
                                 repoUserMember = new clsUserMemberRepo(getApplicationContext());

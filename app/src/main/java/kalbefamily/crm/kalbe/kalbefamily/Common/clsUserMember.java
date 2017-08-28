@@ -74,12 +74,12 @@ public class clsUserMember implements Serializable {
         this.txtNoKTP = txtNoKTP;
     }
 
-    public String getTxtNamaKeluarga() {
-        return txtNamaKeluarga;
+    public String getTxtNamaBelakang() {
+        return txtNamaBelakang;
     }
 
-    public void setTxtNamaKeluarga(String txtNamaKeluarga) {
-        this.txtNamaKeluarga = txtNamaKeluarga;
+    public void setTxtNamaBelakang(String txtNamaBelakang) {
+        this.txtNamaBelakang = txtNamaBelakang;
     }
 
     public String getTxtNamaPanggilan() {
@@ -88,6 +88,14 @@ public class clsUserMember implements Serializable {
 
     public void setTxtNamaPanggilan(String txtNamaPanggilan) {
         this.txtNamaPanggilan = txtNamaPanggilan;
+    }
+
+    public String getTxtNamaDepan() {
+        return txtNamaDepan;
+    }
+
+    public void setTxtNamaDepan(String txtNamaDepan) {
+        this.txtNamaDepan = txtNamaDepan;
     }
 
     public String getTxtBasePoin() {
@@ -130,8 +138,10 @@ public class clsUserMember implements Serializable {
     public String txtNoTelp;
     @DatabaseField(columnName = "txtNoKTP")
     public String txtNoKTP;
-    @DatabaseField(columnName = "txtNamaKeluarga")
-    public String txtNamaKeluarga;
+    @DatabaseField(columnName = "txtNamaBelakang")
+    public String txtNamaDepan;
+    @DatabaseField(columnName = "txtNamaDepan")
+    public String txtNamaBelakang;
     @DatabaseField(columnName = "txtNamaPanggilan")
     public String txtNamaPanggilan;
     @DatabaseField(columnName = "txtBasePoin")
@@ -149,7 +159,7 @@ public class clsUserMember implements Serializable {
     public String Property_txtEmail = "txtEmail";
     public String Property_txtNoTelp = "txtTelp";
     public String Property_txtNoKTP = "txtNoKTP";
-    public String Property_txtNamaKeluarga = "txtNamaKeluarga";
+    public String Property_txtNamaBelakang = "txtNamaBelakang";
     public String Property_txtNamaPanggilan = "txtNamaPanggilan";
     public String Property_intBasePoin = "txtBasePoin";
     public String Property_ListOfUserMember = "ListOfObjectData";
@@ -161,7 +171,7 @@ public class clsUserMember implements Serializable {
             Property_txtEmail+","+
             Property_txtNoTelp+","+
             Property_txtNoKTP+","+
-            Property_txtNamaKeluarga+","+
+            Property_txtNamaBelakang +","+
             Property_txtNamaPanggilan+","+
             Property_intBasePoin;
 

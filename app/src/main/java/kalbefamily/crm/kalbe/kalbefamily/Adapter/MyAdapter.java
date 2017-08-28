@@ -92,7 +92,7 @@ public class MyAdapter extends ExpandableRecyclerAdapter<TitleParentViewHolder,T
                 dataUser.setTxtEmail(dataMember.get(0).txtEmail);
                 dataUser.setTxtNoTelp(dataMember.get(0).txtNoTelp);
                 dataUser.setTxtNoKTP(dataMember.get(0).txtNoKTP);
-                dataUser.setTxtNamaKeluarga(dataMember.get(0).txtNamaKeluarga);
+                dataUser.setTxtNamaBelakang(dataMember.get(0).txtNamaBelakang);
                 dataUser.setTxtNamaPanggilan(dataMember.get(0).txtNamaPanggilan);
 
                 repoUserMember = new clsUserMemberRepo(context2.getApplicationContext());

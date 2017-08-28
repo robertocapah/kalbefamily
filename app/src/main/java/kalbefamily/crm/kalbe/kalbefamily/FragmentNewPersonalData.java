@@ -19,9 +19,9 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,7 +64,6 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
-import static android.R.attr.id;
 import static android.app.Activity.RESULT_OK;
 import static com.android.volley.VolleyLog.TAG;
 
@@ -74,10 +73,10 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class FragmentNewPersonalData extends Fragment implements AdapterView.OnItemSelectedListener{
     View v;
-    TextView tvNama, tvMember, etNamaKeluarga, etNamaPanggilan, etEmail, etTelpon, etAlamat, etNoKTP, tvKategori;
+    TextView tvNama, tvMember, etNamaDepan, etNamaBelakang, etNamaPanggilan, etEmail, etTelpon, etAlamat, etNoKTP, tvKategori;
     RadioButton radioPria, radiowanita;
     RadioGroup radioGenderGroup;
-    Button btnUpdate, btnEditNamaKeluarga, btnEditNamaPanggilan, btnEditEmail, btnEditNoTelp, btnEditAlamat, btnEditNoKTP;
+    Button btnUpdate, btnDetail, btnEditNamaDepan, btnEditNamaBelakang, btnNamaPanggilan, btnEditEmail, btnEditNoTelp, btnEditAlamat, btnEditNoKTP;
     private ImageView image1, image2;
     CircleImageView ivProfile;
     Context context;
@@ -123,7 +122,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         ivProfile = (CircleImageView) v.findViewById(R.id.profile_image);
         tvNama = (TextView) v.findViewById(R.id.tvNama);
         tvMember = (TextView) v.findViewById(R.id.tvMember);
-        etNamaKeluarga = (TextView) v.findViewById(R.id.textViewNamaKeluarga);
+        etNamaDepan = (TextView) v.findViewById(R.id.textViewNamaKeluarga);
+        etNamaBelakang = (TextView) v.findViewById(R.id.textViewNamaBelakang);
         etNamaPanggilan = (TextView) v.findViewById(R.id.textViewNamaPanggilan);
         etEmail = (TextView) v.findViewById(R.id.textViewEmail);
         etTelpon = (TextView) v.findViewById(R.id.textVuewNoTelp);
@@ -132,13 +132,15 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         radioPria = (RadioButton) v.findViewById(R.id.radioButton1);
         radiowanita = (RadioButton) v.findViewById(R.id.radioButton2);
         etNoKTP = (TextView) v.findViewById(R.id.textViewNoKTP);
-        btnEditNamaKeluarga = (Button) v.findViewById(R.id.btnEdit1);
-        btnEditNamaPanggilan = (Button) v.findViewById(R.id.btnEdit2);
+        btnEditNamaDepan = (Button) v.findViewById(R.id.btnEdit1);
+        btnEditNamaBelakang = (Button) v.findViewById(R.id.btnEdit2);
         btnEditEmail = (Button) v.findViewById(R.id.btnEdit3);
         btnEditNoTelp = (Button) v.findViewById(R.id.btnEdit4);
         btnEditAlamat = (Button) v.findViewById(R.id.btnEdit5);
         btnEditNoKTP = (Button) v.findViewById(R.id.btnEdit6);
+        btnNamaPanggilan = (Button) v.findViewById(R.id.btnEdit7);
         btnUpdate = (Button) v.findViewById(R.id.btnUpdate);
+        btnDetail = (Button) v.findViewById(R.id.btnDetail);
         image1 = (ImageView) v.findViewById(R.id.image1);
         image2 = (ImageView) v.findViewById(R.id.image2);
         spinner = (Spinner) v.findViewById(R.id.spinnerContact);
@@ -160,16 +162,22 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         sub3 = member1.substring(8, member1.length());
         tvMember.setText(sub +" "+ sub2 +" "+ sub3);
 
-        if (dataMember.get(0).getTxtNamaKeluarga().toString().equals("null")) {
-            etNamaKeluarga.setText("Nama Depan");
+        if (dataMember.get(0).getTxtNamaBelakang().toString().equals("null")) {
+            etNamaDepan.setText("");
         } else {
-            etNamaKeluarga.setText(dataMember.get(0).getTxtNamaKeluarga().toString());
+            etNamaDepan.setText(dataMember.get(0).getTxtNamaBelakang().toString());
         }
 
         if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
-            etNamaPanggilan.setText("Nama Belakang");
+            etNamaBelakang.setText("");
         } else {
-            etNamaPanggilan.setText(dataMember.get(0).getTxtNamaPanggilan().toString());
+            etNamaBelakang.setText(dataMember.get(0).getTxtNamaPanggilan().toString());
+        }
+
+        if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
+            etNamaPanggilan.setText("");
+        } else {
+            etNamaPanggilan.setText(dataMember.get(0).getTxtNamaPanggilan());
         }
 
         etEmail.setText(dataMember.get(0).getTxtEmail().toString());
@@ -185,7 +193,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         }
 
         if (dataMember.get(0).getTxtNoKTP().toString().equals("null")) {
-            etNoKTP.setText("No KTP");
+            etNoKTP.setText("");
         } else {
             etNoKTP.setText(dataMember.get(0).getTxtNoKTP().toString());
         }
@@ -223,11 +231,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnEditNamaKeluarga.setOnClickListener(new View.OnClickListener() {
+        btnEditNamaDepan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan Nama Keluarga");
+                alert.setMessage("Masukan Nama Depan");
 
                 // Layout Dynamic
                 LinearLayout layout = new LinearLayout(context);
@@ -237,7 +245,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
-                input.setText(etNamaKeluarga.getText().toString());
+                input.setText(etNamaDepan.getText().toString());
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -245,7 +253,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 //                        Toast.makeText(context,"Success",Toast.LENGTH_LONG).show();
-                        etNamaKeluarga.setText(input.getText().toString());
+                        etNamaDepan.setText(input.getText().toString());
                         dialogInterface.dismiss();
                     }
                 });
@@ -254,11 +262,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnEditNamaPanggilan.setOnClickListener(new View.OnClickListener() {
+        btnEditNamaBelakang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan Nama Panggilan");
+                alert.setMessage("Masukan Nama Belakang");
 
                 // Layout Dynamic
                 LinearLayout layout = new LinearLayout(context);
@@ -268,14 +276,44 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
-                input.setText(etNamaPanggilan.getText().toString());
+                input.setText(etNamaBelakang.getText().toString());
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        etNamaPanggilan.setText(input.getText().toString());
+                        etNamaBelakang.setText(input.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
+            }
+        });
+
+        btnNamaPanggilan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage("Masukan Nama Pangglan");
+
+                // Layout Dynamic
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(25, 20, 25, 10);
+
+                final EditText input = new EditText(context);
+                input.setTextColor(Color.BLACK);
+                input.setText(etNamaBelakang.getText().toString());
+                layout.addView(input, layoutParams);
+
+                alert.setView(layout);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        etNamaBelakang.setText(input.getText().toString());
                         dialogInterface.dismiss();
                     }
                 });
@@ -318,32 +356,33 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         btnEditNoTelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popupEditKontak();
-//                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-//                alert.setMessage("Masukan No Telp Anda");
-//
-//                // Layout Dynamic
-//                LinearLayout layout = new LinearLayout(context);
-//                layout.setOrientation(LinearLayout.VERTICAL);
-//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                layoutParams.setMargins(25, 20, 25, 10);
-//
-//                final EditText input = new EditText(context);
-//                input.setTextColor(Color.BLACK);
-//                input.setText(etTelpon.getText().toString());
-//                input.setInputType(InputType.TYPE_CLASS_PHONE);
-//                layout.addView(input, layoutParams);
-//
-//                alert.setView(layout);
-//                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        etTelpon.setText(input.getText().toString());
-//                        dialogInterface.dismiss();
-//                    }
-//                });
-//                AlertDialog alertDialog = alert.create();
-//                alertDialog.show();
+//                popupEditKontak();
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage("No Telp Anda");
+
+                // Layout Dynamic
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(25, 20, 25, 10);
+
+                final EditText input = new EditText(context);
+                input.setTextColor(Color.BLACK);
+                input.setText(etTelpon.getText().toString());
+                input.setInputType(InputType.TYPE_CLASS_PHONE);
+                input.setEnabled(false);
+                layout.addView(input, layoutParams);
+
+                alert.setView(layout);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        etTelpon.setText(input.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
             }
         });
 
@@ -490,8 +529,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         dataUser.setTxtNama(tvNama.getText().toString());
                         dataUser.setTxtAlamat(etAlamat.getText().toString());
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
-                        dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
-                        dataUser.setTxtNamaKeluarga(etNamaKeluarga.getText().toString());
+                        dataUser.setTxtNamaPanggilan(etNamaBelakang.getText().toString());
+                        dataUser.setTxtNamaBelakang(etNamaDepan.getText().toString());
                         dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
 
                         if(!isValidEmail(etEmail.getText().toString())){
@@ -558,6 +597,16 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
+        btnDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentDetailPersonalData fragmentDetailPersonalData = new FragmentDetailPersonalData();
+                FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
+                fragmentTransactionPersonalData.commit();
+            }
+        });
+
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
 
@@ -581,45 +630,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         spinner.setAdapter(dataAdapter);
 
         return v;
-    }
-
-    private void popupEditKontak() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
-        final EditText etKontak =(EditText) promptView.findViewById(R.id.etKontak);
-        final RadioButton radioButtonPrioritas, radioButtonBknPrioritas, radioButtonActive, radioButtonInActive;
-        final RadioGroup radioGenderradioGroupStatus, radioGenderradioGroupPrioritas;
-        radioGenderradioGroupStatus = (RadioGroup) v.findViewById(R.id.radioGroupStatus);
-        radioGenderradioGroupPrioritas = (RadioGroup) v.findViewById(R.id.radioGroupPrioritas);
-        radioButtonActive = (RadioButton) v.findViewById(R.id.radioButtonActive);
-        radioButtonInActive = (RadioButton) v.findViewById(R.id.radioButtonInActive);
-        radioButtonPrioritas = (RadioButton) v.findViewById(R.id.radioButtonPrioritas);
-        radioButtonBknPrioritas = (RadioButton) v.findViewById(R.id.radioButtonBknPrioritas);
-
-        etKontak.setText(etTelpon.getText().toString());
-//        radioButtonActive.setChecked(true);
-//        radioButtonPrioritas.setChecked(true);
-//        radioButtonInActive.setChecked(false);
-//        radioButtonBknPrioritas.setChecked(false);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
-        alertDialogBuilder.setView(promptView);
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                etTelpon.setText(etKontak.getText().toString());
-                                dialog.dismiss();
-                            }
-                        })
-                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
     }
 
     private void viewImage() {

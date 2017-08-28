@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -179,7 +178,8 @@ public class FragmentInfoContact extends Fragment {
                                 String txtEmail = jsonobject.getString("TxtEmail");
                                 String txtTelp = jsonobject.getString("TxtTelp");
                                 String txtNoKTP = jsonobject.getString("TxtNoKTP");
-                                String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
+                                String txtNamaDepan = jsonobject.getString("TxtNamaDepan");
+                                String txtNamaBelakang = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
                                 String intBasePoin = jsonobject.getString("IntBasePoin");
                                 String txtTglAwal = jsonobject.getString("DtTglAwal");
@@ -194,7 +194,8 @@ public class FragmentInfoContact extends Fragment {
                                 dataUser.setTxtEmail(txtEmail);
                                 dataUser.setTxtNoTelp(txtTelp);
                                 dataUser.setTxtNoKTP(txtNoKTP);
-                                dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
+                                dataUser.setTxtNamaDepan(txtNamaDepan);
+                                dataUser.setTxtNamaBelakang(txtNamaBelakang);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
                                 dataUser.setTxtBasePoin(intBasePoin);
                                 dataUser.setTxtTglAwal(txtTglAwal);
@@ -202,6 +203,7 @@ public class FragmentInfoContact extends Fragment {
 
                                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                                 repoUserMember.createOrUpdate(dataUser);
+                                Log.d("Data info", "Data Member berhasil di update");
 //
 //                                int h = 0;
 //                                h = repoUserMember.createOrUpdate(dataUser);

@@ -139,10 +139,10 @@ public class FragmentPersonalData extends Fragment {
             etNoKTP.setText(dataMember.get(0).getTxtNoKTP().toString());
         }
 
-        if (dataMember.get(0).getTxtNamaKeluarga().toString().equals("null")) {
+        if (dataMember.get(0).getTxtNamaBelakang().toString().equals("null")) {
             etNamaKeluarga.setText("");
         } else {
-            etNamaKeluarga.setText(dataMember.get(0).getTxtNamaKeluarga().toString());
+            etNamaKeluarga.setText(dataMember.get(0).getTxtNamaBelakang().toString());
         }
 
         if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
@@ -217,7 +217,7 @@ public class FragmentPersonalData extends Fragment {
                         dataUser.setTxtAlamat(etAlamat.getText().toString());
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
                         dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
-                        dataUser.setTxtNamaKeluarga(etNamaKeluarga.getText().toString());
+                        dataUser.setTxtNamaBelakang(etNamaKeluarga.getText().toString());
                         dataUser.setTxtBasePoin(etBasePoin.getText().toString());
 
                         if(!isValidEmail(etEmail.getText().toString())){

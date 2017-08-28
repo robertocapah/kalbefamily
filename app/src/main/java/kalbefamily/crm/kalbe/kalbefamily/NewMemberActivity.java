@@ -262,7 +262,7 @@ public class NewMemberActivity extends AppCompatActivity {
                                 dataUser.setTxtEmail(txtEmail);
                                 dataUser.setTxtNoTelp(txtTelp);
                                 dataUser.setTxtNoKTP(txtNoKTP);
-                                dataUser.setTxtNamaKeluarga(txtNamaKeluarga);
+                                dataUser.setTxtNamaBelakang(txtNamaKeluarga);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
 
 //                                repoUserMember = new clsUserMemberRepo(getApplicationContext());

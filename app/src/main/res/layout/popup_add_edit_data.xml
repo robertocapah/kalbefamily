@@ -35,7 +35,7 @@
             android:id="@+id/etKontak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12345678999"
+            android:hint="12345678999"
             android:inputType="textMultiLine"/>
 
         <TextView
@@ -60,9 +60,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:text="Active"
+                android:text="Aktif"
+                android:paddingLeft="10dip"
                 android:layout_below="@+id/radioGroup"
                 android:layout_alignLeft="@+id/radioGroup"
+                android:button="@drawable/custom_checkbox_design"
                 android:checked="true"/>
 
             <RadioButton
@@ -70,11 +72,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="30dp"
                 android:paddingRight="@dimen/action_button_margin"
                 android:text="Tidak Aktif"
+                android:paddingLeft="@dimen/action_button_margin"
                 android:layout_below="@+id/radioGroup"
-                android:layout_alignLeft="@+id/radioGroup" />
+                android:layout_alignLeft="@+id/radioGroup"
+                android:button="@drawable/custom_checkbox_design"/>
 
         </RadioGroup>
 
@@ -109,6 +113,7 @@
                 android:text="Prioritas"
                 android:layout_below="@+id/radioGroup"
                 android:layout_alignLeft="@+id/radioGroup"
+                android:button="@drawable/custom_checkbox_design"
                 android:checked="true"/>
 
             <RadioButton
@@ -116,10 +121,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="35dp"
+                android:layout_marginLeft="18dp"
                 android:paddingRight="@dimen/action_button_margin"
                 android:text="Bukan Prioritas"
                 android:layout_below="@+id/radioGroup"
+                android:button="@drawable/custom_checkbox_design"
                 android:layout_alignLeft="@+id/radioGroup" />
 
         </RadioGroup>
