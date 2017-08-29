@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -149,16 +151,24 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak =(EditText) promptView.findViewById(R.id.etKontak);
-        final RadioButton radioButtonPrioritas, radioButtonBknPrioritas, radioButtonActive, radioButtonInActive;
-        final RadioGroup radioGenderradioGroupStatus, radioGenderradioGroupPrioritas;
-        radioGenderradioGroupStatus = (RadioGroup) v.findViewById(R.id.radioGroupStatus);
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        final RadioButton radioButtonPrioritas, radioButtonBknPrioritas;
+        final RadioGroup radioGenderradioGroupPrioritas;
         radioGenderradioGroupPrioritas = (RadioGroup) v.findViewById(R.id.radioGroupPrioritas);
-        radioButtonActive = (RadioButton) v.findViewById(R.id.radioButtonActive);
-        radioButtonInActive = (RadioButton) v.findViewById(R.id.radioButtonInActive);
         radioButtonPrioritas = (RadioButton) v.findViewById(R.id.radioButtonPrioritas);
         radioButtonBknPrioritas = (RadioButton) v.findViewById(R.id.radioButtonBknPrioritas);
 
         etKontak.setText(tvNoTelp.getText().toString());
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
 //        radioButtonActive.setChecked(true);
 //        radioButtonPrioritas.setChecked(true);
 //        radioButtonInActive.setChecked(false);

@@ -48,39 +48,17 @@
             android:layout_marginLeft="5dp"
             android:textColor="#000"/>
 
-        <RadioGroup
-            android:id="@+id/radioGroupStatus"
+        <CheckBox
+            android:id="@+id/checkboxStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Aktif"
+            android:checked="true"
+            android:paddingLeft="10dp"
+            android:button="@drawable/custom_checkbox_design"/>
 
-            <RadioButton
-                android:id="@+id/radioButtonActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Aktif"
-                android:paddingLeft="10dip"
-                android:layout_below="@+id/radioGroup"
-                android:layout_alignLeft="@+id/radioGroup"
-                android:button="@drawable/custom_checkbox_design"
-                android:checked="true"/>
-
-            <RadioButton
-                android:id="@+id/radioButtonInActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:paddingRight="@dimen/action_button_margin"
-                android:text="Tidak Aktif"
-                android:paddingLeft="@dimen/action_button_margin"
-                android:layout_below="@+id/radioGroup"
-                android:layout_alignLeft="@+id/radioGroup"
-                android:button="@drawable/custom_checkbox_design"/>
-
-        </RadioGroup>
 
         <View
             android:layout_marginTop="15dp"
