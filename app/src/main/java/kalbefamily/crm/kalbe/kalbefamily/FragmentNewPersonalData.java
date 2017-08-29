@@ -3,6 +3,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,14 +60,18 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
@@ -109,9 +121,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo repoUserMemberImage = null;
     clsUserImageProfileRepo repoUserImageProfile = null;
+    clsMediaKontakDetailRepo repoKontakDetail;
     clsUserMemberImage dtImage;
     clsUserImageProfile dtImageProfile;
     boolean validate = true;
+    private String txtKontakID;
 
     @Nullable
     @Override
@@ -600,10 +614,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentDetailPersonalData fragmentDetailPersonalData = new FragmentDetailPersonalData();
-                FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
-                fragmentTransactionPersonalData.commit();
+                kontakDetail();
             }
         });
 
@@ -1412,6 +1423,93 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto , SELECT_FILE_PROFILE);//one can be replaced with any action code
+    }
+
+    public void kontakDetail() {
+        final ProgressDialog Dialog = new ProgressDialog(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
+        DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+        helper.refreshData2();
+        try {
+            dataMember = (List<clsUserMember>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        txtKontakID = dataMember.get(0).getTxtKontakId();
+        String strLinkAPI = new clsHardCode().linkGetDataKontakDetail;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtKontakID", txtKontakID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Getting Data, Please wait !", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String lttxtMediaID = jsonobject.getString("LttxtMediaID");
+                                String txtDeskripsi = jsonobject.getString("TxtDeskripsi");
+                                String txtPrioritasKontak = jsonobject.getString("IntPrioritasKontak");
+                                String txtDetailMedia = jsonobject.getString("TxtDetailMedia");
+                                String txtKeterangan = jsonobject.getString("TxtKeterangan");
+                                String lttxtStatusAktif = jsonobject.getString("LttxtStatusAktif");
+                                String txtKategoriMedia = jsonobject.getString("TxtKategoriMedia");
+                                txtDeskripsi = txtDeskripsi.trim();
+
+                                clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dataKontak.setLttxtMediaID(lttxtMediaID);
+                                dataKontak.setTxtDeskripsi(txtDeskripsi);
+                                dataKontak.setTxtPrioritasKontak(txtPrioritasKontak);
+                                dataKontak.setTxtDetailMedia(txtDetailMedia);
+                                dataKontak.setTxtKeterangan(txtKeterangan);
+                                dataKontak.setLttxtStatusAktif(lttxtStatusAktif);
+                                dataKontak.setTxtKategoriMedia(txtKategoriMedia);
+
+                                repoKontakDetail = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                repoKontakDetail.createOrUpdate(dataKontak);
+                            }
+                            Log.d("Data info", "Data Kontak Detail berhasil di update");
+                            FragmentDetailPersonalData fragmentDetailPersonalData = new FragmentDetailPersonalData();
+                            FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
+                            fragmentTransactionPersonalData.commit();
+
+                        } else {
+                            new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
     }
 
     public final static boolean isValidEmail(CharSequence target) {

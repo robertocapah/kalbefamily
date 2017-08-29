@@ -3,6 +3,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -13,24 +14,59 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 /**
  * Created by Rian Andrivani on 8/28/2017.
  */
 
-public class FragmentDetailPersonalData extends Fragment {
+public class FragmentDetailPersonalData extends Fragment implements AdapterView.OnItemSelectedListener {
     View v;
     Context context;
-    TextView tvNoTelp;
+    List<clsUserMember> dataMember = null;
+    List<clsMediaKontakDetail> dataNoTelp, dataSms;
+    clsMediaKontakDetailRepo repoKontakDetail;
+    clsMediaKontakDetailRepo repoKontak;
+    private String txtKontakID;
+
+    RelativeLayout layout1, layout2, layout3, layout4, layout5, layout6;
+    TextView tvNoTelp, tvSms;
     Button btnNoTelp;
+    Spinner spinner, spinnerSms;
 
     @Nullable
     @Override
@@ -39,7 +75,10 @@ public class FragmentDetailPersonalData extends Fragment {
         context = getActivity().getApplicationContext();
 
         tvNoTelp = (TextView) v.findViewById(R.id.textViewNoTelp);
+        tvSms = (TextView) v.findViewById(R.id.textViewSMS);
         btnNoTelp = (Button) v.findViewById(R.id.btnEdit1);
+        spinner = (Spinner) v.findViewById(R.id.spinnerTelpon);
+        spinnerSms = (Spinner) v.findViewById(R.id.spinnerSMS);
 
         btnNoTelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +87,62 @@ public class FragmentDetailPersonalData extends Fragment {
             }
         });
 
+        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+        try {
+            dataNoTelp = (List<clsMediaKontakDetail>) repoKontak.findbyTelpon();
+            dataSms = (List<clsMediaKontakDetail>) repoKontak.findbySms();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+        spinnerSms.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> noTelp = new ArrayList<String>();
+        List<String> noSms = new ArrayList<String>();
+        if (dataNoTelp.size() > 0) {
+            for (clsMediaKontakDetail kontakDetail : dataNoTelp) {
+                noTelp.add(kontakDetail.getTxtDetailMedia());
+            }
+        } if (dataSms.size() > 0) {
+            for (clsMediaKontakDetail kontakDetail : dataSms) {
+                noSms.add(kontakDetail.getTxtDetailMedia());
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context.getApplicationContext(), android.R.layout.simple_spinner_item, noTelp);
+        ArrayAdapter<String> dataAdapterSms = new ArrayAdapter<String>(context.getApplicationContext(), android.R.layout.simple_spinner_item, noSms);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapterSms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+        spinnerSms.setAdapter(dataAdapterSms);
+
         return v;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String telpon = adapterView.getItemAtPosition(i).toString();
+        String sms = adapterView.getItemAtPosition(i).toString();
+
+        Spinner spinner = (Spinner) adapterView;
+        if(spinner.getId() == R.id.spinnerTelpon) {
+            tvNoTelp.setText(telpon);
+        } if(spinner.getId() == R.id.spinnerSMS) {
+            tvSms.setText(sms);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     private void popupEditNoTelp() {
@@ -64,7 +158,7 @@ public class FragmentDetailPersonalData extends Fragment {
         radioButtonPrioritas = (RadioButton) v.findViewById(R.id.radioButtonPrioritas);
         radioButtonBknPrioritas = (RadioButton) v.findViewById(R.id.radioButtonBknPrioritas);
 
-//        etKontak.setText(etTelpon.getText().toString());
+        etKontak.setText(tvNoTelp.getText().toString());
 //        radioButtonActive.setChecked(true);
 //        radioButtonPrioritas.setChecked(true);
 //        radioButtonInActive.setChecked(false);

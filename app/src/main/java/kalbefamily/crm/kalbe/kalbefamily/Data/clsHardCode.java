@@ -26,4 +26,5 @@ public class clsHardCode {
     public String linkScanQRCode = new mConfigRepo(context).API + "ScanQRCode";
     public String linkGetDatadMembership = new mConfigRepo(context).API + "GetDatadMembership";
     public String linkAvailablePoin = new mConfigRepo(context).API + "AvailablePoinCustomer";
+    public String linkGetDataKontakDetail = new mConfigRepo(context).API + "GetDataMediaKontakDetail";
 }
