@@ -26,7 +26,7 @@
         <item
             android:id="@+id/scanQrCode"
             android:checked="true"
-            android:icon="@drawable/zxinglib_icon"
+            android:icon="@drawable/ic_qrcode"
             android:orderInCategory="0"
             android:title="Start Scan QR-Code"
             app:actionLayout="@layout/menu_counter"
@@ -35,7 +35,7 @@
         <item
             android:id="@+id/rewardCard"
             android:checked="true"
-            android:icon="@drawable/ic_action_name"
+            android:icon="@drawable/ic_card"
             android:orderInCategory="0"
             android:title="Reward Card"
             app:actionLayout="@layout/menu_counter"
@@ -44,7 +44,7 @@
         <item
             android:id="@+id/availablePont"
             android:checked="true"
-            android:icon="@drawable/ic_folder_open_black_48dp"
+            android:icon="@drawable/ic_point"
             android:orderInCategory="0"
             android:title="Available Point"
             app:actionLayout="@layout/menu_counter"
