@@ -140,4 +140,234 @@ public class clsMediaKontakDetailRepo implements crud {
         }
         return items;
     }
+
+    public List<?> findbyBBM() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'BLACKBERRY'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyLine() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'LINE'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyWA() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'WHATSAPP'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyEmail() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'Email'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyTwitter() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'TWITTER'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyFacebook() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'FACEBOOK'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyInstagram() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'INSTAGRAM'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyFax() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'Fax'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyPath() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'PATH'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findbyMMS() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getUserMediaKontakDetailDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi = 'MMS'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtDetailMedia = resultColumns[3];
+
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
 }

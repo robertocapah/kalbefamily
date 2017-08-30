@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:weightSum="4">
 
+        <!--telepon-->
         <RelativeLayout
             android:id="@+id/layout1"
             android:layout_width="match_parent"
@@ -32,7 +33,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvNumber1"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem1"
                 android:hint="No Telpon"
@@ -59,6 +59,7 @@
 
         </RelativeLayout>
 
+        <!--sms-->
         <RelativeLayout
             android:id="@+id/layout2"
             android:layout_width="match_parent"
@@ -79,7 +80,6 @@
                 android:id="@+id/textViewSMS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem2"
                 android:hint="SMS"
@@ -106,13 +106,14 @@
 
         </RelativeLayout>
 
-
+        <!--bbm-->
         <RelativeLayout
             android:id="@+id/layout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="false"
+            android:visibility="gone"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
@@ -127,7 +128,6 @@
                 android:id="@+id/textViewBBM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem3"
                 android:hint="Blackberry Messanger"
@@ -144,14 +144,24 @@
                 android:background="@drawable/ic_edit_"
                 android:padding="6dp" />
 
+            <Spinner
+                android:id="@+id/spinnerBBM"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewBBM"
+                android:layout_toLeftOf="@+id/btnEdit3"
+                android:layout_toStartOf="@+id/btnEdit3" />
+
         </RelativeLayout>
 
+        <!--line-->
         <RelativeLayout
             android:id="@+id/layout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="false"
+            android:visibility="gone"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
@@ -166,7 +176,6 @@
                 android:id="@+id/textViewLine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem4"
                 android:hint="Line Messanger"
@@ -183,14 +192,24 @@
                 android:background="@drawable/ic_edit_"
                 android:padding="6dp" />
 
+            <Spinner
+                android:id="@+id/spinnerLine"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewLine"
+                android:layout_toLeftOf="@+id/btnEdit4"
+                android:layout_toStartOf="@+id/btnEdit4" />
+
         </RelativeLayout>
 
+        <!--WA-->
         <RelativeLayout
             android:id="@+id/layout5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="false"
+            android:visibility="gone"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
@@ -205,7 +224,6 @@
                 android:id="@+id/textViewWhatsApp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem5"
                 android:hint="WhatsApp Messanger"
@@ -222,8 +240,17 @@
                 android:background="@drawable/ic_edit_"
                 android:padding="6dp" />
 
+            <Spinner
+                android:id="@+id/spinnerWA"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewWhatsApp"
+                android:layout_toLeftOf="@+id/btnEdit5"
+                android:layout_toStartOf="@+id/btnEdit5" />
+
         </RelativeLayout>
 
+        <!--email-->
         <RelativeLayout
             android:id="@+id/layout6"
             android:layout_width="match_parent"
@@ -234,8 +261,8 @@
 
             <ImageView
                 android:id="@+id/ivContactItem6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_email_black" />
@@ -245,10 +272,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvNumber3"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem6"
-                android:text="Email"
+                android:layout_marginEnd="85dp"
+                android:hint="Email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
@@ -261,6 +288,302 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:background="@drawable/ic_edit_"
                 android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerEmail"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewEmail"
+                android:layout_toLeftOf="@+id/btnEdit6"
+                android:layout_toStartOf="@+id/btnEdit6" />
+
+        </RelativeLayout>
+
+        <!--twitter-->
+        <RelativeLayout
+            android:id="@+id/layout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_twitter" />
+
+            <TextView
+                android:id="@+id/textViewTwitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem7"
+                android:hint="Twitter"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit7"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerTwitter"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewTwitter"
+                android:layout_toLeftOf="@+id/btnEdit7"
+                android:layout_toStartOf="@+id/btnEdit7" />
+
+        </RelativeLayout>
+
+        <!--facebook-->
+        <RelativeLayout
+            android:id="@+id/layout8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_facebook" />
+
+            <TextView
+                android:id="@+id/textViewFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem8"
+                android:hint="Facebook"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit8"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerFacebook"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewFacebook"
+                android:layout_toLeftOf="@+id/btnEdit8"
+                android:layout_toStartOf="@+id/btnEdit8" />
+
+        </RelativeLayout>
+
+        <!--instagram-->
+        <RelativeLayout
+            android:id="@+id/layout9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_instagram" />
+
+            <TextView
+                android:id="@+id/textViewInstagram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem9"
+                android:hint="Instagram"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit9"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerInstagram"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewInstagram"
+                android:layout_toLeftOf="@+id/btnEdit9"
+                android:layout_toStartOf="@+id/btnEdit9" />
+
+        </RelativeLayout>
+
+        <!--fax-->
+        <RelativeLayout
+            android:id="@+id/layout10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_fax" />
+
+            <TextView
+                android:id="@+id/textViewFax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem10"
+                android:hint="Fax"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit10"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerFax"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewFax"
+                android:layout_toLeftOf="@+id/btnEdit10"
+                android:layout_toStartOf="@+id/btnEdit10" />
+
+        </RelativeLayout>
+
+        <!--path-->
+        <RelativeLayout
+            android:id="@+id/layout11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem11"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_path" />
+
+            <TextView
+                android:id="@+id/textViewPath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem11"
+                android:hint="Path"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit11"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerPath"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewPath"
+                android:layout_toLeftOf="@+id/btnEdit11"
+                android:layout_toStartOf="@+id/btnEdit11" />
+
+        </RelativeLayout>
+
+        <!--mms-->
+        <RelativeLayout
+            android:id="@+id/layout12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="false"
+            android:visibility="gone"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:id="@+id/ivContactItem12"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_mms" />
+
+            <TextView
+                android:id="@+id/textViewMms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivContactItem12"
+                android:hint="MMS"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
+            <Button
+                android:id="@+id/btnEdit12"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@drawable/ic_edit_"
+                android:padding="6dp" />
+
+            <Spinner
+                android:id="@+id/spinnerMMS"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textViewMms"
+                android:layout_toLeftOf="@+id/btnEdit12"
+                android:layout_toStartOf="@+id/btnEdit12" />
 
         </RelativeLayout>
 

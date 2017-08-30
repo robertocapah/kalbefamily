@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -443,6 +444,12 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 layoutParams.setMargins(25, 20, 25, 10);
 
                 final EditText input = new EditText(context);
+                // max lenght
+                int maxLength = 16;
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                input.setFilters(FilterArray);
+
                 input.setTextColor(Color.BLACK);
                 input.setText(etNoKTP.getText().toString());
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);

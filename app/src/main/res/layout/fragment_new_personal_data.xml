@@ -196,6 +196,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="false"
+                android:visibility="gone"
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView
@@ -230,12 +231,11 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/item_divider" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
+                android:visibility="gone"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/activity_horizontal_margin">
 
@@ -292,8 +292,6 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/item_divider" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -318,6 +316,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivContactItem5"
                     android:text="Alamat"
+                    android:layout_marginEnd="50dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin" />
@@ -392,11 +391,11 @@
 
                 <ImageView
                     android:id="@+id/ivContactItem7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_action_name" />
+                    android:src="@drawable/ic_card" />
 
                 <TextView
                     android:id="@+id/textViewNoKTP"
