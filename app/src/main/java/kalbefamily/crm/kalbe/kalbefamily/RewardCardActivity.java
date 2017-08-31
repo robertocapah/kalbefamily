@@ -62,7 +62,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
             e.printStackTrace();
         }
 
-        // spinner name member
+        // spinnerTelp name member
 //        List<String> dataMemberName = new ArrayList<>();
 //        if (dataMember.size() > 0) {
 //            for (clsUserMember data : dataMember) {
@@ -81,13 +81,13 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         categories.add("Tampak Depan");
         categories.add("Tampak Belakang");
 
-        // Creating adapter for spinner
+        // Creating adapter for spinnerTelp
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // attaching data adapter to spinner
+        // attaching data adapter to spinnerTelp
         spinner.setAdapter(dataAdapter);
 
         String sub, sub2, sub3;

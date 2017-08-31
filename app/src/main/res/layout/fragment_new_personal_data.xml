@@ -474,6 +474,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="5dp"
                 android:weightSum="1">
 
                 <Button
@@ -482,27 +483,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:text="Simpan Perubahan"
                     android:layout_gravity="start"
-                    android:background="@drawable/btn_download_all"/>
+                    android:background="@drawable/btn_download_all"
+                    android:layout_weight="0.5"/>
+
 
                 <Button
                     android:id="@+id/btnDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:text="Update Kontak"
                     android:layout_gravity="end"
                     android:background="@drawable/btn_download_all"
-                    android:layout_weight="0.7" />
+                    android:layout_weight="0.5" />
             </LinearLayout>
 
         </LinearLayout>

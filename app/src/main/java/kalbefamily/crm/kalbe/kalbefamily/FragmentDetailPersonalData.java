@@ -3,7 +3,6 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,33 +22,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
-import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
-import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
-import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
-import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
-import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
-import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 /**
  * Created by Rian Andrivani on 8/28/2017.
@@ -61,13 +44,19 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
     Context context;
     List<clsUserMember> dataMember = null;
     List<clsMediaKontakDetail> dataNoTelp, dataSms, dataBBM, dataLine, dataWA, dataEmail, dataTwitter, dataFacebook, dataInstagram, dataFax, dataPath, dataMMS;
+    List<clsMediaKontakDetail> dataAll, dataById;
     clsMediaKontakDetailRepo repoKontak;
     private String txtKontakID;
 
     RelativeLayout layout1, layout2, layout3, layout4, layout5, layout6, layout7, layout8, layout9, layout10, layout11, layout12;
     TextView tvNoTelp, tvSms, tvBBM, tvLine, tvWA, tvEmail, tvTwitter, tvFacebook, tvInstagram, tvFax, tvMMS, tvPath;
-    Button btnNoTelp;
-    Spinner spinner, spinnerSms, spinnerBBM, spinnerLine, spinnerWA, spinnerEmail, spinnertwitter, spinnerFacebook, spinnerInstagram, spinnerFax, spinnerMMS, spinnerPath;
+    Button btnNoTelp, btnSms, btnBBM, btnEmail;
+    Spinner spinnerTelp, spinnerSms, spinnerBBM, spinnerLine, spinnerWA, spinnerEmail, spinnertwitter, spinnerFacebook, spinnerInstagram, spinnerFax, spinnerMMS, spinnerPath;
+    Spinner spinner;
+    private String guiID;
+    private HashMap<String, String> hashMap = new HashMap<>();
+    private HashMap<String, String> hashMapPrioritas = new HashMap<>();
+    private HashMap<String, String> hashMapAktif = new HashMap<>();
 
     @Nullable
     @Override
@@ -99,8 +88,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         tvFax = (TextView) v.findViewById(R.id.textViewFax);
         tvPath = (TextView) v.findViewById(R.id.textViewPath);
         tvMMS = (TextView) v.findViewById(R.id.textViewMms);
-        btnNoTelp = (Button) v.findViewById(R.id.btnEdit1);
-        spinner = (Spinner) v.findViewById(R.id.spinnerTelpon);
+        spinnerTelp = (Spinner) v.findViewById(R.id.spinnerTelpon);
         spinnerSms = (Spinner) v.findViewById(R.id.spinnerSMS);
         spinnerBBM = (Spinner) v.findViewById(R.id.spinnerBBM);
         spinnerLine = (Spinner) v.findViewById(R.id.spinnerLine);
@@ -112,6 +100,10 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         spinnerFax = (Spinner) v.findViewById(R.id.spinnerFax);
         spinnerPath = (Spinner) v.findViewById(R.id.spinnerPath);
         spinnerMMS = (Spinner) v.findViewById(R.id.spinnerMMS);
+        btnNoTelp = (Button) v.findViewById(R.id.btnEdit1);
+        btnEmail = (Button) v.findViewById(R.id.btnEdit6);
+        btnSms = (Button) v.findViewById(R.id.btnEdit2);
+        btnBBM = (Button) v.findViewById(R.id.btnEdit3);
 
         layout1.setVisibility(View.GONE);
         layout2.setVisibility(View.GONE);
@@ -119,6 +111,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
 
         repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
         try {
+            dataAll = (List<clsMediaKontakDetail>) repoKontak.findAll();
             dataNoTelp = (List<clsMediaKontakDetail>) repoKontak.findbyTelpon();
             dataSms = (List<clsMediaKontakDetail>) repoKontak.findbySms();
             dataEmail = (List<clsMediaKontakDetail>) repoKontak.findbyEmail();
@@ -165,12 +158,33 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         btnNoTelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectOption();
+                selectOptionTelpon();
+            }
+        });
+
+        btnSms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectOptionSms();
+            }
+        });
+
+        btnBBM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectOptionBBM();
+            }
+        });
+
+        btnEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectOptionEmail();
             }
         });
 
         // Spinner click listener
-        spinner.setOnItemSelectedListener(this);
+        spinnerTelp.setOnItemSelectedListener(this);
         spinnerSms.setOnItemSelectedListener(this);
         spinnerBBM.setOnItemSelectedListener(this);
         spinnerLine.setOnItemSelectedListener(this);
@@ -199,14 +213,23 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         if (dataNoTelp.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataNoTelp) {
                 noTelp.add(kontakDetail.getTxtDetailMedia());
+                hashMap.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
+                hashMapAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
+                hashMapPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
             }
         } if (dataSms.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataSms) {
                 noSms.add(kontakDetail.getTxtDetailMedia());
+                hashMap.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
+                hashMapAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
+                hashMapPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
             }
         } if (dataBBM.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataBBM) {
                 bbm.add(kontakDetail.getTxtDetailMedia());
+                hashMap.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
+                hashMapAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
+                hashMapPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
             }
         } if (dataLine.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataLine) {
@@ -219,6 +242,9 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataEmail.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataEmail) {
                 email.add(kontakDetail.getTxtDetailMedia());
+                hashMap.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
+                hashMapAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
+                hashMapPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
             }
         } if (dataTwitter.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataTwitter) {
@@ -274,8 +300,8 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         dataAdapterPath.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dataAdapterMMS.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
+        // attaching data adapter to spinnerTelp
+        spinnerTelp.setAdapter(dataAdapter);
         spinnerSms.setAdapter(dataAdapterSms);
         spinnerBBM.setAdapter(dataAdapterBBM);
         spinnerLine.setAdapter(dataAdapterLine);
@@ -297,7 +323,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         String sms = adapterView.getItemAtPosition(i).toString();
         String txtDetailMedia = adapterView.getItemAtPosition(i).toString();
 
-        Spinner spinner = (Spinner) adapterView;
+        spinner = (Spinner) adapterView;
         if(spinner.getId() == R.id.spinnerTelpon) {
             tvNoTelp.setText(telpon);
         } if(spinner.getId() == R.id.spinnerSMS) {
@@ -333,15 +359,25 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
     private void popupEditNoTelp() {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
-        final EditText etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        final RadioButton radioButtonPrioritas, radioButtonBknPrioritas;
-        final RadioGroup radioGenderradioGroupPrioritas;
-        radioGenderradioGroupPrioritas = (RadioGroup) v.findViewById(R.id.radioGroupPrioritas);
-        radioButtonPrioritas = (RadioButton) v.findViewById(R.id.radioButtonPrioritas);
-        radioButtonBknPrioritas = (RadioButton) v.findViewById(R.id.radioButtonBknPrioritas);
+        String selectedItem = spinnerTelp.getSelectedItem().toString();
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
         etKontak.setText(tvNoTelp.getText().toString());
+        etKeterangan.setText(hashMap.get(selectedItem));
+        etPrioritas.setText(hashMapPrioritas.get(selectedItem));
+
+        if (hashMapAktif.get(selectedItem).toString().equals("Aktif")){
+            checkBoxStatus.setChecked(true);
+        } else {
+            checkBoxStatus.setChecked(false);
+            checkBoxStatus.setText("Tidak AKtif");
+        }
+//        etKeterangan.setText(hashMap.get(selectedItem));
         checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -377,7 +413,175 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         alertD.show();
     }
 
-    private void selectOption() {
+    private void popupEditSms() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        String selectedItem = spinnerSms.getSelectedItem().toString();
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        etKontak.setText(tvSms.getText().toString());
+        etKeterangan.setText(hashMap.get(selectedItem));
+        etPrioritas.setText(hashMapPrioritas.get(selectedItem));
+        if (hashMapAktif.get(selectedItem).toString().equals("Aktif")){
+            checkBoxStatus.setChecked(true);
+        } else {
+            checkBoxStatus.setChecked(false);
+            checkBoxStatus.setText("Tidak AKtif");
+        }
+//        etKeterangan.setText(hashMap.get(selectedItem));
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+//        radioButtonActive.setChecked(true);
+//        radioButtonPrioritas.setChecked(true);
+//        radioButtonInActive.setChecked(false);
+//        radioButtonBknPrioritas.setChecked(false);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+//                                etTelpon.setText(etKontak.getText().toString());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupEditBBM() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        String selectedItem = spinnerSms.getSelectedItem().toString();
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        etKontak.setText(tvBBM.getText().toString());
+        etKeterangan.setText(hashMap.get(selectedItem));
+        etPrioritas.setText(hashMapPrioritas.get(selectedItem));
+        if (hashMapAktif.get(selectedItem).toString().equals("Aktif")){
+            checkBoxStatus.setChecked(true);
+        } else {
+            checkBoxStatus.setChecked(false);
+            checkBoxStatus.setText("Tidak AKtif");
+        }
+//        etKeterangan.setText(hashMap.get(selectedItem));
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+//        radioButtonActive.setChecked(true);
+//        radioButtonPrioritas.setChecked(true);
+//        radioButtonInActive.setChecked(false);
+//        radioButtonBknPrioritas.setChecked(false);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+//                                etTelpon.setText(etKontak.getText().toString());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupEditEmail() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        String selectedItem = spinnerEmail.getSelectedItem().toString();
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        etKontak.setText(tvEmail.getText().toString());
+//        etKeterangan.setText(dataEmail.get(0).getTxtKeterangan().toString());
+        etKeterangan.setText(hashMap.get(selectedItem));
+        etPrioritas.setText(hashMapPrioritas.get(selectedItem));
+        if (hashMapAktif.get(selectedItem).toString().equals("Aktif")){
+            checkBoxStatus.setChecked(true);
+        } else {
+            checkBoxStatus.setChecked(false);
+            checkBoxStatus.setText("Tidak AKtif");
+        }
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+//        radioButtonActive.setChecked(true);
+//        radioButtonPrioritas.setChecked(true);
+//        radioButtonInActive.setChecked(false);
+//        radioButtonBknPrioritas.setChecked(false);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+//                                etTelpon.setText(etKontak.getText().toString());
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void selectOptionTelpon() {
         final CharSequence[] items = { "Tambah Baru", "Edit",
                 "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -392,6 +596,75 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditNoTelp();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void selectOptionSms() {
+        final CharSequence[] items = { "Tambah Baru", "Edit",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Pilihan");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result= Utility.checkPermission(getActivity());
+                if (items[item].equals("Tambah Baru")) {
+                    if(result)
+                        dialog.dismiss();
+                } else if (items[item].equals("Edit")) {
+                    if(result)
+                        popupEditSms();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void selectOptionBBM() {
+        final CharSequence[] items = { "Tambah Baru", "Edit",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Pilihan");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result= Utility.checkPermission(getActivity());
+                if (items[item].equals("Tambah Baru")) {
+                    if(result)
+                        dialog.dismiss();
+                } else if (items[item].equals("Edit")) {
+                    if(result)
+                        popupEditBBM();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void selectOptionEmail() {
+        final CharSequence[] items = { "Tambah Baru", "Edit",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Pilihan");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result= Utility.checkPermission(getActivity());
+                if (items[item].equals("Tambah Baru")) {
+                    if(result)
+                        dialog.dismiss();
+                } else if (items[item].equals("Edit")) {
+                    if(result)
+                        popupEditEmail();
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }

@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="false"
-            android:visibility="gone"
+
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView

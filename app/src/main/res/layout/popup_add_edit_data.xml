@@ -35,29 +35,43 @@
             android:id="@+id/etKontak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="12345678999"
-            android:inputType="textMultiLine"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Keterangan : "
-            android:textStyle="bold"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="#000"/>
-
-        <EditText
-            android:id="@+id/etKeterangan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLength="30"
-            android:hint="Keterangan"
+            android:hint="12345678999"
+            android:textSize="15dp"
+            android:maxLength="60"
             android:inputType="textMultiLine"/>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keterangan : "
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="#000"/>
+
+            <EditText
+                android:id="@+id/etKeterangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:maxLength="30"
+                android:textSize="15dp"
+                android:hint="Keterangan"
+                android:inputType="textMultiLine"/>
+        </LinearLayout>
+
         <View
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="-10dp"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
@@ -70,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status "
+                android:text="Status : "
                 android:textStyle="bold"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
@@ -85,8 +99,8 @@
                 android:layout_marginLeft="10dp"
                 android:text="Aktif"
                 android:checked="true"
-                android:paddingLeft="10dp"
-                android:button="@drawable/custom_checkbox_design"/>
+                android:paddingLeft="10dp" />
+            <!--android:button="@drawable/custom_checkbox_design"-->
 
         </LinearLayout>
 
@@ -97,47 +111,35 @@
             android:layout_height="1dp"
             android:background="#bfbfbf" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status Prioritas : "
-            android:textStyle="bold"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="#000"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroupPrioritas"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioButtonPrioritas"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status Prioritas : "
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="#000"/>
+
+            <EditText
+                android:id="@+id/etPrioritas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Prioritas"
-                android:layout_below="@+id/radioGroup"
-                android:layout_alignLeft="@+id/radioGroup"
-                android:button="@drawable/custom_checkbox_design"
-                android:checked="true"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:maxLength="3"
+                android:hint="0"
+                android:inputType="number"/>
 
-            <RadioButton
-                android:id="@+id/radioButtonBknPrioritas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="18dp"
-                android:paddingRight="@dimen/action_button_margin"
-                android:text="Bukan Prioritas"
-                android:layout_below="@+id/radioGroup"
-                android:button="@drawable/custom_checkbox_design"
-                android:layout_alignLeft="@+id/radioGroup" />
 
-        </RadioGroup>
+        </LinearLayout>
+
 
         <View
             android:layout_marginTop="15dp"

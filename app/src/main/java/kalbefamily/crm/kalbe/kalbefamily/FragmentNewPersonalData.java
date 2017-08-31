@@ -231,6 +231,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
                 input.setText(tvNama.getText().toString());
+                input.setHint(" Nama Anda");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -261,6 +262,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
                 input.setText(etNamaDepan.getText().toString());
+                input.setHint("Nama Depan");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -292,6 +294,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
                 input.setText(etNamaBelakang.getText().toString());
+                input.setHint("Nama Belakang");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -322,6 +325,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
                 input.setText(etNamaBelakang.getText().toString());
+                input.setHint("Nama Panggilan");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -416,6 +420,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
                 input.setText(etAlamat.getText().toString());
+                input.setHint(" Alamat");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -453,6 +458,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 input.setTextColor(Color.BLACK);
                 input.setText(etNoKTP.getText().toString());
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setHint(" No KTP");
                 layout.addView(input, layoutParams);
 
                 alert.setView(layout);
@@ -638,13 +644,13 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         categories.add("Facebook");
         categories.add("Twitter");
 
-        // Creating adapter for spinner
+        // Creating adapter for spinnerTelp
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // attaching data adapter to spinner
+        // attaching data adapter to spinnerTelp
         spinner.setAdapter(dataAdapter);
 
         return v;
