@@ -855,6 +855,94 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         alertD.show();
     }
 
+    private void popupTambahWA() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("WHATSAPP");
+                                lttxtMediaID.setText("1208");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No WhatsApp Tidak boleh kosong", false);
+                                } else if (!isValidMobile(etKontak.getText().toString())) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No WhatsApp tidak Valid", false);
+                                    validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString().toUpperCase());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
     private void popupTambahEmail() {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
@@ -906,6 +994,512 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                                 } else if (!isValidEmail(etKontak.getText().toString())) {
                                     new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
                                     validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahTwitter() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("TWITTER");
+                                lttxtMediaID.setText("0837");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Twitter Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahFacebook() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("FACEBOOK");
+                                lttxtMediaID.setText("0838");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Facebook Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahInstagram() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("INSTAGRAM");
+                                lttxtMediaID.setText("1207");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Instagram Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahFax() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("Fax");
+                                lttxtMediaID.setText("0003");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No Fax Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahPath() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("PATH");
+                                lttxtMediaID.setText("1206");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Path Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak baru berhasil dibuat", true);
+                                    Log.d("Data info", "Kontak baru berhasil di buat");
+                                }
+
+                                dialog.dismiss();
+                                dataListview();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    private void popupTambahMMS() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+
+        etKontak =(EditText) promptView.findViewById(R.id.etKontak);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                txtDeskripsi.setText("MMS");
+                                lttxtMediaID.setText("0006");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No MMS Tidak boleh kosong", false);
                                 } else if (etPrioritas.getText().toString().equals("")) {
                                     new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                                 } else {
@@ -1668,7 +2262,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahWA();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditWA();
@@ -1714,7 +2308,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahTwitter();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditTwitter();
@@ -1737,7 +2331,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahFacebook();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditFacebook();
@@ -1760,7 +2354,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahInstagram();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditInstagram();
@@ -1783,7 +2377,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahFax();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditFax();
@@ -1806,7 +2400,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahPath();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditPath();
@@ -1828,7 +2422,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 boolean result= Utility.checkPermission(getActivity());
                 if (items[item].equals("Tambah Baru")) {
                     if(result)
-                        dialog.dismiss();
+                        popupTambahMMS();
                 } else if (items[item].equals("Edit")) {
                     if(result)
                         popupEditMMS();
