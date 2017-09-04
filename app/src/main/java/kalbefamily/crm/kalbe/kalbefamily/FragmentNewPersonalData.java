@@ -560,57 +560,78 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         dataUser.setTxtNamaBelakang(etNamaDepan.getText().toString());
                         dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
 
-                        if(!isValidEmail(etEmail.getText().toString())){
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
-                            validate = false;
-                        } else if (tvKategori.getText().toString().equals("(No Telp)")) {
-                            if (!isValidMobile(etTelpon.getText().toString())) {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), "No Telpon tidak Valid", false);
-                                validate = false;
-                            } else {
-                                dataUser.setTxtEmail(etEmail.getText().toString());
-                                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+                        dataUser.setTxtEmail(etEmail.getText().toString());
+                        dataUser.setTxtNoTelp(etTelpon.getText().toString());
 
-                                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
-                                RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
+                        int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+                        RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
 
-                                dataUser.setTxtJenisKelamin(rbGender.getText().toString());
+                        dataUser.setTxtJenisKelamin(rbGender.getText().toString());
 
-                                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
-                                repoUserMember.createOrUpdate(dataUser);
+                        repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                        repoUserMember.createOrUpdate(dataUser);
 
-                                savePicture1();
-                                savePicture2();
-                                savePictureProfile();
-                                sendData();
+                        savePicture1();
+                        savePicture2();
+                        savePictureProfile();
+                        sendData();
 
-                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-                                getActivity().finish();
-                                startActivity(intent);
-                            }
-                        } else {
-                            dataUser.setTxtEmail(etEmail.getText().toString());
-                            dataUser.setTxtNoTelp(etTelpon.getText().toString());
+                        new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                        Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+                        getActivity().finish();
+                        startActivity(intent);
 
-                            int selectedId = radioGenderGroup.getCheckedRadioButtonId();
-                            RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
-
-                            dataUser.setTxtJenisKelamin(rbGender.getText().toString());
-
-                            repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
-                            repoUserMember.createOrUpdate(dataUser);
-
-                            savePicture1();
-                            savePicture2();
-                            savePictureProfile();
-                            sendData();
-
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-                            Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-                            getActivity().finish();
-                            startActivity(intent);
-                        }
+//                        if(!isValidEmail(etEmail.getText().toString())){
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
+//                            validate = false;
+//                        } else if (tvKategori.getText().toString().equals("(No Telp)")) {
+//                            if (!isValidMobile(etTelpon.getText().toString())) {
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), "No Telpon tidak Valid", false);
+//                                validate = false;
+//                            } else {
+//                                dataUser.setTxtEmail(etEmail.getText().toString());
+//                                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+//
+//                                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+//                                RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
+//
+//                                dataUser.setTxtJenisKelamin(rbGender.getText().toString());
+//
+//                                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+//                                repoUserMember.createOrUpdate(dataUser);
+//
+//                                savePicture1();
+//                                savePicture2();
+//                                savePictureProfile();
+//                                sendData();
+//
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+//                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+//                                getActivity().finish();
+//                                startActivity(intent);
+//                            }
+//                        } else {
+//                            dataUser.setTxtEmail(etEmail.getText().toString());
+//                            dataUser.setTxtNoTelp(etTelpon.getText().toString());
+//
+//                            int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+//                            RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
+//
+//                            dataUser.setTxtJenisKelamin(rbGender.getText().toString());
+//
+//                            repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+//                            repoUserMember.createOrUpdate(dataUser);
+//
+//                            savePicture1();
+//                            savePicture2();
+//                            savePictureProfile();
+//                            sendData();
+//
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+//                            Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+//                            getActivity().finish();
+//                            startActivity(intent);
+//                        }
                     }
                 });
                 alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {

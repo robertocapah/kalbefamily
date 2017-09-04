@@ -11,6 +11,20 @@
         android:orientation="vertical"
         android:weightSum="4">
 
+        <TextView
+            android:id="@+id/txtDeskripsi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:hint="Deskripsi"/>
+
+        <TextView
+            android:id="@+id/lttxtMediaID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:hint="Detail Media"/>
+
         <!--telepon-->
         <RelativeLayout
             android:id="@+id/layout1"
