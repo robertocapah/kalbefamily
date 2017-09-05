@@ -94,6 +94,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
     private HashMap<String, String> hashMapPathAktif = new HashMap<>();
     private HashMap<String, String> hashMapFaxAktif = new HashMap<>();
     private HashMap<String, String> hashMapMmsAktif = new HashMap<>();
+    private HashMap<String, String> hashMapIdTelp = new HashMap<>();
+    private HashMap<String, String> hashMapIdSms = new HashMap<>();
+    private HashMap<String, String> hashMapIdBBM = new HashMap<>();
+    private HashMap<String, String> hashMapIdLine = new HashMap<>();
+    private HashMap<String, String> hashMapIdWA = new HashMap<>();
+    private HashMap<String, String> hashMapIdEmail = new HashMap<>();
+    private HashMap<String, String> hashMapIdTwitter = new HashMap<>();
+    private HashMap<String, String> hashMapIdFacebook = new HashMap<>();
+    private HashMap<String, String> hashMapIdInstagram = new HashMap<>();
+    private HashMap<String, String> hashMapIdPath = new HashMap<>();
+    private HashMap<String, String> hashMapIdFax = new HashMap<>();
+    private HashMap<String, String> hashMapIdMMS = new HashMap<>();
 
     boolean validate = true;
 
@@ -343,6 +355,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         if (dataNoTelp.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataNoTelp) {
                 noTelp.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdTelp.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapTelp.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapTelpAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapTelpPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -350,6 +363,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataSms.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataSms) {
                 noSms.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdSms.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapSms.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapSmsAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapSmsPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -357,6 +371,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataBBM.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataBBM) {
                 bbm.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdBBM.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapBBM.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapBBMAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapBBMPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -364,6 +379,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataLine.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataLine) {
                 line.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdLine.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapLine.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapLineAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapLinePrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -371,6 +387,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataWA.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataWA) {
                 wa.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdWA.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapWA.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapWAAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapWAPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -378,6 +395,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataEmail.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataEmail) {
                 email.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdEmail.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapEmail.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapEmailAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapEmailPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -385,6 +403,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataTwitter.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataTwitter) {
                 twitter.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdTwitter.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapTwitter.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapTwitterAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapTwitterPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -392,6 +411,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataFacebook.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataFacebook) {
                 facebook.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdFacebook.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapFacebook.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapFacebookAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapFacebookPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -399,6 +419,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataInstagram.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataInstagram) {
                 instagram.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdInstagram.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapInstagram.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapInstagramAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapInstagramPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -406,6 +427,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataFax.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataFax) {
                 fax.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdFax.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapFax.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapFaxAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapFaxPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -413,6 +435,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataPath.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataPath) {
                 path.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdPath.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapPath.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapPathAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapPathPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -420,6 +443,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         } if (dataMMS.size() > 0) {
             for (clsMediaKontakDetail kontakDetail : dataMMS) {
                 mms.add(kontakDetail.getTxtDetailMedia());
+                hashMapIdMMS.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtGuiId());
                 hashMapMms.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtKeterangan());
                 hashMapMmsAktif.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getLttxtStatusAktif());
                 hashMapMmsPrioritas.put(kontakDetail.getTxtDetailMedia(), kontakDetail.getTxtPrioritasKontak());
@@ -523,7 +547,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         etKontak.setFilters(FilterArray);
 
-        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setHint("* wajib diisi");
         etPrioritas.setHint("* wajib diisi");
 
@@ -611,7 +635,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         etKontak.setFilters(FilterArray);
 
-        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setHint("* wajib diisi");
         etPrioritas.setHint("* wajib diisi");
 
@@ -870,7 +894,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         etKontak.setFilters(FilterArray);
 
-        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setHint("* wajib diisi");
         etPrioritas.setHint("* wajib diisi");
 
@@ -1298,7 +1322,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         etKontak.setFilters(FilterArray);
 
-        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setHint("* wajib diisi");
         etPrioritas.setHint("* wajib diisi");
 
@@ -1467,7 +1491,7 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         etKontak.setFilters(FilterArray);
 
-        etKontak.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setHint("* wajib diisi");
         etPrioritas.setHint("* wajib diisi");
 
@@ -1542,12 +1566,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerTelp.getSelectedItem().toString();
+        final String selectedItem = spinnerTelp.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setText(tvNoTelp.getText().toString());
         etKeterangan.setText(hashMapTelp.get(selectedItem));
         etPrioritas.setText(hashMapTelpPrioritas.get(selectedItem));
@@ -1570,6 +1600,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1577,8 +1614,39 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("Telepon");
+                                lttxtMediaID.setText("0001");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No Telepon Tidak boleh kosong", false);
+                                } else if (!isValidMobile(etKontak.getText().toString())) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
+                                    validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdTelp.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1595,12 +1663,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerSms.getSelectedItem().toString();
+        final String selectedItem = spinnerSms.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setText(tvSms.getText().toString());
         etKeterangan.setText(hashMapSms.get(selectedItem));
         etPrioritas.setText(hashMapSmsPrioritas.get(selectedItem));
@@ -1621,10 +1695,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 }
             }
         });
-//        radioButtonActive.setChecked(true);
-//        radioButtonPrioritas.setChecked(true);
-//        radioButtonInActive.setChecked(false);
-//        radioButtonBknPrioritas.setChecked(false);
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
@@ -1633,8 +1710,39 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("SMS");
+                                lttxtMediaID.setText("0004");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No Sms Tidak boleh kosong", false);
+                                } else if (!isValidMobile(etKontak.getText().toString())) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No SMS tidak Valid", false);
+                                    validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdSms.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1651,12 +1759,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerBBM.getSelectedItem().toString();
+        final String selectedItem = spinnerBBM.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 8;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         etKontak.setText(tvBBM.getText().toString());
         etKeterangan.setText(hashMapBBM.get(selectedItem));
         etPrioritas.setText(hashMapBBMPrioritas.get(selectedItem));
@@ -1678,6 +1792,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1685,8 +1806,38 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("BLACKBERRY");
+                                lttxtMediaID.setText("0497");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Pin BBM Tidak boleh kosong", false);
+                                } else if (etKontak.getText().toString().length() < 6) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Pin BBM tidak valid", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdBBM.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString().toUpperCase());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1703,11 +1854,16 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerLine.getSelectedItem().toString();
+        final String selectedItem = spinnerLine.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 55;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
 
         etKontak.setText(tvLine.getText().toString());
         etKeterangan.setText(hashMapLine.get(selectedItem));
@@ -1730,6 +1886,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1737,8 +1900,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("LINE");
+                                lttxtMediaID.setText("1205");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "ID Line Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdLine.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString().toUpperCase());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1755,12 +1946,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerWA.getSelectedItem().toString();
+        final String selectedItem = spinnerWA.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setText(tvWA.getText().toString());
         etKeterangan.setText(hashMapWA.get(selectedItem));
         etPrioritas.setText(hashMapWAPrioritas.get(selectedItem));
@@ -1782,6 +1979,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1789,8 +1993,39 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("WHATSAPP");
+                                lttxtMediaID.setText("1208");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No WhatsApp Tidak boleh kosong", false);
+                                } else if (!isValidMobile(etKontak.getText().toString())) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No WhatsApp tidak Valid", false);
+                                    validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdWA.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString().toUpperCase());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1807,12 +2042,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerEmail.getSelectedItem().toString();
+        final String selectedItem = spinnerEmail.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 55;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         etKontak.setText(tvEmail.getText().toString());
         etKeterangan.setText(hashMapEmail.get(selectedItem));
         etPrioritas.setText(hashMapEmailPrioritas.get(selectedItem));
@@ -1833,6 +2074,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1840,8 +2088,39 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("Email");
+                                lttxtMediaID.setText("0002");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Email Tidak boleh kosong", false);
+                                } else if (!isValidEmail(etKontak.getText().toString())) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
+                                    validate = false;
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdEmail.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1858,11 +2137,16 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnertwitter.getSelectedItem().toString();
+        final String selectedItem = spinnertwitter.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
 
         etKontak.setText(tvTwitter.getText().toString());
         etKeterangan.setText(hashMapTwitter.get(selectedItem));
@@ -1884,6 +2168,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1891,8 +2182,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("TWITTER");
+                                lttxtMediaID.setText("0837");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Twitter Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdTwitter.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1909,11 +2228,16 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerFacebook.getSelectedItem().toString();
+        final String selectedItem = spinnerFacebook.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
 
         etKontak.setText(tvFacebook.getText().toString());
         etKeterangan.setText(hashMapFacebook.get(selectedItem));
@@ -1935,6 +2259,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1942,8 +2273,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("FACEBOOK");
+                                lttxtMediaID.setText("0838");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Facebook Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdFacebook.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -1960,11 +2319,16 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerInstagram.getSelectedItem().toString();
+        final String selectedItem = spinnerInstagram.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
 
         etKontak.setText(tvInstagram.getText().toString());
         etKeterangan.setText(hashMapInstagram.get(selectedItem));
@@ -1986,6 +2350,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -1993,8 +2364,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("INSTAGRAM");
+                                lttxtMediaID.setText("1207");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Instagram Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdInstagram.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -2011,12 +2410,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerFax.getSelectedItem().toString();
+        final String selectedItem = spinnerFax.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setText(tvFax.getText().toString());
         etKeterangan.setText(hashMapFax.get(selectedItem));
         etPrioritas.setText(hashMapFaxPrioritas.get(selectedItem));
@@ -2037,6 +2442,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -2044,8 +2456,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("Fax");
+                                lttxtMediaID.setText("0003");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No Fax Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdFax.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -2062,11 +2502,16 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerPath.getSelectedItem().toString();
+        final String selectedItem = spinnerPath.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        int maxLength = 35;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
 
         etKontak.setText(tvPath.getText().toString());
         etKeterangan.setText(hashMapPath.get(selectedItem));
@@ -2088,6 +2533,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -2095,8 +2547,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("PATH");
+                                lttxtMediaID.setText("1206");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Id Path Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdPath.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -2113,12 +2593,18 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        String selectedItem = spinnerMMS.getSelectedItem().toString();
+        final String selectedItem = spinnerMMS.getSelectedItem().toString();
 
         etKontak =(EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
 
+        int maxLength = 14;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKontak.setFilters(FilterArray);
+
+        etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         etKontak.setText(tvMMS.getText().toString());
         etKeterangan.setText(hashMapMms.get(selectedItem));
         etPrioritas.setText(hashMapMmsPrioritas.get(selectedItem));
@@ -2139,6 +2625,13 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
             }
         });
 
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder
@@ -2146,8 +2639,36 @@ public class FragmentDetailPersonalData extends Fragment implements AdapterView.
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                etTelpon.setText(etKontak.getText().toString());
+                                txtDeskripsi.setText("MMS");
+                                lttxtMediaID.setText("0006");
+                                if (etKontak.getText().toString().equals("")){
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "No MMS Tidak boleh kosong", false);
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(hashMapIdMMS.get(selectedItem).toString());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID.getText().toString());
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
                                 dialog.dismiss();
+                                dataListview();
                             }
                         })
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
