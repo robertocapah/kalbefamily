@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by Rian Andrivani on 7/31/2017.
@@ -30,6 +32,8 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
     TextView etNumber, etNama, etTglBerlaku;
     Spinner spinner;
     AbsoluteLayout layoutDepan, layoutBelakang;
+    ImageView tampakDepan;
+    PhotoViewAttacher photoViewAttacher;
 
     List<clsUserMember> dataMember = null;
 
@@ -53,6 +57,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         spinner = (Spinner) findViewById(R.id.spinner);
         layoutDepan = (AbsoluteLayout) findViewById(R.id.absoluteLayout);
         layoutBelakang = (AbsoluteLayout) findViewById(R.id.absoluteLayout_belakang);
+        tampakDepan = (ImageView) findViewById(R.id.tampakDepan);
 //        spinNama = (Spinner) findViewById(R.id.spnNama);
 
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
@@ -98,6 +103,10 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         etNumber.setText(sub +" "+ sub2 +" "+ sub3);
         etNama.setText(dataMember.get(0).getTxtNama().toUpperCase());
         etTglBerlaku.setText(dataMember.get(0).getTxtTglBerlaku());
+
+//        photoViewAttacher = new PhotoViewAttacher(tampakDepan);
+//
+//        photoViewAttacher.update();
 
     }
 
