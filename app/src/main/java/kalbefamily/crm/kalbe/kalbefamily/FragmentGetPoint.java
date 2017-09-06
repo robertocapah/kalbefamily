@@ -66,7 +66,7 @@ public class FragmentGetPoint extends Fragment {
         JSONObject resJson = new JSONObject();
 
         try {
-            resJson.put("txtKontakID", "1110-8885986");
+            resJson.put("txtKontakID", txtKontakID);
         } catch (JSONException e) {
             e.printStackTrace();
         }

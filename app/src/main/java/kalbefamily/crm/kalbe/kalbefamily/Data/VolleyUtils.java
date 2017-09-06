@@ -3,7 +3,10 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.provider.SyncStateContract;
+import android.support.annotation.RequiresApi;
 import android.util.Base64;
 
 import com.android.volley.AuthFailureError;
@@ -24,6 +27,7 @@ import java.util.Map;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
 
 import static android.provider.Telephony.Carriers.PASSWORD;
@@ -33,6 +37,7 @@ import static android.provider.Telephony.Carriers.PASSWORD;
  */
 
 public class VolleyUtils {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void makeJsonObjectRequest(final Activity activity, String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
 
         ProgressDialog Dialog = new ProgressDialog(activity);
@@ -41,6 +46,7 @@ public class VolleyUtils {
 
         Dialog = ProgressDialog.show(activity, "",
                 progressBarType, true);
+//        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));
         final ProgressDialog finalDialog = Dialog;
         final ProgressDialog finalDialog1 = Dialog;
 

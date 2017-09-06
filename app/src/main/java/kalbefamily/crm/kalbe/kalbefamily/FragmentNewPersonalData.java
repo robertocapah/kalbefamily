@@ -177,16 +177,16 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         sub3 = member1.substring(8, member1.length());
         tvMember.setText(sub +" "+ sub2 +" "+ sub3);
 
-        if (dataMember.get(0).getTxtNamaBelakang().toString().equals("null")) {
+        if (dataMember.get(0).getTxtNamaDepan().toString().equals("null")) {
             etNamaDepan.setText("");
         } else {
-            etNamaDepan.setText(dataMember.get(0).getTxtNamaBelakang().toString());
+            etNamaDepan.setText(dataMember.get(0).getTxtNamaDepan().toString());
         }
 
-        if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
+        if (dataMember.get(0).getTxtNamaBelakang().toString().equals("null")) {
             etNamaBelakang.setText("");
         } else {
-            etNamaBelakang.setText(dataMember.get(0).getTxtNamaPanggilan().toString());
+            etNamaBelakang.setText(dataMember.get(0).getTxtNamaBelakang().toString());
         }
 
         if (dataMember.get(0).getTxtNamaPanggilan().toString().equals("null")) {
@@ -324,7 +324,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                 final EditText input = new EditText(context);
                 input.setTextColor(Color.BLACK);
-                input.setText(etNamaBelakang.getText().toString());
+                input.setText(etNamaPanggilan.getText().toString());
                 input.setHint("Nama Panggilan");
                 layout.addView(input, layoutParams);
 
@@ -332,7 +332,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        etNamaBelakang.setText(input.getText().toString());
+                        etNamaPanggilan.setText(input.getText().toString());
                         dialogInterface.dismiss();
                     }
                 });
@@ -553,11 +553,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         clsUserMember dataUser = new clsUserMember();
                         dataUser.setTxtKontakId(dataMember.get(0).getTxtKontakId().toString());
                         dataUser.setTxtMemberId(member1);
-                        dataUser.setTxtNama(tvNama.getText().toString());
+                        dataUser.setTxtNamaDepan(etNamaDepan.getText().toString());
                         dataUser.setTxtAlamat(etAlamat.getText().toString());
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
-                        dataUser.setTxtNamaPanggilan(etNamaBelakang.getText().toString());
-                        dataUser.setTxtNamaBelakang(etNamaDepan.getText().toString());
+                        dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
+                        dataUser.setTxtNamaBelakang(etNamaBelakang.getText().toString());
                         dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
 
                         dataUser.setTxtEmail(etEmail.getText().toString());
@@ -575,11 +575,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         savePicture2();
                         savePictureProfile();
                         sendData();
-
-                        new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-                        Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-                        getActivity().finish();
-                        startActivity(intent);
 
 //                        if(!isValidEmail(etEmail.getText().toString())){
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -1126,7 +1121,24 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                     @Override
                     public void onResponse(String response, Boolean status, String strErrorMsg) {
-                        String res = response;
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response);
+                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                            String warn = jsn.getString("TxtMessage");
+                            String result = jsn.getString("IntResult");
+                            String res = response;
+
+                            if (result.equals("1")) {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+                                getActivity().finish();
+                                startActivity(intent);
+                            } else {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                         Log.i(TAG, "Ski data from server - " + response);
                         clsUserMember userMemberData = new clsUserMember();
