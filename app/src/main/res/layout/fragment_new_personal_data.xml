@@ -91,6 +91,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_toEndOf="@id/ivContactItem1"
                     android:hint="Nama Depan"
+                    android:textSize="15dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272" />
 
@@ -478,6 +479,20 @@
                 android:weightSum="1">
 
                 <Button
+                    android:id="@+id/btnDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:text="Media Komunikasi"
+                    android:layout_gravity="end"
+                    android:background="@drawable/btn_download_all"
+                    android:layout_weight="0.6" />
+
+                <Button
                     android:id="@+id/btnUpdate"
                     android:layout_below="@+id/view3"
                     android:layout_width="wrap_content"
@@ -490,22 +505,7 @@
                     android:text="Simpan Perubahan"
                     android:layout_gravity="start"
                     android:background="@drawable/btn_download_all"
-                    android:layout_weight="0.5"/>
-
-
-                <Button
-                    android:id="@+id/btnDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:text="Update Kontak"
-                    android:layout_gravity="end"
-                    android:background="@drawable/btn_download_all"
-                    android:layout_weight="0.5" />
+                    android:layout_weight="0.4"/>
             </LinearLayout>
 
         </LinearLayout>

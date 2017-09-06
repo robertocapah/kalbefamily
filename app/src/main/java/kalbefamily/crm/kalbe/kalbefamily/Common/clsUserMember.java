@@ -153,7 +153,7 @@ public class clsUserMember implements Serializable {
 
     public String Property_txtKontakId = "txtKontakID";
     public String Property_txtMemberId = "txtMemberId";
-    public String Property_txtNama = "txtNamaDepan";
+    public String Property_txtNamaDepan = "txtNamaDepan";
     public String Property_txtAlamat = "txtAlamat";
     public String Property_txtJenisKelamin = "txtJenisKelamin";
     public String Property_txtEmail = "txtEmail";
@@ -165,7 +165,7 @@ public class clsUserMember implements Serializable {
     public String Property_ListOfUserMember = "ListOfObjectData";
     public String Property_All=Property_txtKontakId +","+
             Property_txtMemberId +","+
-            Property_txtNama+","+
+            Property_txtNamaDepan +","+
             Property_txtAlamat+","+
             Property_txtJenisKelamin+","+
             Property_txtEmail+","+

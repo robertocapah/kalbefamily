@@ -49,7 +49,7 @@ public class dataJson {
             for (clsUserMember data : this.getListDataUserMember()){
                 JSONObject item1 = new JSONObject();
                 resJson.put(dtUserMember.Property_txtKontakId, String.valueOf(data.getTxtKontakId()));
-                resJson.put(dtUserMember.Property_txtNama, String.valueOf(data.getTxtNama()));
+                resJson.put(dtUserMember.Property_txtNamaDepan, String.valueOf(data.getTxtNamaDepan()));
                 resJson.put(dtUserMember.Property_txtAlamat, String.valueOf(data.getTxtAlamat()));
                 resJson.put(dtUserMember.Property_txtJenisKelamin, String.valueOf(data.getTxtJenisKelamin()));
                 resJson.put(dtUserMember.Property_txtNoTelp, String.valueOf(data.getTxtNoTelp()));
