@@ -95,6 +95,59 @@ public class clsMediaKontakDetailRepo implements crud {
         return items;
     }
 
+    public List<?> findDataByParent() throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select * from clsMediaKontakDetail group by txtDeskripsi",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                               String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtGuiId = resultColumns[4];
+                                    dt.txtDetailMedia = resultColumns[3];
+                                    dt.txtPrioritasKontak = resultColumns[8];
+                                    dt.txtKeterangan = resultColumns[6];
+                                    dt.lttxtStatusAktif = resultColumns[1];
+                                    dt.txtDeskripsi = resultColumns[2];
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findDataChild(String txtDeskripsi) throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try{
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select * from clsMediaKontakDetail where txtDeskripsi='"+txtDeskripsi+"'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                               String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtGuiId = resultColumns[4];
+                                    dt.txtDetailMedia = resultColumns[3];
+                                    dt.txtPrioritasKontak = resultColumns[8];
+                                    dt.txtKeterangan = resultColumns[6];
+                                    dt.lttxtStatusAktif = resultColumns[1];
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
+    }
+
     public List<?> findbyTelpon() throws SQLException {
         List<clsMediaKontakDetail> items = null;
         try{

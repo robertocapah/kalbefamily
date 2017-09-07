@@ -1436,7 +1436,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 repoKontakDetail.createOrUpdate(dataKontak);
                             }
                             Log.d("Data info", "Data Kontak Detail berhasil di update");
-                            FragmentDetailPersonalData fragmentDetailPersonalData = new FragmentDetailPersonalData();
+                            FragmentNewDetailPersonal fragmentDetailPersonalData = new FragmentNewDetailPersonal();
                             FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
                             fragmentTransactionPersonalData.commit();

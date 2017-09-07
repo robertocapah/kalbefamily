@@ -68,7 +68,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
         <activity android:name=".IntroActivity" />
         <activity android:name=".MemberActivity" />
         <activity android:name=".MainMenu" />

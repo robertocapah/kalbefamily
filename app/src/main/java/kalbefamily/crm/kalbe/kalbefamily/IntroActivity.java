@@ -16,14 +16,13 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
  */
 
 public class IntroActivity extends AppIntro {
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addSlide(SampleSlide.newInstance(R.layout.slide_1));
         addSlide(SampleSlide.newInstance(R.layout.slide_2));
         addSlide(SampleSlide.newInstance(R.layout.slide_3));
-        addSlide(AppIntroFragment.newInstance("Intro application", "Kalbe Nutritionals", R.drawable.ic_skip_white, getColor(R.color.colorAccent)));
+//        addSlide(AppIntroFragment.newInstance("Intro application", "Kalbe Nutritionals", R.drawable.ic_skip_white, getColor(R.color.colorAccent)));
 
         setFlowAnimation();
 //        setContentView(R.layout.activity_intro);
