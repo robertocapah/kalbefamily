@@ -89,7 +89,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     TextView tvNama, tvMember, etNamaDepan, etNamaBelakang, etNamaPanggilan, etEmail, etTelpon, etAlamat, etNoKTP, tvKategori;
     RadioButton radioPria, radiowanita;
     RadioGroup radioGenderGroup;
-    Button btnUpdate, btnDetail, btnEditNamaDepan, btnEditNamaBelakang, btnNamaPanggilan, btnEditEmail, btnEditNoTelp, btnEditAlamat, btnEditNoKTP;
+    Button btnUpdate, btnDetail;
     private ImageView image1, image2;
     CircleImageView ivProfile;
     Context context;
@@ -147,13 +147,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         radioPria = (RadioButton) v.findViewById(R.id.radioButton1);
         radiowanita = (RadioButton) v.findViewById(R.id.radioButton2);
         etNoKTP = (TextView) v.findViewById(R.id.textViewNoKTP);
-        btnEditNamaDepan = (Button) v.findViewById(R.id.btnEdit1);
-        btnEditNamaBelakang = (Button) v.findViewById(R.id.btnEdit2);
-        btnEditEmail = (Button) v.findViewById(R.id.btnEdit3);
-        btnEditNoTelp = (Button) v.findViewById(R.id.btnEdit4);
-        btnEditAlamat = (Button) v.findViewById(R.id.btnEdit5);
-        btnEditNoKTP = (Button) v.findViewById(R.id.btnEdit6);
-        btnNamaPanggilan = (Button) v.findViewById(R.id.btnEdit7);
         btnUpdate = (Button) v.findViewById(R.id.btnUpdate);
         btnDetail = (Button) v.findViewById(R.id.btnDetail);
         image1 = (ImageView) v.findViewById(R.id.image1);
@@ -215,39 +208,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         tvKategori.setText("(LINE)");
 
-        tvNama.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setTitle("Update Nama Anda");
-                alert.setMessage("Nama Anda : ");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                input.setTextColor(Color.BLACK);
-                input.setText(tvNama.getText().toString());
-                input.setHint(" Nama Anda");
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        tvNama.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
-            }
-        });
-
-        btnEditNamaDepan.setOnClickListener(new View.OnClickListener() {
+        etNamaDepan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -279,7 +240,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnEditNamaBelakang.setOnClickListener(new View.OnClickListener() {
+        etNamaBelakang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -310,7 +271,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnNamaPanggilan.setOnClickListener(new View.OnClickListener() {
+        etNamaPanggilan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -341,71 +302,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnEditEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan Email Anda");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                input.setTextColor(Color.BLACK);
-                input.setText(etEmail.getText().toString());
-                input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        etEmail.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
-            }
-        });
-
-        btnEditNoTelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                popupEditKontak();
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("No Telp Anda");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                input.setTextColor(Color.BLACK);
-                input.setText(etTelpon.getText().toString());
-                input.setInputType(InputType.TYPE_CLASS_PHONE);
-                input.setEnabled(false);
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        etTelpon.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
-            }
-        });
-
-        btnEditAlamat.setOnClickListener(new View.OnClickListener() {
+        etAlamat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -436,7 +333,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        btnEditNoKTP.setOnClickListener(new View.OnClickListener() {
+        etNoKTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
