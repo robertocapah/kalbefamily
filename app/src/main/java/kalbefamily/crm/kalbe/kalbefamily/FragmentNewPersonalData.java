@@ -478,7 +478,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 //                            validate = false;
 //                        } else if (tvKategori.getText().toString().equals("(No Telp)")) {
 //                            if (!isValidMobile(etTelpon.getText().toString())) {
-//                                new clsActivity().showCustomToast(context.getApplicationContext(), "No Telpon tidak Valid", false);
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), "No BBM tidak Valid", false);
 //                                validate = false;
 //                            } else {
 //                                dataUser.setTxtEmail(etEmail.getText().toString());

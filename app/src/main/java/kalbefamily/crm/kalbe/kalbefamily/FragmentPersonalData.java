@@ -224,7 +224,7 @@ public class FragmentPersonalData extends Fragment {
                             new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
                             validate = false;
                         } else if (!isValidMobile(etTelpon.getText().toString())) {
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Telpon harus berupa angka", false);
+                            new clsActivity().showCustomToast(context.getApplicationContext(), "BBM harus berupa angka", false);
                             validate = false;
                         } else {
                             dataUser.setTxtEmail(etEmail.getText().toString());

@@ -19,17 +19,19 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 
 public class clsMediaKontakDetailRepo implements crud {
     private DatabaseHelper helper;
-    public clsMediaKontakDetailRepo(Context context){
+
+    public clsMediaKontakDetailRepo(Context context) {
         DatabaseManager.init(context);
         helper = DatabaseManager.getInstance().getHelper();
     }
+
     @Override
     public int create(Object item) {
         int index = -1;
         clsMediaKontakDetail object = (clsMediaKontakDetail) item;
         try {
             index = helper.getUserMediaKontakDetailDao().create(object);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return index;
@@ -43,7 +45,7 @@ public class clsMediaKontakDetailRepo implements crud {
             Dao.CreateOrUpdateStatus status = helper.getUserMediaKontakDetailDao().createOrUpdate(object);
             index = status.getNumLinesChanged();
 //            index = 1;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return index;
@@ -55,7 +57,9 @@ public class clsMediaKontakDetailRepo implements crud {
         clsMediaKontakDetail object = (clsMediaKontakDetail) item;
         try {
             index = helper.getUserMediaKontakDetailDao().update(object);
-        }catch (SQLException e){
+            List<clsMediaKontakDetail> dt = helper.getUserMediaKontakDetailDao().queryForAll();
+            String asd = "";
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return index;
@@ -67,7 +71,7 @@ public class clsMediaKontakDetailRepo implements crud {
         clsMediaKontakDetail object = (clsMediaKontakDetail) item;
         try {
             index = helper.getUserMediaKontakDetailDao().delete(object);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return index;
@@ -76,9 +80,19 @@ public class clsMediaKontakDetailRepo implements crud {
     @Override
     public Object findById(int id) throws SQLException {
         clsMediaKontakDetail item = null;
-        try{
+        try {
             item = helper.getUserMediaKontakDetailDao().queryForId(id);
-        }catch (SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+    public List<clsMediaKontakDetail> findByIdString(String id) throws SQLException {
+        List<clsMediaKontakDetail> item = null;
+        try {
+            item = helper.getUserMediaKontakDetailDao().queryBuilder().where().eq("txtGuiId", id).query();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return item;
@@ -87,9 +101,19 @@ public class clsMediaKontakDetailRepo implements crud {
     @Override
     public List<?> findAll() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             items = helper.getUserMediaKontakDetailDao().queryForAll();
-        }catch (SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findWhere(String txtDeskripsi) throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try {
+            items = helper.getUserMediaKontakDetailDao().queryBuilder().where().eq("txtDeskripsi", txtDeskripsi).query();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -97,13 +121,13 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findDataByParent() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getAvailablePoinDao().queryRaw(
                             "select * from clsMediaKontakDetail group by txtDeskripsi",
                             new RawRowMapper<clsMediaKontakDetail>() {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
-                                                               String[] resultColumns) {
+                                                                   String[] resultColumns) {
                                     clsMediaKontakDetail dt = new clsMediaKontakDetail();
                                     dt.txtGuiId = resultColumns[4];
                                     dt.txtDetailMedia = resultColumns[3];
@@ -111,12 +135,13 @@ public class clsMediaKontakDetailRepo implements crud {
                                     dt.txtKeterangan = resultColumns[6];
                                     dt.lttxtStatusAktif = resultColumns[1];
                                     dt.txtDeskripsi = resultColumns[2];
+                                    dt.lttxtMediaID = resultColumns[0];
                                     return dt;
                                 }
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -124,25 +149,27 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findDataChild(String txtDeskripsi) throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getAvailablePoinDao().queryRaw(
-                            "select * from clsMediaKontakDetail where txtDeskripsi='"+txtDeskripsi+"'",
+                            "select * from clsMediaKontakDetail where txtDeskripsi='" + txtDeskripsi + "'",
                             new RawRowMapper<clsMediaKontakDetail>() {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
-                                                               String[] resultColumns) {
+                                                                   String[] resultColumns) {
                                     clsMediaKontakDetail dt = new clsMediaKontakDetail();
                                     dt.txtGuiId = resultColumns[4];
                                     dt.txtDetailMedia = resultColumns[3];
                                     dt.txtPrioritasKontak = resultColumns[8];
                                     dt.txtKeterangan = resultColumns[6];
                                     dt.lttxtStatusAktif = resultColumns[1];
+                                    dt.txtDeskripsi = resultColumns[2];
+                                    dt.lttxtMediaID = resultColumns[0];
                                     return dt;
                                 }
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -150,13 +177,13 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyTelpon() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'Telepon'",
                             new RawRowMapper<clsMediaKontakDetail>() {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
-                                                               String[] resultColumns) {
+                                                                   String[] resultColumns) {
                                     clsMediaKontakDetail dt = new clsMediaKontakDetail();
                                     dt.txtGuiId = resultColumns[4];
                                     dt.txtDetailMedia = resultColumns[3];
@@ -169,7 +196,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -177,7 +204,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbySms() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'SMS'",
@@ -196,7 +223,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -204,7 +231,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyBBM() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'BLACKBERRY'",
@@ -223,7 +250,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -231,7 +258,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyLine() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'LINE'",
@@ -250,7 +277,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -258,7 +285,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyWA() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'WHATSAPP'",
@@ -277,7 +304,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -285,7 +312,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyEmail() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'Email'",
@@ -304,7 +331,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -312,7 +339,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyTwitter() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'TWITTER'",
@@ -331,7 +358,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -339,7 +366,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyFacebook() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'FACEBOOK'",
@@ -358,7 +385,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -366,7 +393,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyInstagram() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'INSTAGRAM'",
@@ -385,7 +412,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -393,7 +420,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyFax() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'Fax'",
@@ -412,7 +439,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -420,7 +447,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyPath() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'PATH'",
@@ -439,7 +466,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
@@ -447,7 +474,7 @@ public class clsMediaKontakDetailRepo implements crud {
 
     public List<?> findbyMMS() throws SQLException {
         List<clsMediaKontakDetail> items = null;
-        try{
+        try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
                     helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi = 'MMS'",
@@ -466,7 +493,7 @@ public class clsMediaKontakDetailRepo implements crud {
                             });
 
             items = rawResults.getResults();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return items;
