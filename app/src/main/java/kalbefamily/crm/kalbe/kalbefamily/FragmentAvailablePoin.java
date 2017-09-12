@@ -100,12 +100,14 @@ public class FragmentAvailablePoin extends Fragment {
         }
         ExpandableListView lv = (ExpandableListView) getActivity().findViewById(R.id.list);
         // Set up our adapter
+        String groupFrom[] = {NAME};
+        int groupTo[] = {R.id.heading};
+
         mAdapter = new SimpleExpandableListAdapter(
                 getActivity(),
                 groupData,
-                android.R.layout.simple_expandable_list_item_1,
-                new String[] { NAME, IS_EVEN },
-                new int[] { android.R.id.text1, android.R.id.text2 },
+                R.layout.group_items,
+                groupFrom, groupTo,
                 childData,
                 android.R.layout.simple_expandable_list_item_2,
                 new String[] { NAME, IS_EVEN },

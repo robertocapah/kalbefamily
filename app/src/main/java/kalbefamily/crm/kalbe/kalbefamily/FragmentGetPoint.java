@@ -2,6 +2,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -105,6 +106,7 @@ public class FragmentGetPoint extends Fragment {
                                 repoAvailablePoin = new clsAvailablePoinRepo(context.getApplicationContext());
                                 repoAvailablePoin.createOrUpdate(dataPoin);
                             }
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                             FragmentAvailablePoin fragmentAvailablePoin = new FragmentAvailablePoin();
                             FragmentTransaction fragmentTransactionAvailablePoint = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
