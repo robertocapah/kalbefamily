@@ -11,12 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +42,11 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
  * Created by Rian Andrivani on 9/7/2017.
  */
 
-public class FragmentNewDetailPersonal extends Fragment {
+public class FragmentNewDetailPersonal extends Fragment implements AdapterView.OnItemSelectedListener{
     View v;
     Context context;
     TextView txtDeskripsi;
+    Button btnSimpan, btnTambah;
     List<clsUserMember> dataMember = null;
     List<clsMediaKontakDetail> dataParent, dataNoTelp, dataChild;
     clsMediaKontakDetailRepo repoKontak;
@@ -55,6 +60,15 @@ public class FragmentNewDetailPersonal extends Fragment {
         v = inflater.inflate(R.layout.fragment_new_detail_personal, container, false);
         context = getActivity().getApplicationContext();
         txtDeskripsi = (TextView) v.findViewById(R.id.txtDeskripsi);
+        btnSimpan = (Button) v.findViewById(R.id.btnSimpan);
+        btnTambah = (Button) v.findViewById(R.id.btnTambah);
+
+        btnTambah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupTambah();
+            }
+        });
 
         return v;
     }
@@ -299,28 +313,22 @@ public class FragmentNewDetailPersonal extends Fragment {
                                 } else if (etPrioritas.getText().toString().equals("")) {
                                     new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                                 } else {
-                                    List<clsMediaKontakDetail> dataKontak = null;
-                                    try {
-                                        dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                    }
-                                    clsMediaKontakDetail dt = dataKontak.get(0);
-
-                                    dt.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                    dt.setLttxtMediaID(lttxtMediaID);
-                                    dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                    dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                    dt.setTxtDetailMedia(etKontak.getText().toString());
-                                    dt.setTxtKeterangan(etKeterangan.getText().toString());
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(guiID);
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(lttxtMediaID);
+                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
 
                                     if (checkBoxStatus.isChecked()) {
-                                        dt.setLttxtStatusAktif("Aktif");
+                                        dataKontak.setLttxtStatusAktif("Aktif");
                                     } else {
-                                        dt.setLttxtStatusAktif("Tidak Aktif");
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
                                     }
                                     repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                    repoKontak.createOrUpdate(dt);
+                                    repoKontak.createOrUpdate(dataKontak);
 
                                     new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
                                     Log.d("Data info", "Kontak berhasil di perbarui");
@@ -339,6 +347,299 @@ public class FragmentNewDetailPersonal extends Fragment {
         alertD.show();
     }
 
+    private void popupTambah() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View promptView = layoutInflater.inflate(R.layout.popup_add_data_kontak, null);
+        final EditText etKontak, etKeterangan, etPrioritas;
+        final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        final Spinner spinnerKategori;
+
+        etKontak = (EditText) promptView.findViewById(R.id.etKontak);
+        spinnerKategori = (Spinner) promptView.findViewById(R.id.spinnerKategori);
+        etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
+        etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+
+        // Spinner click listener
+        spinnerKategori.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("BLACKBERRY");
+        categories.add("Email");
+        categories.add("FACEBOOK");
+        categories.add("Fax");
+        categories.add("INSTAGRAM");
+        categories.add("LINE");
+        categories.add("MMS");
+        categories.add("PATH");
+        categories.add("SMS");
+        categories.add("Telepon");
+        categories.add("TWITTER");
+        categories.add("WHATSAPP");
+
+        // Creating adapter for spinnerTelp
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinnerTelp
+        spinnerKategori.setAdapter(dataAdapter);
+
+        spinnerKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String kategori = spinnerKategori.getSelectedItem().toString();
+
+                if (kategori.equals("Telepon") || kategori.equals("SMS") || kategori.equals("WHATSAPP") || kategori.equals("Fax") || kategori.equals("MMS")) {
+                    int maxLength = 14;
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                    etKontak.setFilters(FilterArray);
+
+                    etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
+                } else if (kategori.equals("BLACKBERRY")) {
+                    int maxLength = 8;
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                    etKontak.setFilters(FilterArray);
+
+                    etKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+                } else if (kategori.equals("Email")) {
+                    int maxLength = 55;
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                    etKontak.setFilters(FilterArray);
+
+                    etKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                } else {
+                    int maxLength = 35;
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                    etKontak.setFilters(FilterArray);
+
+                    etKontak.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        etKontak.setHint("* wajib diisi");
+        etPrioritas.setHint("* wajib diisi");
+
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                String kategori = spinnerKategori.getSelectedItem().toString();
+                                String mediaID = null;
+
+                                if (etKontak.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
+                                } else if (kategori.equals("Telepon")) {
+                                    if (!isValidMobile(etKontak.getText().toString())) {
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
+                                        validate = false;
+                                    } else if (etPrioritas.getText().toString().equals("")) {
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                    } else {
+                                        if (kategori.equals("Telepon")) {
+                                            mediaID = "0001";
+                                        } else if (kategori.equals("Email")){
+                                            mediaID = "0002";
+                                        } else if (kategori.equals("Fax")){
+                                            mediaID = "0003";
+                                        } else if (kategori.equals("SMS")){
+                                            mediaID = "0004";
+                                        } else if (kategori.equals("MMS")){
+                                            mediaID = "0006";
+                                        } else if (kategori.equals("BLACKBERRY")){
+                                            mediaID = "0497";
+                                        } else if (kategori.equals("TWITTER")){
+                                            mediaID = "0837";
+                                        } else if (kategori.equals("FACEBOOK")){
+                                            mediaID = "0838";
+                                        } else if (kategori.equals("LINE")){
+                                            mediaID = "1205";
+                                        } else if (kategori.equals("PATH")){
+                                            mediaID = "1206";
+                                        } else if (kategori.equals("INSTAGRAM")){
+                                            mediaID = "1207";
+                                        } else if (kategori.equals("WHATSAPP")){
+                                            mediaID = "1208";
+                                        }
+                                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                        dataKontak.setLttxtMediaID(mediaID);
+                                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                        if (checkBoxStatus.isChecked()) {
+                                            dataKontak.setLttxtStatusAktif("Aktif");
+                                        } else {
+                                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                        }
+                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                        repoKontak.createOrUpdate(dataKontak);
+
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                        Log.d("Data info", "Kontak berhasil di perbarui");
+                                    }
+                                } else if (kategori.equals("Email")) {
+                                    if (!isValidEmail(etKontak.getText().toString())) {
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
+                                        validate = false;
+                                    } else if (etPrioritas.getText().toString().equals("")) {
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                    } else {
+                                        if (kategori.equals("Telepon")) {
+                                            mediaID = "0001";
+                                        } else if (kategori.equals("Email")){
+                                            mediaID = "0002";
+                                        } else if (kategori.equals("Fax")){
+                                            mediaID = "0003";
+                                        } else if (kategori.equals("SMS")){
+                                            mediaID = "0004";
+                                        } else if (kategori.equals("MMS")){
+                                            mediaID = "0006";
+                                        } else if (kategori.equals("BLACKBERRY")){
+                                            mediaID = "0497";
+                                        } else if (kategori.equals("TWITTER")){
+                                            mediaID = "0837";
+                                        } else if (kategori.equals("FACEBOOK")){
+                                            mediaID = "0838";
+                                        } else if (kategori.equals("LINE")){
+                                            mediaID = "1205";
+                                        } else if (kategori.equals("PATH")){
+                                            mediaID = "1206";
+                                        } else if (kategori.equals("INSTAGRAM")){
+                                            mediaID = "1207";
+                                        } else if (kategori.equals("WHATSAPP")){
+                                            mediaID = "1208";
+                                        }
+                                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                        dataKontak.setLttxtMediaID(mediaID);
+                                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                        if (checkBoxStatus.isChecked()) {
+                                            dataKontak.setLttxtStatusAktif("Aktif");
+                                        } else {
+                                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                        }
+                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                        repoKontak.createOrUpdate(dataKontak);
+
+                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                        Log.d("Data info", "Kontak berhasil di perbarui");
+                                    }
+                                } else if (etPrioritas.getText().toString().equals("")) {
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                                } else {
+                                    if (kategori.equals("Telepon")) {
+                                        mediaID = "0001";
+                                    } else if (kategori.equals("Email")){
+                                        mediaID = "0002";
+                                    } else if (kategori.equals("Fax")){
+                                        mediaID = "0003";
+                                    } else if (kategori.equals("SMS")){
+                                        mediaID = "0004";
+                                    } else if (kategori.equals("MMS")){
+                                        mediaID = "0006";
+                                    } else if (kategori.equals("BLACKBERRY")){
+                                        mediaID = "0497";
+                                    } else if (kategori.equals("TWITTER")){
+                                        mediaID = "0837";
+                                    } else if (kategori.equals("FACEBOOK")){
+                                        mediaID = "0838";
+                                    } else if (kategori.equals("LINE")){
+                                        mediaID = "1205";
+                                    } else if (kategori.equals("PATH")){
+                                        mediaID = "1206";
+                                    } else if (kategori.equals("INSTAGRAM")){
+                                        mediaID = "1207";
+                                    } else if (kategori.equals("WHATSAPP")){
+                                        mediaID = "1208";
+                                    }
+                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                    dataKontak.setLttxtMediaID(mediaID);
+                                    dataKontak.setTxtDeskripsi(kategori);
+                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                                    if (checkBoxStatus.isChecked()) {
+                                        dataKontak.setLttxtStatusAktif("Aktif");
+                                    } else {
+                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                    }
+                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                    repoKontak.createOrUpdate(dataKontak);
+
+                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                                    Log.d("Data info", "Kontak berhasil di perbarui");
+                                }
+
+                                dialog.dismiss();
+                                dataUpdate();
+                            }
+                        })
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+        final AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     public final static boolean isValidEmail(CharSequence target) {
         if (target == null) {
             return false;
@@ -350,5 +651,4 @@ public class FragmentNewDetailPersonal extends Fragment {
     private boolean isValidMobile(String phone) {
         return android.util.Patterns.PHONE.matcher(phone).matches();
     }
-
 }

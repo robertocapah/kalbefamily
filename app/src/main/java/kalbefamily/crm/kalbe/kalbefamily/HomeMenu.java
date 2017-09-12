@@ -160,7 +160,7 @@ public class HomeMenu extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
+        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNamaDepan());
         tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
 //        if (dataMember.get(0).getTxtEmail().equals("")) {
 //            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
@@ -251,7 +251,7 @@ public class HomeMenu extends AppCompatActivity {
                     case R.id.personalData:
                         toolbar.setTitle("Personal data");
 
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
                         FragmentNewPersonalData fragmentPersonalData = new FragmentNewPersonalData();
                         FragmentTransaction fragmentTransactionPersonalData = getSupportFragmentManager().beginTransaction();

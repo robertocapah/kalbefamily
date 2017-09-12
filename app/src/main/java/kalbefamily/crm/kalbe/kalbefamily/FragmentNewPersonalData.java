@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -471,7 +472,21 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         savePicture1();
                         savePicture2();
                         savePictureProfile();
-                        sendData();
+
+                        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+                        dialog2.setIndeterminate(true);
+                        dialog2.setMessage("Mohon Tunggu...");
+                        dialog2.show();
+
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        // On complete call either onLoginSuccess or onLoginFailed
+                                        sendData();
+                                        // onLoginFailed();
+                                        dialog2.dismiss();
+                                    }
+                                }, 4000);
 
 //                        if(!isValidEmail(etEmail.getText().toString())){
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -1436,6 +1451,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 repoKontakDetail.createOrUpdate(dataKontak);
                             }
                             Log.d("Data info", "Data Kontak Detail berhasil di update");
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                             FragmentNewDetailPersonal fragmentDetailPersonalData = new FragmentNewDetailPersonal();
                             FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
