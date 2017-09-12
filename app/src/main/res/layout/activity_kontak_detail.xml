@@ -13,12 +13,12 @@
 
         <LinearLayout
             android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#4CAF50"
-        android:gravity="center"
-        android:layout_weight="1.5">
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:orientation="vertical"
+            android:background="@drawable/batik_kecil"
+            android:gravity="center"
+            android:layout_weight="1.5">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"

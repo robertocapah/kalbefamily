@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent"
+    android:background="@drawable/sulur_copy"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical">
 
         <!-- HEADER -->
@@ -19,162 +20,157 @@
                 android:id="@+id/ivBannerLogin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/banner" />
+                android:src="@mipmap/banner2" />
         </LinearLayout>
 
 
-        <!-- BODY -->
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:id="@+id/llContent"
-            android:padding="16dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/batik">
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtHDId"
-                android:layout_width="wrap_content"
+            <!-- BODY -->
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="txthdId"
-                android:visibility="gone" />
-            <TextView
-                android:id="@+id/txtHDId2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="txthdId"
-                android:visibility="gone" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:id="@+id/llContent"
+                android:padding="16dp"
+                android:gravity="center_vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Member ID"
-                android:ems="10"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:id="@+id/txtMember"
-                android:background="@drawable/bg_edtext"
-                android:drawableRight="@mipmap/ic_username"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/press_go"
-                android:textColor="@color/white"
-                android:id="@+id/textView4" />
-            <!--<View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/viewFlipper1"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray"/>-->
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/tv_role"
-                android:layout_marginTop="10dp"
-                android:id="@+id/textView6"
-                android:textStyle="normal"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:id="@+id/spnType"
-                android:background="@drawable/bg_edtext"/>
-            <Spinner
-                android:id="@+id/spnOutlet"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/bg_edtext" />-->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/viewFlipper2"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray"/>
-            <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="Password"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:imeActionLabel="Sign In"-->
-            <!--android:imeOptions="actionUnspecified"-->
-            <!--android:inputType="textPassword"-->
-            <!--android:maxLines="1"-->
-            <!--android:singleLine="true"-->
-            <!--android:ems="10"-->
-            <!--android:id="@+id/editTextPass"-->
-            <!--android:background="@drawable/bg_edtext"-->
-            <!--android:drawableRight="@mipmap/ic_eye"/>-->
-            <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Login"-->
-            <!--android:textStyle="bold"-->
-            <!--android:id="@+id/buttonLogin"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@drawable/bg_edtext" />-->
-            <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/txtMemberID" />-->
-            <Button
-                android:text="Submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:id="@+id/buttonSubmit" />
+                <TextView
+                    android:id="@+id/txtHDId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="txthdId"
+                    android:visibility="gone" />
+                <TextView
+                    android:id="@+id/txtHDId2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="txthdId"
+                    android:visibility="gone" />
 
-        </LinearLayout>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="Member ID"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:id="@+id/txtMember"
+                    android:background="@drawable/bg_edtext"
+                    android:drawableRight="@mipmap/ic_username"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/press_go"
+                    android:textColor="@color/white"
+                    android:id="@+id/textView4" />
+                <!--<View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/viewFlipper1"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray"/>-->
+                <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/tv_role"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/textView6"
+                    android:textStyle="normal"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/spnType"
+                    android:background="@drawable/bg_edtext"/>
+                <Spinner
+                    android:id="@+id/spnOutlet"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_edtext" />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/viewFlipper2"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray"/>
+                <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Password"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:imeActionLabel="Sign In"-->
+                <!--android:imeOptions="actionUnspecified"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:maxLines="1"-->
+                <!--android:singleLine="true"-->
+                <!--android:ems="10"-->
+                <!--android:id="@+id/editTextPass"-->
+                <!--android:background="@drawable/bg_edtext"-->
+                <!--android:drawableRight="@mipmap/ic_eye"/>-->
+                <!--<Button-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Login"-->
+                <!--android:textStyle="bold"-->
+                <!--android:id="@+id/buttonLogin"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@drawable/bg_edtext" />-->
+                <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/txtMemberID" />-->
+                <Button
+                    android:text="Submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/buttonSubmit" />
 
-        <!-- FOOTER -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/batik"
-            >
+            </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
+            <!-- FOOTER -->
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Exit"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"
-                android:id="@+id/buttonExit"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/btn_on_click"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ping"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"
-                android:id="@+id/buttonPing"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/btn_on_click"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/tv_version"
-                android:id="@+id/txtVersionLogin"
-                android:layout_gravity="center_horizontal"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:textColor="@color/white"/>
+                android:orientation="vertical"
+                android:gravity="bottom">
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Exit"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textStyle="bold"
+                    android:id="@+id/buttonExit"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/btn_on_click"
+                    android:layout_alignParentBottom="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/tv_version"
+                    android:id="@+id/txtVersionLogin"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

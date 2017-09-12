@@ -76,6 +76,7 @@
         <activity android:name=".QrCodeActivity" />
         <activity
             android:name=".RewardCardActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape" />
         <activity android:name=".NewMemberActivity" />
         <activity android:name=".NewLoginActivity" />
