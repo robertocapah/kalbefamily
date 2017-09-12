@@ -142,6 +142,8 @@ public class HomeMenu extends AppCompatActivity {
 
 //        UserMember();
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         FragmentInfoContact ContactFragment = new FragmentInfoContact();
         FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
         fragmentTransactionHome.replace(R.id.frame, ContactFragment);
@@ -239,7 +241,7 @@ public class HomeMenu extends AppCompatActivity {
                     case R.id.contact:
                         toolbar.setTitle("Home");
 
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
                         FragmentInfoContact ContactFragment = new FragmentInfoContact();
                         FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
@@ -288,7 +290,7 @@ public class HomeMenu extends AppCompatActivity {
                         return true;
                     case R.id.availablePont:
 //                        availablePoin();
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
                         toolbar.setTitle("Available Point Customer");
                         FragmentGetPoint fragmentAvailablePoin = new FragmentGetPoint();

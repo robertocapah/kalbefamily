@@ -73,7 +73,7 @@ public class FragmentGetPoint extends Fragment {
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Getting Data, Please wait !", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Mohon Tunggu...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -109,7 +109,7 @@ public class FragmentGetPoint extends Fragment {
                             FragmentTransaction fragmentTransactionAvailablePoint = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransactionAvailablePoint.replace(R.id.frame, fragmentAvailablePoin);
                             fragmentTransactionAvailablePoint.commit();
-                            new clsActivity().showCustomToast(context.getApplicationContext(), "Get Data, Success", true);
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Get Data, Success", true);
                         } else {
                             new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
                         }
