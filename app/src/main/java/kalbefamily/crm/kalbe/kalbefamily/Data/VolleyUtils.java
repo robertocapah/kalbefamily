@@ -37,7 +37,7 @@ import static android.provider.Telephony.Carriers.PASSWORD;
  */
 
 public class VolleyUtils {
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void makeJsonObjectRequest(final Activity activity, String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
 
         ProgressDialog Dialog = new ProgressDialog(activity);

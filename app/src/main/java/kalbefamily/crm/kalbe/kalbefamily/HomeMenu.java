@@ -101,17 +101,17 @@ public class HomeMenu extends AppCompatActivity {
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Exit");
-        builder.setMessage("Do you want to exit?");
+        builder.setTitle("Keluar");
+        builder.setMessage("Apakah Anda ingin keluar?");
 
-        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
         });
 
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -141,8 +141,6 @@ public class HomeMenu extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 //        UserMember();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         FragmentInfoContact ContactFragment = new FragmentInfoContact();
         FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();

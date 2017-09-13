@@ -42,7 +42,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
  * Created by Rian Andrivani on 9/7/2017.
  */
 
-public class FragmentNewDetailPersonal extends Fragment implements AdapterView.OnItemSelectedListener{
+public class FragmentNewDetailPersonal extends Fragment implements AdapterView.OnItemSelectedListener {
     View v;
     Context context;
     TextView txtDeskripsi;
@@ -67,6 +67,28 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             @Override
             public void onClick(View view) {
                 popupTambah();
+            }
+        });
+
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle("Konfirmasi");
+                alertDialog.setMessage("Apakah Anda yakin?");
+                alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+
+                    }
+                });
+                alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.show();
             }
         });
 
@@ -240,111 +262,120 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
-                                txtDeskripsi.setText(deskripsi);
-                                if (etKontak.getText().toString().equals("")) {
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
-                                } else if (deskripsi.equals("Telepon")) {
-                                    if (!isValidMobile(etKontak.getText().toString())) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
-                                        validate = false;
-                                    } else if (etPrioritas.getText().toString().equals("")) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                    } else {
-                                        List<clsMediaKontakDetail> dataKontak = null;
-                                        try {
-                                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-                                        clsMediaKontakDetail dt = dataKontak.get(0);
 
-                                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                        dt.setLttxtMediaID(lttxtMediaID);
-                                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                        dt.setTxtDetailMedia(etKontak.getText().toString());
-                                        dt.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                        if (checkBoxStatus.isChecked()) {
-                                            dt.setLttxtStatusAktif("Aktif");
-                                        } else {
-                                            dt.setLttxtStatusAktif("Tidak Aktif");
-                                        }
-                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                        repoKontak.createOrUpdate(dt);
-
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                        Log.d("Data info", "Kontak berhasil di perbarui");
-                                    }
-                                } else if (deskripsi.equals("Email")) {
-                                    if (!isValidEmail(etKontak.getText().toString())) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
-                                        validate = false;
-                                    } else if (etPrioritas.getText().toString().equals("")) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                    } else {
-                                        List<clsMediaKontakDetail> dataKontak = null;
-                                        try {
-                                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-                                        clsMediaKontakDetail dt = dataKontak.get(0);
-
-                                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                        dt.setLttxtMediaID(lttxtMediaID);
-                                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                        dt.setTxtDetailMedia(etKontak.getText().toString());
-                                        dt.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                        if (checkBoxStatus.isChecked()) {
-                                            dt.setLttxtStatusAktif("Aktif");
-                                        } else {
-                                            dt.setLttxtStatusAktif("Tidak Aktif");
-                                        }
-                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                        repoKontak.createOrUpdate(dt);
-
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                        Log.d("Data info", "Kontak berhasil di perbarui");
-                                    }
-                                } else if (etPrioritas.getText().toString().equals("")) {
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                } else {
-                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                                    dataKontak.setTxtGuiId(guiID);
-                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                    dataKontak.setLttxtMediaID(lttxtMediaID);
-                                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                    if (checkBoxStatus.isChecked()) {
-                                        dataKontak.setLttxtStatusAktif("Aktif");
-                                    } else {
-                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                                    }
-                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                    repoKontak.createOrUpdate(dataKontak);
-
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                    Log.d("Data info", "Kontak berhasil di perbarui");
-                                }
-
-                                dialog.dismiss();
-                                dataUpdate();
                             }
                         })
-                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Tutup", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
         final AlertDialog alertD = alertDialogBuilder.create();
         alertD.show();
+
+        alertD.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
+                txtDeskripsi.setText(deskripsi);
+                if (etKontak.getText().toString().equals("")) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
+                } else if (deskripsi.equals("Telepon")) {
+                    if (!isValidMobile(etKontak.getText().toString())) {
+                        new clsActivity().showToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
+                        validate = false;
+                    } else if (etPrioritas.getText().toString().equals("")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                    } else {
+                        List<clsMediaKontakDetail> dataKontak = null;
+                        try {
+                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        clsMediaKontakDetail dt = dataKontak.get(0);
+
+                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
+                        dt.setLttxtMediaID(lttxtMediaID);
+                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                        dt.setTxtDetailMedia(etKontak.getText().toString());
+                        dt.setTxtKeterangan(etKeterangan.getText().toString());
+
+                        if (checkBoxStatus.isChecked()) {
+                            dt.setLttxtStatusAktif("Aktif");
+                        } else {
+                            dt.setLttxtStatusAktif("Tidak Aktif");
+                        }
+                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                        repoKontak.createOrUpdate(dt);
+
+                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                        Log.d("Data info", "Kontak berhasil di perbarui");
+                        alertD.dismiss();
+                    }
+                } else if (deskripsi.equals("Email")) {
+                    if (!isValidEmail(etKontak.getText().toString())) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Email tidak valid", false);
+                        validate = false;
+                    } else if (etPrioritas.getText().toString().equals("")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                    } else {
+                        List<clsMediaKontakDetail> dataKontak = null;
+                        try {
+                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        clsMediaKontakDetail dt = dataKontak.get(0);
+
+                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
+                        dt.setLttxtMediaID(lttxtMediaID);
+                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                        dt.setTxtDetailMedia(etKontak.getText().toString());
+                        dt.setTxtKeterangan(etKeterangan.getText().toString());
+
+                        if (checkBoxStatus.isChecked()) {
+                            dt.setLttxtStatusAktif("Aktif");
+                        } else {
+                            dt.setLttxtStatusAktif("Tidak Aktif");
+                        }
+                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                        repoKontak.createOrUpdate(dt);
+
+                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                        Log.d("Data info", "Kontak berhasil di perbarui");
+                        alertD.dismiss();
+                    }
+                } else if (etPrioritas.getText().toString().equals("")) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                } else {
+                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                    dataKontak.setTxtGuiId(guiID);
+                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                    dataKontak.setLttxtMediaID(lttxtMediaID);
+                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                    if (checkBoxStatus.isChecked()) {
+                        dataKontak.setLttxtStatusAktif("Aktif");
+                    } else {
+                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                    }
+                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                    repoKontak.createOrUpdate(dataKontak);
+
+                    new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
+                    Log.d("Data info", "Kontak berhasil di perbarui");
+                    alertD.dismiss();
+                }
+
+                dataUpdate();
+            }
+        });
     }
 
     private void popupTambah() {
@@ -454,172 +485,13 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener(){
+                        new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
-                                String kategori = spinnerKategori.getSelectedItem().toString();
-                                String mediaID = null;
 
-                                if (etKontak.getText().toString().equals("")) {
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
-                                } else if (kategori.equals("Telepon")) {
-                                    if (!isValidMobile(etKontak.getText().toString())) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
-                                        validate = false;
-                                    } else if (etPrioritas.getText().toString().equals("")) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                    } else {
-                                        if (kategori.equals("Telepon")) {
-                                            mediaID = "0001";
-                                        } else if (kategori.equals("Email")){
-                                            mediaID = "0002";
-                                        } else if (kategori.equals("Fax")){
-                                            mediaID = "0003";
-                                        } else if (kategori.equals("SMS")){
-                                            mediaID = "0004";
-                                        } else if (kategori.equals("MMS")){
-                                            mediaID = "0006";
-                                        } else if (kategori.equals("BLACKBERRY")){
-                                            mediaID = "0497";
-                                        } else if (kategori.equals("TWITTER")){
-                                            mediaID = "0837";
-                                        } else if (kategori.equals("FACEBOOK")){
-                                            mediaID = "0838";
-                                        } else if (kategori.equals("LINE")){
-                                            mediaID = "1205";
-                                        } else if (kategori.equals("PATH")){
-                                            mediaID = "1206";
-                                        } else if (kategori.equals("INSTAGRAM")){
-                                            mediaID = "1207";
-                                        } else if (kategori.equals("WHATSAPP")){
-                                            mediaID = "1208";
-                                        }
-                                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                        dataKontak.setLttxtMediaID(mediaID);
-                                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                        if (checkBoxStatus.isChecked()) {
-                                            dataKontak.setLttxtStatusAktif("Aktif");
-                                        } else {
-                                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                                        }
-                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                        repoKontak.createOrUpdate(dataKontak);
-
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                        Log.d("Data info", "Kontak berhasil di perbarui");
-                                    }
-                                } else if (kategori.equals("Email")) {
-                                    if (!isValidEmail(etKontak.getText().toString())) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
-                                        validate = false;
-                                    } else if (etPrioritas.getText().toString().equals("")) {
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                    } else {
-                                        if (kategori.equals("Telepon")) {
-                                            mediaID = "0001";
-                                        } else if (kategori.equals("Email")){
-                                            mediaID = "0002";
-                                        } else if (kategori.equals("Fax")){
-                                            mediaID = "0003";
-                                        } else if (kategori.equals("SMS")){
-                                            mediaID = "0004";
-                                        } else if (kategori.equals("MMS")){
-                                            mediaID = "0006";
-                                        } else if (kategori.equals("BLACKBERRY")){
-                                            mediaID = "0497";
-                                        } else if (kategori.equals("TWITTER")){
-                                            mediaID = "0837";
-                                        } else if (kategori.equals("FACEBOOK")){
-                                            mediaID = "0838";
-                                        } else if (kategori.equals("LINE")){
-                                            mediaID = "1205";
-                                        } else if (kategori.equals("PATH")){
-                                            mediaID = "1206";
-                                        } else if (kategori.equals("INSTAGRAM")){
-                                            mediaID = "1207";
-                                        } else if (kategori.equals("WHATSAPP")){
-                                            mediaID = "1208";
-                                        }
-                                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                        dataKontak.setLttxtMediaID(mediaID);
-                                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                        if (checkBoxStatus.isChecked()) {
-                                            dataKontak.setLttxtStatusAktif("Aktif");
-                                        } else {
-                                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                                        }
-                                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                        repoKontak.createOrUpdate(dataKontak);
-
-                                        new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                        Log.d("Data info", "Kontak berhasil di perbarui");
-                                    }
-                                } else if (etPrioritas.getText().toString().equals("")) {
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
-                                } else {
-                                    if (kategori.equals("Telepon")) {
-                                        mediaID = "0001";
-                                    } else if (kategori.equals("Email")){
-                                        mediaID = "0002";
-                                    } else if (kategori.equals("Fax")){
-                                        mediaID = "0003";
-                                    } else if (kategori.equals("SMS")){
-                                        mediaID = "0004";
-                                    } else if (kategori.equals("MMS")){
-                                        mediaID = "0006";
-                                    } else if (kategori.equals("BLACKBERRY")){
-                                        mediaID = "0497";
-                                    } else if (kategori.equals("TWITTER")){
-                                        mediaID = "0837";
-                                    } else if (kategori.equals("FACEBOOK")){
-                                        mediaID = "0838";
-                                    } else if (kategori.equals("LINE")){
-                                        mediaID = "1205";
-                                    } else if (kategori.equals("PATH")){
-                                        mediaID = "1206";
-                                    } else if (kategori.equals("INSTAGRAM")){
-                                        mediaID = "1207";
-                                    } else if (kategori.equals("WHATSAPP")){
-                                        mediaID = "1208";
-                                    }
-                                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                    dataKontak.setLttxtMediaID(mediaID);
-                                    dataKontak.setTxtDeskripsi(kategori);
-                                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-
-                                    if (checkBoxStatus.isChecked()) {
-                                        dataKontak.setLttxtStatusAktif("Aktif");
-                                    } else {
-                                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                                    }
-                                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                                    repoKontak.createOrUpdate(dataKontak);
-
-                                    new clsActivity().showCustomToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                                    Log.d("Data info", "Kontak berhasil di perbarui");
-                                }
-
-                                dialog.dismiss();
-                                dataUpdate();
                             }
                         })
-                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Tutup", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -628,6 +500,174 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         final AlertDialog alertD = alertDialogBuilder.create();
         alertD.show();
+
+        alertD.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String kategori = spinnerKategori.getSelectedItem().toString();
+                String mediaID = null;
+
+                if (etKontak.getText().toString().equals("")) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
+                } else if (kategori.equals("Telepon")) {
+                    if (!isValidMobile(etKontak.getText().toString())) {
+                        new clsActivity().showToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
+                        validate = false;
+                    } else if (etPrioritas.getText().toString().equals("")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                    } else {
+                        if (kategori.equals("Telepon")) {
+                            mediaID = "0001";
+                        } else if (kategori.equals("Email")) {
+                            mediaID = "0002";
+                        } else if (kategori.equals("Fax")) {
+                            mediaID = "0003";
+                        } else if (kategori.equals("SMS")) {
+                            mediaID = "0004";
+                        } else if (kategori.equals("MMS")) {
+                            mediaID = "0006";
+                        } else if (kategori.equals("BLACKBERRY")) {
+                            mediaID = "0497";
+                        } else if (kategori.equals("TWITTER")) {
+                            mediaID = "0837";
+                        } else if (kategori.equals("FACEBOOK")) {
+                            mediaID = "0838";
+                        } else if (kategori.equals("LINE")) {
+                            mediaID = "1205";
+                        } else if (kategori.equals("PATH")) {
+                            mediaID = "1206";
+                        } else if (kategori.equals("INSTAGRAM")) {
+                            mediaID = "1207";
+                        } else if (kategori.equals("WHATSAPP")) {
+                            mediaID = "1208";
+                        }
+                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                        dataKontak.setLttxtMediaID(mediaID);
+                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                        if (checkBoxStatus.isChecked()) {
+                            dataKontak.setLttxtStatusAktif("Aktif");
+                        } else {
+                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                        }
+                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                        repoKontak.createOrUpdate(dataKontak);
+
+                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
+                        Log.d("Data info", "Kontak berhasil di buat");
+                        alertD.dismiss();
+                    }
+                } else if (kategori.equals("Email")) {
+                    if (!isValidEmail(etKontak.getText().toString())) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Email tidak valid", false);
+                        validate = false;
+                    } else if (etPrioritas.getText().toString().equals("")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                    } else {
+                        if (kategori.equals("Telepon")) {
+                            mediaID = "0001";
+                        } else if (kategori.equals("Email")) {
+                            mediaID = "0002";
+                        } else if (kategori.equals("Fax")) {
+                            mediaID = "0003";
+                        } else if (kategori.equals("SMS")) {
+                            mediaID = "0004";
+                        } else if (kategori.equals("MMS")) {
+                            mediaID = "0006";
+                        } else if (kategori.equals("BLACKBERRY")) {
+                            mediaID = "0497";
+                        } else if (kategori.equals("TWITTER")) {
+                            mediaID = "0837";
+                        } else if (kategori.equals("FACEBOOK")) {
+                            mediaID = "0838";
+                        } else if (kategori.equals("LINE")) {
+                            mediaID = "1205";
+                        } else if (kategori.equals("PATH")) {
+                            mediaID = "1206";
+                        } else if (kategori.equals("INSTAGRAM")) {
+                            mediaID = "1207";
+                        } else if (kategori.equals("WHATSAPP")) {
+                            mediaID = "1208";
+                        }
+                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                        dataKontak.setLttxtMediaID(mediaID);
+                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                        if (checkBoxStatus.isChecked()) {
+                            dataKontak.setLttxtStatusAktif("Aktif");
+                        } else {
+                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                        }
+                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                        repoKontak.createOrUpdate(dataKontak);
+
+                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
+                        Log.d("Data info", "Kontak berhasil di buat");
+                        alertD.dismiss();
+                    }
+                } else if (etPrioritas.getText().toString().equals("")) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                } else {
+                    if (kategori.equals("Telepon")) {
+                        mediaID = "0001";
+                    } else if (kategori.equals("Email")) {
+                        mediaID = "0002";
+                    } else if (kategori.equals("Fax")) {
+                        mediaID = "0003";
+                    } else if (kategori.equals("SMS")) {
+                        mediaID = "0004";
+                    } else if (kategori.equals("MMS")) {
+                        mediaID = "0006";
+                    } else if (kategori.equals("BLACKBERRY")) {
+                        mediaID = "0497";
+                    } else if (kategori.equals("TWITTER")) {
+                        mediaID = "0837";
+                    } else if (kategori.equals("FACEBOOK")) {
+                        mediaID = "0838";
+                    } else if (kategori.equals("LINE")) {
+                        mediaID = "1205";
+                    } else if (kategori.equals("PATH")) {
+                        mediaID = "1206";
+                    } else if (kategori.equals("INSTAGRAM")) {
+                        mediaID = "1207";
+                    } else if (kategori.equals("WHATSAPP")) {
+                        mediaID = "1208";
+                    }
+                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                    dataKontak.setLttxtMediaID(mediaID);
+                    dataKontak.setTxtDeskripsi(kategori);
+                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+
+                    if (checkBoxStatus.isChecked()) {
+                        dataKontak.setLttxtStatusAktif("Aktif");
+                    } else {
+                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                    }
+                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                    repoKontak.createOrUpdate(dataKontak);
+
+                    new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
+                    Log.d("Data info", "Kontak berhasil di buat");
+                    alertD.dismiss();
+                }
+
+                dataUpdate();
+            }
+        });
     }
 
     @Override

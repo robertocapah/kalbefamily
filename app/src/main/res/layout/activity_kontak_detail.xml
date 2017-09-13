@@ -35,7 +35,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="========"
+            android:text="Your Name"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
@@ -47,7 +47,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="=======_==@kalbe.com"
+            android:text="( Base Point : 0 )"
             android:textColor="@color/white"/>
 
         <!--<TextView-->
@@ -144,7 +144,7 @@
                     android:layout_toStartOf="@+id/chkState3"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="=======_==@kalbe.com"
+                    android:hint="E M A I L"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#212121" />
 
@@ -200,7 +200,7 @@
                     android:layout_toStartOf="@+id/chkState5"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text=" "
+                    android:hint="Address"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#212121" />
 

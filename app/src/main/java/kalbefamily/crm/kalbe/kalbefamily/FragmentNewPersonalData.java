@@ -443,9 +443,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle("Confirm");
-                alertDialog.setMessage("Are you sure?");
-                alertDialog.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                alertDialog.setTitle("Konfirmasi");
+                alertDialog.setMessage("Apakah Anda yakin?");
+                alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         clsUserMember dataUser = new clsUserMember();
@@ -541,7 +541,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 //                        }
                     }
                 });
-                alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -1408,7 +1408,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Getting Data, Please wait !", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Mohon Tunggu...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);

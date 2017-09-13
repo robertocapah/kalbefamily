@@ -156,10 +156,10 @@ public class NewMemberActivity extends AppCompatActivity {
             public void onClick(View v) {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NewMemberActivity.this);
 
-                builder.setTitle("Exit");
-                builder.setMessage("Do you want to exit?");
+                builder.setTitle("Keluar");
+                builder.setMessage("Apakah Anda ingin keluar?");
 
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -170,7 +170,7 @@ public class NewMemberActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -180,28 +180,6 @@ public class NewMemberActivity extends AppCompatActivity {
 
                 android.app.AlertDialog alert = builder.create();
                 alert.show();
-            }
-        });
-
-        Button btnPing = (Button) findViewById(R.id.buttonPing);
-        btnPing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //buat check isi table deviceInfo
-                List<clsDeviceInfoData> items = null;
-                try {
-                    items = (List<clsDeviceInfoData>) repoDeviceInfo.findAll();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                //ini buat copy db ke luar
-                try {
-                    new clsHelper().createDatabase(getApplicationContext());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
     }

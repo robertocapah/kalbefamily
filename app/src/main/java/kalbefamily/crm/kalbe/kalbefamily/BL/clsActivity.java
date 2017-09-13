@@ -111,20 +111,17 @@ public class clsActivity extends Activity {
         */
     }
 
-    public void showToast(Context ctx, String str){
-        LayoutInflater mInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public void showToast(Context context, String message, Boolean status){
+        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View promptView = mInflater.inflate(R.layout.custom_toast, null);
 
         TextView tvTextToast = (TextView) promptView.findViewById(R.id.custom_toast_message);
         ImageView icon = (ImageView) promptView.findViewById(R.id.custom_toast_image);
-        tvTextToast.setText(str);
+        tvTextToast.setText(message);
 
         GradientDrawable bgShape = (GradientDrawable)promptView.getBackground();
 
-        bgShape.setColor(Color.parseColor("#6dc066"));
-        icon.setImageResource(R.drawable.ic_checklist);
-        /*
         if (status) {
             bgShape.setColor(Color.parseColor("#6dc066"));
             icon.setImageResource(R.drawable.ic_checklist);
@@ -133,19 +130,12 @@ public class clsActivity extends Activity {
             bgShape.setColor(Color.parseColor("#e74c3c"));
             icon.setImageResource(R.drawable.ic_error);
         }
-        */
-        Toast toast = new Toast(ctx);
+
+        Toast toast = new Toast(context);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(promptView);
-        toast.setGravity(Gravity.TOP, 25, 400);
-        //toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.BOTTOM, 0, 40);
         toast.show();
-        /*
-        Toast toast = Toast.makeText(ctx,
-                str, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 25, 400);
-        toast.show();
-        */
     }
 
     public void showCustomToast(Context context, String message, Boolean status) {
