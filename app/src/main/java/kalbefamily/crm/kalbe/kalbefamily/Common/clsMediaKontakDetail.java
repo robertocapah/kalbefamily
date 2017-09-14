@@ -82,6 +82,14 @@ public class clsMediaKontakDetail implements Serializable {
         this.txtKategoriMedia = txtKategoriMedia;
     }
 
+    public String getTxtExtension() {
+        return txtExtension;
+    }
+
+    public void setTxtExtension(String txtExtension) {
+        this.txtExtension = txtExtension;
+    }
+
     @DatabaseField(id = true,columnName = "txtGuiId")
     public String txtGuiId;
     @DatabaseField(columnName = "txtKontakId")
@@ -100,6 +108,8 @@ public class clsMediaKontakDetail implements Serializable {
     public String lttxtStatusAktif;
     @DatabaseField(columnName = "txtKategoriMedia")
     public String txtKategoriMedia;
+    @DatabaseField(columnName = "txtExtension")
+    public String txtExtension;
 
     public String Property_txtGuiId = "txtGuiId";
     public String Property_txtKontakId = "txtKontakId";
@@ -110,6 +120,7 @@ public class clsMediaKontakDetail implements Serializable {
     public String Property_txtKeterangan = "txtKeterangan";
     public String Property_lttxtStatusAktif = "lttxtStatusAktif";
     public String Property_txtKategoriMedia = "txtKategoriMedia";
+    public String Property_txtExtension = "txtExtension";
     public String Property_All=Property_txtGuiId +","+
             Property_txtKontakId +","+
             Property_lttxtMediaID+","+
@@ -119,5 +130,6 @@ public class clsMediaKontakDetail implements Serializable {
             Property_txtKeterangan+","+
             Property_txtKeterangan+","+
             Property_lttxtStatusAktif +","+
-            Property_txtKategoriMedia;
+            Property_txtKategoriMedia +","+
+            Property_txtExtension;
 }

@@ -129,13 +129,14 @@ public class clsMediaKontakDetailRepo implements crud {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
                                                                    String[] resultColumns) {
                                     clsMediaKontakDetail dt = new clsMediaKontakDetail();
-                                    dt.txtGuiId = resultColumns[4];
+                                    dt.txtGuiId = resultColumns[5];
                                     dt.txtDetailMedia = resultColumns[3];
-                                    dt.txtPrioritasKontak = resultColumns[8];
+                                    dt.txtPrioritasKontak = resultColumns[9];
                                     dt.txtKeterangan = resultColumns[6];
                                     dt.lttxtStatusAktif = resultColumns[1];
                                     dt.txtDeskripsi = resultColumns[2];
                                     dt.lttxtMediaID = resultColumns[0];
+                                    dt.txtExtension = resultColumns[4];
                                     return dt;
                                 }
                             });
@@ -157,13 +158,14 @@ public class clsMediaKontakDetailRepo implements crud {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
                                                                    String[] resultColumns) {
                                     clsMediaKontakDetail dt = new clsMediaKontakDetail();
-                                    dt.txtGuiId = resultColumns[4];
+                                    dt.txtGuiId = resultColumns[5];
                                     dt.txtDetailMedia = resultColumns[3];
-                                    dt.txtPrioritasKontak = resultColumns[8];
+                                    dt.txtPrioritasKontak = resultColumns[9];
                                     dt.txtKeterangan = resultColumns[6];
                                     dt.lttxtStatusAktif = resultColumns[1];
                                     dt.txtDeskripsi = resultColumns[2];
                                     dt.lttxtMediaID = resultColumns[0];
+                                    dt.txtExtension = resultColumns[4];
                                     return dt;
                                 }
                             });

@@ -486,7 +486,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                         // onLoginFailed();
                                         dialog2.dismiss();
                                     }
-                                }, 4000);
+                                }, 3000);
 
 //                        if(!isValidEmail(etEmail.getText().toString())){
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -1408,7 +1408,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Mohon Tunggu...", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -1434,6 +1434,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 String txtKeterangan = jsonobject.getString("TxtKeterangan");
                                 String lttxtStatusAktif = jsonobject.getString("LttxtStatusAktif");
                                 String txtKategoriMedia = jsonobject.getString("TxtKategoriMedia");
+                                String txtExtension = jsonobject.getString("TxtExtension");
                                 txtDeskripsi = txtDeskripsi.trim();
 
                                 clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
@@ -1446,6 +1447,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 dataKontak.setTxtKeterangan(txtKeterangan);
                                 dataKontak.setLttxtStatusAktif(lttxtStatusAktif);
                                 dataKontak.setTxtKategoriMedia(txtKategoriMedia);
+                                dataKontak.setTxtExtension(txtExtension);
 
                                 repoKontakDetail = new clsMediaKontakDetailRepo(context.getApplicationContext());
                                 repoKontakDetail.createOrUpdate(dataKontak);

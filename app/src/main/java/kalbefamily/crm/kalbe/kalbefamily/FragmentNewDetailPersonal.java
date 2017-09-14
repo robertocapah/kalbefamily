@@ -176,16 +176,28 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
-        final EditText etKontak, etKeterangan, etPrioritas;
+        final EditText etKontak, etKeterangan, etPrioritas, etExtension;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
 //        final String selectedItem = spinnerTelp.getSelectedItem().toString();
 
         etKontak = (EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+        etExtension = (EditText) promptView.findViewById(R.id.etExtension);
         deskripsi = dataParent.get(groupPosition).getTxtDeskripsi().toString();
         lttxtMediaID = dataParent.get(groupPosition).getLttxtMediaID().toString();
         if (deskripsi.equals("Telepon") || deskripsi.equals("SMS") || deskripsi.equals("WHATSAPP") || deskripsi.equals("Fax") || deskripsi.equals("MMS")) {
+            if (deskripsi.equals("Telepon")) {
+                etKontak.setHint("No Telepon");
+            } else if (deskripsi.equals("SMS")) {
+                etKontak.setHint("No SMS");
+            } else if (deskripsi.equals("WHATSAPP")) {
+                etKontak.setHint("No WhatsApp");
+            } else if (deskripsi.equals("Fax")) {
+                etKontak.setHint("No Fax");
+            } else if (deskripsi.equals("MMS")) {
+                etKontak.setHint("No MMS");
+            }
             int maxLength = 14;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
@@ -199,6 +211,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             etKontak.setFilters(FilterArray);
 
             etKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+            etKontak.setHint("ID BBM");
         } else if (deskripsi.equals("Email")) {
             int maxLength = 55;
             InputFilter[] FilterArray = new InputFilter[1];
@@ -206,15 +219,26 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             etKontak.setFilters(FilterArray);
 
             etKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            etKontak.setHint("Akun Email");
         } else {
+            if (deskripsi.equals("FACEBOOK")) {
+                etKontak.setHint("Akun Facebook");
+            } else if (deskripsi.equals("INSTAGRAM")) {
+                etKontak.setHint("Akun Instagram");
+            } else if (deskripsi.equals("TWITTER")) {
+                etKontak.setHint("Akun Twitter");
+            } else if (deskripsi.equals("LINE")) {
+                etKontak.setHint("Akun Line");
+            } else if (deskripsi.equals("PATH")) {
+                etKontak.setHint("Akun Path");
+            }
             int maxLength = 35;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
             etKontak.setFilters(FilterArray);
-        }
 
-        etKontak.setHint("* wajib diisi");
-        etPrioritas.setHint("* wajib diisi");
+            etKontak.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
 
         etKontak.setText(kontak);
 
@@ -227,6 +251,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         }
         etKeterangan.setText(ltdt.get(childPosition).getTxtKeterangan().toString());
         etPrioritas.setText(prioritasKontak);
+        etExtension.setText(ltdt.get(childPosition).getTxtExtension().toString());
 
         if (status.equals("Aktif")) {
             checkBoxStatus.setChecked(true);
@@ -301,6 +326,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
                         dt.setTxtDetailMedia(etKontak.getText().toString());
                         dt.setTxtKeterangan(etKeterangan.getText().toString());
+                        dt.setTxtExtension(etExtension.getText().toString());
 
                         if (checkBoxStatus.isChecked()) {
                             dt.setLttxtStatusAktif("Aktif");
@@ -335,6 +361,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
                         dt.setTxtDetailMedia(etKontak.getText().toString());
                         dt.setTxtKeterangan(etKeterangan.getText().toString());
+                        dt.setTxtExtension(etExtension.getText().toString());
 
                         if (checkBoxStatus.isChecked()) {
                             dt.setLttxtStatusAktif("Aktif");
@@ -359,6 +386,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                     dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                     dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                    dataKontak.setTxtExtension(etExtension.getText().toString());
 
                     if (checkBoxStatus.isChecked()) {
                         dataKontak.setLttxtStatusAktif("Aktif");
@@ -381,7 +409,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     private void popupTambah() {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_data_kontak, null);
-        final EditText etKontak, etKeterangan, etPrioritas;
+        final EditText etKontak, etKeterangan, etPrioritas, etExtension;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
         final Spinner spinnerKategori;
 
@@ -389,6 +417,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         spinnerKategori = (Spinner) promptView.findViewById(R.id.spinnerKategori);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
+        etExtension = (EditText) promptView.findViewById(R.id.etExtension);
 
         // Spinner click listener
         spinnerKategori.setOnItemSelectedListener(this);
@@ -423,6 +452,17 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 String kategori = spinnerKategori.getSelectedItem().toString();
 
                 if (kategori.equals("Telepon") || kategori.equals("SMS") || kategori.equals("WHATSAPP") || kategori.equals("Fax") || kategori.equals("MMS")) {
+                    if (kategori.equals("Telepon")) {
+                        etKontak.setHint("No Telepon");
+                    } else if (kategori.equals("SMS")) {
+                        etKontak.setHint("No SMS");
+                    } else if (kategori.equals("WHATSAPP")) {
+                        etKontak.setHint("No WhatsApp");
+                    } else if (kategori.equals("Fax")) {
+                        etKontak.setHint("No Fax");
+                    } else if (kategori.equals("MMS")) {
+                        etKontak.setHint("No MMS");
+                    }
                     int maxLength = 14;
                     InputFilter[] FilterArray = new InputFilter[1];
                     FilterArray[0] = new InputFilter.LengthFilter(maxLength);
@@ -436,6 +476,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     etKontak.setFilters(FilterArray);
 
                     etKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+                    etKontak.setHint("ID BBM");
                 } else if (kategori.equals("Email")) {
                     int maxLength = 55;
                     InputFilter[] FilterArray = new InputFilter[1];
@@ -443,7 +484,19 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     etKontak.setFilters(FilterArray);
 
                     etKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                    etKontak.setHint("Akun Email");
                 } else {
+                    if (kategori.equals("FACEBOOK")) {
+                        etKontak.setHint("Akun Facebook");
+                    } else if (kategori.equals("INSTAGRAM")) {
+                        etKontak.setHint("Akun Instagram");
+                    } else if (kategori.equals("TWITTER")) {
+                        etKontak.setHint("Akun Twitter");
+                    } else if (kategori.equals("LINE")) {
+                        etKontak.setHint("Akun Line");
+                    } else if (kategori.equals("PATH")) {
+                        etKontak.setHint("Akun Path");
+                    }
                     int maxLength = 35;
                     InputFilter[] FilterArray = new InputFilter[1];
                     FilterArray[0] = new InputFilter.LengthFilter(maxLength);
@@ -458,9 +511,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
             }
         });
-
-        etKontak.setHint("* wajib diisi");
-        etPrioritas.setHint("* wajib diisi");
 
         checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -516,39 +566,16 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        if (kategori.equals("Telepon")) {
-                            mediaID = "0001";
-                        } else if (kategori.equals("Email")) {
-                            mediaID = "0002";
-                        } else if (kategori.equals("Fax")) {
-                            mediaID = "0003";
-                        } else if (kategori.equals("SMS")) {
-                            mediaID = "0004";
-                        } else if (kategori.equals("MMS")) {
-                            mediaID = "0006";
-                        } else if (kategori.equals("BLACKBERRY")) {
-                            mediaID = "0497";
-                        } else if (kategori.equals("TWITTER")) {
-                            mediaID = "0837";
-                        } else if (kategori.equals("FACEBOOK")) {
-                            mediaID = "0838";
-                        } else if (kategori.equals("LINE")) {
-                            mediaID = "1205";
-                        } else if (kategori.equals("PATH")) {
-                            mediaID = "1206";
-                        } else if (kategori.equals("INSTAGRAM")) {
-                            mediaID = "1207";
-                        } else if (kategori.equals("WHATSAPP")) {
-                            mediaID = "1208";
-                        }
+                        mediaID = "0001";
                         clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
                         dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
                         dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
                         dataKontak.setLttxtMediaID(mediaID);
-                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dataKontak.setTxtDeskripsi(kategori);
                         dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                         dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                         dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                        dataKontak.setTxtExtension(etExtension.getText().toString());
 
                         if (checkBoxStatus.isChecked()) {
                             dataKontak.setLttxtStatusAktif("Aktif");
@@ -569,39 +596,16 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        if (kategori.equals("Telepon")) {
-                            mediaID = "0001";
-                        } else if (kategori.equals("Email")) {
-                            mediaID = "0002";
-                        } else if (kategori.equals("Fax")) {
-                            mediaID = "0003";
-                        } else if (kategori.equals("SMS")) {
-                            mediaID = "0004";
-                        } else if (kategori.equals("MMS")) {
-                            mediaID = "0006";
-                        } else if (kategori.equals("BLACKBERRY")) {
-                            mediaID = "0497";
-                        } else if (kategori.equals("TWITTER")) {
-                            mediaID = "0837";
-                        } else if (kategori.equals("FACEBOOK")) {
-                            mediaID = "0838";
-                        } else if (kategori.equals("LINE")) {
-                            mediaID = "1205";
-                        } else if (kategori.equals("PATH")) {
-                            mediaID = "1206";
-                        } else if (kategori.equals("INSTAGRAM")) {
-                            mediaID = "1207";
-                        } else if (kategori.equals("WHATSAPP")) {
-                            mediaID = "1208";
-                        }
+                        mediaID = "0002";
                         clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
                         dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
                         dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
                         dataKontak.setLttxtMediaID(mediaID);
-                        dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                        dataKontak.setTxtDeskripsi(kategori);
                         dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                         dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                         dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                        dataKontak.setTxtExtension(etExtension.getText().toString());
 
                         if (checkBoxStatus.isChecked()) {
                             dataKontak.setLttxtStatusAktif("Aktif");
@@ -618,11 +622,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 } else if (etPrioritas.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                 } else {
-                    if (kategori.equals("Telepon")) {
-                        mediaID = "0001";
-                    } else if (kategori.equals("Email")) {
-                        mediaID = "0002";
-                    } else if (kategori.equals("Fax")) {
+                    if (kategori.equals("Fax")) {
                         mediaID = "0003";
                     } else if (kategori.equals("SMS")) {
                         mediaID = "0004";
@@ -651,6 +651,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                     dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                     dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                    dataKontak.setTxtExtension(etExtension.getText().toString());
 
                     if (checkBoxStatus.isChecked()) {
                         dataKontak.setLttxtStatusAktif("Aktif");

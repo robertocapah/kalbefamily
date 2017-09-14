@@ -147,6 +147,42 @@
             android:layout_height="1dp"
             android:background="#bfbfbf" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extension : "
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="#000"/>
+
+            <EditText
+                android:id="@+id/etExtension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:maxLength="4"
+                android:hint="0001"
+                android:inputType="number"/>
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_marginTop="15dp"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#bfbfbf" />
+
     </LinearLayout>
 
 </ScrollView>
