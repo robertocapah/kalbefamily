@@ -22,6 +22,7 @@ public class clsHardCode {
     public String linkCheckVersion = new mConfigRepo(context).API + "CheckVersionApp";
     //    public String linkPushData = "http://10.171.11.87/APIEF2/api/PushData/pushData2";
     public String linkSendData = new mConfigRepo(context).API + "UpdateDataKontak";
+    public String linkSendDataMediaKontak = new mConfigRepo(context).API + "UpdateDataMediaKontak";
     public String linkGetDetailCustomer = new mConfigRepo(context).API + "GetDetailKontakCustomer";
     public String linkScanQRCode = new mConfigRepo(context).API + "ScanQRCode";
     public String linkGetDatadMembership = new mConfigRepo(context).API + "GetDatadMembership";

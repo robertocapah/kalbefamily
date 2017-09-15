@@ -112,10 +112,10 @@ public class clsMediaKontakDetail implements Serializable {
     public String txtExtension;
 
     public String Property_txtGuiId = "txtGuiId";
-    public String Property_txtKontakId = "txtKontakId";
+    public String Property_txtKontakId = "txtKontakID";
     public String Property_lttxtMediaID = "lttxtMediaID";
     public String Property_txtDeskripsi = "txtDeskripsi";
-    public String Property_txtPrioritasKontak = "txtPrioritasKontak";
+    public String Property_txtPrioritasKontak = "intPrioritasKontak";
     public String Property_txtDetailMedia = "txtDetailMedia";
     public String Property_txtKeterangan = "txtKeterangan";
     public String Property_lttxtStatusAktif = "lttxtStatusAktif";

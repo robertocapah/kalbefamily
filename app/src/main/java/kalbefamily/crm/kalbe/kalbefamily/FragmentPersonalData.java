@@ -571,7 +571,7 @@ public class FragmentPersonalData extends Fragment {
                 String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;

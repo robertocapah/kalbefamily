@@ -16,6 +16,8 @@ public class dataJson {
     public List<clsUserMemberImage> ListDataUserMemberImage;
     public List<clsQRCodeData> LisClsQRCodeData;
 
+    public List<clsMediaKontakDetail> ListMediaKontakDetail;
+
     public synchronized List<clsUserMember> getListDataUserMember() {
         return ListDataUserMember;
     }
@@ -38,6 +40,14 @@ public class dataJson {
 
     public synchronized void setLisClsQRCodeData(List<clsQRCodeData> lisClsQRCodeData) {
         LisClsQRCodeData = lisClsQRCodeData;
+    }
+
+    public synchronized List<clsMediaKontakDetail> getListMediaKontakDetail() {
+        return ListMediaKontakDetail;
+    }
+
+    public synchronized void setListMediaKontakDetail(List<clsMediaKontakDetail> listMediaKontakDetail) {
+        ListMediaKontakDetail = listMediaKontakDetail;
     }
 
     public JSONObject txtJSON() throws JSONException {
@@ -72,6 +82,29 @@ public class dataJson {
                 itemsListJquey.add(resJson);
             }
 //            resJson.put(dtUserMemberImage.Property_ListOfMemberImage, new JSONArray(itemsListJquey));
+        }
+
+        return resJson;
+    }
+
+    public JSONObject txtJSONmediaKontak() throws JSONException {
+        JSONObject resJson = new JSONObject();
+        Collection<JSONObject> itemsListJquey = new ArrayList<JSONObject>();
+        if (this.getListMediaKontakDetail() != null) {
+            clsMediaKontakDetail dtMediaKontakDetail = new clsMediaKontakDetail();
+            itemsListJquey = new ArrayList<JSONObject>();
+            for (clsMediaKontakDetail data : this.getListMediaKontakDetail()) {
+                resJson.put(dtMediaKontakDetail.Property_txtKontakId, String.valueOf(data.getTxtKontakId()));
+                resJson.put(dtMediaKontakDetail.Property_lttxtMediaID, String.valueOf(data.getLttxtMediaID()));
+                resJson.put(dtMediaKontakDetail.Property_txtPrioritasKontak, String.valueOf(data.getTxtPrioritasKontak()));
+                resJson.put(dtMediaKontakDetail.Property_txtDetailMedia, String.valueOf(data.getTxtDetailMedia()));
+                resJson.put(dtMediaKontakDetail.Property_txtKeterangan, String.valueOf(data.getTxtKeterangan()));
+                resJson.put(dtMediaKontakDetail.Property_lttxtStatusAktif, String.valueOf(data.getLttxtStatusAktif()));
+                resJson.put(dtMediaKontakDetail.Property_txtPrioritasKontak, String.valueOf(data.getTxtPrioritasKontak()));
+                resJson.put(dtMediaKontakDetail.Property_txtKategoriMedia, String.valueOf(data.getTxtKategoriMedia()));
+                resJson.put(dtMediaKontakDetail.Property_txtExtension, String.valueOf(data.getTxtExtension()));
+                itemsListJquey.add(resJson);
+            }
         }
 
         return resJson;

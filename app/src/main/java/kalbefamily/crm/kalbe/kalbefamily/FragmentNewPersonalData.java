@@ -473,20 +473,22 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         savePicture2();
                         savePictureProfile();
 
-                        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
-                        dialog2.setIndeterminate(true);
-                        dialog2.setMessage("Mohon Tunggu...");
-                        dialog2.show();
+                        sendData();
 
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        // On complete call either onLoginSuccess or onLoginFailed
-                                        sendData();
-                                        // onLoginFailed();
-                                        dialog2.dismiss();
-                                    }
-                                }, 3000);
+//                        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+//                        dialog2.setIndeterminate(true);
+//                        dialog2.setMessage("Mohon Tunggu...");
+//                        dialog2.show();
+//
+//                        new android.os.Handler().postDelayed(
+//                                new Runnable() {
+//                                    public void run() {
+//                                        // On complete call either onLoginSuccess or onLoginFailed
+//
+//                                        // onLoginFailed();
+//                                        dialog2.dismiss();
+//                                    }
+//                                }, 3000);
 
 //                        if(!isValidEmail(etEmail.getText().toString())){
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
@@ -555,6 +557,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    new clsHelper().copydb(context);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 kontakDetail();
             }
         });
@@ -1025,7 +1032,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendData(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;

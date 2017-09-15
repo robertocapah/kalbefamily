@@ -105,7 +105,16 @@ public class VolleyUtils {
         RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
         queue.add(req);
     }
-    public void makeJsonObjectRequestSendData(final Context ctx, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+    public void makeJsonObjectRequestSendData(final Activity activity, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+        ProgressDialog Dialog = new ProgressDialog(activity);
+//        Dialog.setCancelable(false);
+//        Dialog.show();
+
+        Dialog = ProgressDialog.show(activity, "",
+                "Mohon Tunggu...", true);
+//        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
             @Override
@@ -113,11 +122,13 @@ public class VolleyUtils {
                 Boolean status = false;
                 String errorMessage = null;
                 listener.onResponse(response.toString(), status, errorMessage);
+                finalDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                finalDialog1.dismiss();
             }
         }) {
             @Override
@@ -147,6 +158,44 @@ public class VolleyUtils {
 
                 return params;
             }
+        };
+        multipartRequest.setRetryPolicy(new
+                DefaultRetryPolicy(500000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
+        queue.add(multipartRequest);
+    }
+
+    public void makeJsonObjectRequestSendDataMediaKontak(final Context ctx, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response.toString(), status, errorMessage);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    final String mRequestBody2 = "[" +  mRequestBody.getDtdataJson().txtJSONmediaKontak().toString() + "]";
+                    params.put("txtParam", mRequestBody2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+
         };
         multipartRequest.setRetryPolicy(new
                 DefaultRetryPolicy(500000,

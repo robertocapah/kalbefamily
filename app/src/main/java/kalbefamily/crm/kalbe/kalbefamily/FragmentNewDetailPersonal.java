@@ -1,7 +1,9 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -22,21 +24,29 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
+import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by Rian Andrivani on 9/7/2017.
@@ -79,7 +89,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-
+                        sendData();
                     }
                 });
                 alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
@@ -178,12 +188,50 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
         final EditText etKontak, etKeterangan, etPrioritas, etExtension;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
+        final Spinner spinnerKategoriMedia;
 //        final String selectedItem = spinnerTelp.getSelectedItem().toString();
 
         etKontak = (EditText) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
         etExtension = (EditText) promptView.findViewById(R.id.etExtension);
+        spinnerKategoriMedia = (Spinner) promptView.findViewById(R.id.spinnerKategoriMedia);
+
+        // spinner listener
+        spinnerKategoriMedia.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> kategoriMedia = new ArrayList<String>();
+        kategoriMedia.add("");
+        kategoriMedia.add("Home");
+        kategoriMedia.add("Office");
+        kategoriMedia.add("NOMOR BAPAK");
+        kategoriMedia.add("NOMOR IBU");
+        kategoriMedia.add("NOMOR ORANG TUA");
+        kategoriMedia.add("NOMOR KELUARGA");
+        kategoriMedia.add("EMAIL PIC");
+        kategoriMedia.add("NOMOR PIC");
+        kategoriMedia.add("NOMOR TOKO");
+        kategoriMedia.add("EMAIL VERIFICATION");
+        kategoriMedia.add("PATH");
+        kategoriMedia.add("fACEBOOK");
+        kategoriMedia.add("TWITTER");
+        kategoriMedia.add("EMAIL PELANGGAN");
+        kategoriMedia.add("ID LINE");
+        kategoriMedia.add("BLACKBERRY");
+        kategoriMedia.add("BLOG");
+        kategoriMedia.add("INSTAGRAM");
+        kategoriMedia.add("WHATS APP");
+
+        // Creating adapter for spinnerTelp
+        ArrayAdapter<String> dataAdapterKategoriMedia = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, kategoriMedia);
+
+        // Drop down layout style - list view with radio button
+        dataAdapterKategoriMedia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinnerKategoriMedia.setAdapter(dataAdapterKategoriMedia);
+
         deskripsi = dataParent.get(groupPosition).getTxtDeskripsi().toString();
         lttxtMediaID = dataParent.get(groupPosition).getLttxtMediaID().toString();
         if (deskripsi.equals("Telepon") || deskripsi.equals("SMS") || deskripsi.equals("WHATSAPP") || deskripsi.equals("Fax") || deskripsi.equals("MMS")) {
@@ -271,6 +319,15 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             }
         });
 
+        int index = 0;
+        String item = ltdt.get(childPosition).getTxtKategoriMedia().toString();
+        for (int i = 0; i < spinnerKategoriMedia.getAdapter().getCount() - 1; i++) {
+            if (spinnerKategoriMedia.getItemAtPosition(i).equals(item)) {
+                index = i;
+            }
+        }
+        spinnerKategoriMedia.setSelection(index);
+
         try {
             repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
@@ -302,6 +359,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             @Override
             public void onClick(View view) {
                 String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
+                String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
                 txtDeskripsi.setText(deskripsi);
                 if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
@@ -327,6 +385,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dt.setTxtDetailMedia(etKontak.getText().toString());
                         dt.setTxtKeterangan(etKeterangan.getText().toString());
                         dt.setTxtExtension(etExtension.getText().toString());
+                        dt.setTxtKategoriMedia(kategoriMediaKontak);
 
                         if (checkBoxStatus.isChecked()) {
                             dt.setLttxtStatusAktif("Aktif");
@@ -362,6 +421,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dt.setTxtDetailMedia(etKontak.getText().toString());
                         dt.setTxtKeterangan(etKeterangan.getText().toString());
                         dt.setTxtExtension(etExtension.getText().toString());
+                        dt.setTxtKategoriMedia(kategoriMediaKontak);
 
                         if (checkBoxStatus.isChecked()) {
                             dt.setLttxtStatusAktif("Aktif");
@@ -387,6 +447,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                     dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                     dataKontak.setTxtExtension(etExtension.getText().toString());
+                    dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
 
                     if (checkBoxStatus.isChecked()) {
                         dataKontak.setLttxtStatusAktif("Aktif");
@@ -411,16 +472,18 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         final View promptView = layoutInflater.inflate(R.layout.popup_add_data_kontak, null);
         final EditText etKontak, etKeterangan, etPrioritas, etExtension;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
-        final Spinner spinnerKategori;
+        final Spinner spinnerKategori, spinnerKategoriMedia;
 
         etKontak = (EditText) promptView.findViewById(R.id.etKontak);
         spinnerKategori = (Spinner) promptView.findViewById(R.id.spinnerKategori);
+        spinnerKategoriMedia = (Spinner) promptView.findViewById(R.id.spinnerKategoriMedia);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
         etExtension = (EditText) promptView.findViewById(R.id.etExtension);
 
         // Spinner click listener
         spinnerKategori.setOnItemSelectedListener(this);
+        spinnerKategoriMedia.setOnItemSelectedListener(this);
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
@@ -437,14 +500,39 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         categories.add("TWITTER");
         categories.add("WHATSAPP");
 
+        List<String> kategoriMedia = new ArrayList<String>();
+        kategoriMedia.add("");
+        kategoriMedia.add("Home");
+        kategoriMedia.add("Office");
+        kategoriMedia.add("NOMOR BAPAK");
+        kategoriMedia.add("NOMOR IBU");
+        kategoriMedia.add("NOMOR ORANG TUA");
+        kategoriMedia.add("NOMOR KELUARGA");
+        kategoriMedia.add("EMAIL PIC");
+        kategoriMedia.add("NOMOR PIC");
+        kategoriMedia.add("NOMOR TOKO");
+        kategoriMedia.add("EMAIL VERIFICATION");
+        kategoriMedia.add("PATH");
+        kategoriMedia.add("fACEBOOK");
+        kategoriMedia.add("TWITTER");
+        kategoriMedia.add("EMAIL PELANGGAN");
+        kategoriMedia.add("ID LINE");
+        kategoriMedia.add("BLACKBERRY");
+        kategoriMedia.add("BLOG");
+        kategoriMedia.add("INSTAGRAM");
+        kategoriMedia.add("WHATS APP");
+
         // Creating adapter for spinnerTelp
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapterKategoriMedia = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, kategoriMedia);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapterKategoriMedia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // attaching data adapter to spinnerTelp
+        // attaching data adapter to spinner
         spinnerKategori.setAdapter(dataAdapter);
+        spinnerKategoriMedia.setAdapter(dataAdapterKategoriMedia);
 
         spinnerKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -555,6 +643,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             @Override
             public void onClick(View view) {
                 String kategori = spinnerKategori.getSelectedItem().toString();
+                String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
                 String mediaID = null;
 
                 if (etKontak.getText().toString().equals("")) {
@@ -576,6 +665,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                         dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                         dataKontak.setTxtExtension(etExtension.getText().toString());
+                        dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
 
                         if (checkBoxStatus.isChecked()) {
                             dataKontak.setLttxtStatusAktif("Aktif");
@@ -606,6 +696,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                         dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                         dataKontak.setTxtExtension(etExtension.getText().toString());
+                        dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
 
                         if (checkBoxStatus.isChecked()) {
                             dataKontak.setLttxtStatusAktif("Aktif");
@@ -652,6 +743,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                     dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                     dataKontak.setTxtExtension(etExtension.getText().toString());
+                    dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
 
                     if (checkBoxStatus.isChecked()) {
                         dataKontak.setLttxtStatusAktif("Aktif");
@@ -669,6 +761,106 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 dataUpdate();
             }
         });
+    }
+
+    private void sendData() {
+        String versionName = "";
+        clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
+        if (dtJson != null) {
+            try {
+                String strLinkAPI = new clsHardCode().linkSendData;
+                final String mRequestBody = "[" + dtJson.toString() + "]";
+
+                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        String error;
+                    }
+
+                    @Override
+                    public void onResponse(String response, Boolean status, String strErrorMsg) {
+                        String warn = null;
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response);
+                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                            warn = jsn.getString("TxtMessage");
+                            String result = jsn.getString("IntResult");
+                            String res = response;
+
+                            if (result.equals("1")) {
+                                sendDataMediaKontakDetail();
+                            } else {
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                                popup();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i(TAG, "Ski data from server - " + warn);
+                        clsUserMember userMemberData = new clsUserMember();
+                    }
+                });
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendDataMediaKontakDetail() {
+        String versionName = "";
+        clsSendData dtJson = new clsHelper().sendDataMediaKontak(versionName, context.getApplicationContext());
+        if (dtJson != null) {
+            try {
+                String strLinkAPI = new clsHardCode().linkSendDataMediaKontak;
+                final String mRequestBody = "[" + dtJson.toString() + "]";
+
+                new VolleyUtils().makeJsonObjectRequestSendDataMediaKontak(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        String error;
+                    }
+
+                    @Override
+                    public void onResponse(String response, Boolean status, String strErrorMsg) {
+                        String warn = null;
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response);
+                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                            warn = jsn.getString("TxtMessage");
+                            String result = jsn.getString("IntResult");
+                            String res = response;
+
+                            if (result.equals("1")) {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+                                getActivity().finish();
+                                startActivity(intent);
+                            } else {
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                                popup();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i(TAG, "Ski data from server - " + warn);
+                        clsUserMember userMemberData = new clsUserMember();
+                    }
+                });
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void popup() {
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Oops...")
+                .setContentText("Data Gagal disimpan, silahkan coba lagi...")
+                .show();
     }
 
     @Override

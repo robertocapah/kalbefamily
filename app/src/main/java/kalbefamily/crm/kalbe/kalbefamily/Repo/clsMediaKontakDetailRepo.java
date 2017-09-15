@@ -5,8 +5,10 @@ import android.content.Context;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.dao.RawRowMapper;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
@@ -132,11 +134,12 @@ public class clsMediaKontakDetailRepo implements crud {
                                     dt.txtGuiId = resultColumns[5];
                                     dt.txtDetailMedia = resultColumns[3];
                                     dt.txtPrioritasKontak = resultColumns[9];
-                                    dt.txtKeterangan = resultColumns[6];
+                                    dt.txtKeterangan = resultColumns[7];
                                     dt.lttxtStatusAktif = resultColumns[1];
                                     dt.txtDeskripsi = resultColumns[2];
                                     dt.lttxtMediaID = resultColumns[0];
                                     dt.txtExtension = resultColumns[4];
+                                    dt.txtKategoriMedia = resultColumns[6];
                                     return dt;
                                 }
                             });
@@ -161,11 +164,12 @@ public class clsMediaKontakDetailRepo implements crud {
                                     dt.txtGuiId = resultColumns[5];
                                     dt.txtDetailMedia = resultColumns[3];
                                     dt.txtPrioritasKontak = resultColumns[9];
-                                    dt.txtKeterangan = resultColumns[6];
+                                    dt.txtKeterangan = resultColumns[7];
                                     dt.lttxtStatusAktif = resultColumns[1];
                                     dt.txtDeskripsi = resultColumns[2];
                                     dt.lttxtMediaID = resultColumns[0];
                                     dt.txtExtension = resultColumns[4];
+                                    dt.txtKategoriMedia = resultColumns[6];
                                     return dt;
                                 }
                             });
@@ -175,6 +179,28 @@ public class clsMediaKontakDetailRepo implements crud {
             e.printStackTrace();
         }
         return items;
+    }
+
+    public List<clsMediaKontakDetail> getAllDataToSendData(Context context){
+        QueryBuilder<clsMediaKontakDetail, Integer> queryBuilder = null;
+        List<clsMediaKontakDetail> data = null;
+        try {
+            data = (List<clsMediaKontakDetail>) helper.getUserMediaKontakDetailDao().queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        clsMediaKontakDetail dt = new clsMediaKontakDetail();
+        List<clsMediaKontakDetail> listData = new ArrayList<>();
+
+        if (data.size() > 0) {
+            try {
+                queryBuilder = helper.getUserMediaKontakDetailDao().queryBuilder();
+                listData = queryBuilder.query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listData;
     }
 
     public List<?> findbyTelpon() throws SQLException {
