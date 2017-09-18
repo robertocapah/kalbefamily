@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -25,6 +27,10 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +45,8 @@ import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
@@ -56,7 +64,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     View v;
     Context context;
     TextView txtDeskripsi;
-    Button btnSimpan, btnTambah;
+    Button btnTambah;
     List<clsUserMember> dataMember = null;
     List<clsMediaKontakDetail> dataParent, dataNoTelp, dataChild;
     clsMediaKontakDetailRepo repoKontak;
@@ -65,12 +73,13 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
     String child, deskripsi, lttxtMediaID;
     boolean validate = true;
+    private String txtKontakID;
+    DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_new_detail_personal, container, false);
         context = getActivity().getApplicationContext();
         txtDeskripsi = (TextView) v.findViewById(R.id.txtDeskripsi);
-        btnSimpan = (Button) v.findViewById(R.id.btnSimpan);
         btnTambah = (Button) v.findViewById(R.id.btnTambah);
 
         btnTambah.setOnClickListener(new View.OnClickListener() {
@@ -80,27 +89,27 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             }
         });
 
-        btnSimpan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle("Konfirmasi");
-                alertDialog.setMessage("Apakah Anda yakin?");
-                alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        sendData();
-                    }
-                });
-                alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alertDialog.show();
-            }
-        });
+//        btnSimpan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+//                alertDialog.setTitle("Konfirmasi");
+//                alertDialog.setMessage("Apakah Anda yakin?");
+//                alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int i) {
+//                        sendData();
+//                    }
+//                });
+//                alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                alertDialog.show();
+//            }
+//        });
 
         return v;
     }
@@ -186,12 +195,14 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         final View promptView = layoutInflater.inflate(R.layout.popup_add_edit_data, null);
-        final EditText etKontak, etKeterangan, etPrioritas, etExtension;
+        final TextView tvKontak, tvKategori;
+        final EditText etKeterangan, etPrioritas, etExtension;
         final CheckBox checkBoxStatus = (CheckBox) promptView.findViewById(R.id.checkboxStatus);
         final Spinner spinnerKategoriMedia;
 //        final String selectedItem = spinnerTelp.getSelectedItem().toString();
 
-        etKontak = (EditText) promptView.findViewById(R.id.etKontak);
+        tvKategori = (TextView) promptView.findViewById(R.id.tvKategori);
+        tvKontak = (TextView) promptView.findViewById(R.id.etKontak);
         etKeterangan = (EditText) promptView.findViewById(R.id.etKeterangan);
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
         etExtension = (EditText) promptView.findViewById(R.id.etExtension);
@@ -219,7 +230,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         kategoriMedia.add("EMAIL PELANGGAN");
         kategoriMedia.add("ID LINE");
         kategoriMedia.add("BLACKBERRY");
-        kategoriMedia.add("BLOG");
         kategoriMedia.add("INSTAGRAM");
         kategoriMedia.add("WHATS APP");
 
@@ -236,59 +246,60 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         lttxtMediaID = dataParent.get(groupPosition).getLttxtMediaID().toString();
         if (deskripsi.equals("Telepon") || deskripsi.equals("SMS") || deskripsi.equals("WHATSAPP") || deskripsi.equals("Fax") || deskripsi.equals("MMS")) {
             if (deskripsi.equals("Telepon")) {
-                etKontak.setHint("No Telepon");
+                tvKontak.setHint("No Telepon");
             } else if (deskripsi.equals("SMS")) {
-                etKontak.setHint("No SMS");
+                tvKontak.setHint("No SMS");
             } else if (deskripsi.equals("WHATSAPP")) {
-                etKontak.setHint("No WhatsApp");
+                tvKontak.setHint("No WhatsApp");
             } else if (deskripsi.equals("Fax")) {
-                etKontak.setHint("No Fax");
+                tvKontak.setHint("No Fax");
             } else if (deskripsi.equals("MMS")) {
-                etKontak.setHint("No MMS");
+                tvKontak.setHint("No MMS");
             }
             int maxLength = 14;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            etKontak.setFilters(FilterArray);
+            tvKontak.setFilters(FilterArray);
 
-            etKontak.setInputType(InputType.TYPE_CLASS_PHONE);
+            tvKontak.setInputType(InputType.TYPE_CLASS_PHONE);
         } else if (deskripsi.equals("BLACKBERRY")) {
             int maxLength = 8;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            etKontak.setFilters(FilterArray);
+            tvKontak.setFilters(FilterArray);
 
-            etKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-            etKontak.setHint("ID BBM");
+            tvKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+            tvKontak.setHint("ID BBM");
         } else if (deskripsi.equals("Email")) {
             int maxLength = 55;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            etKontak.setFilters(FilterArray);
+            tvKontak.setFilters(FilterArray);
 
-            etKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            etKontak.setHint("Akun Email");
+            tvKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            tvKontak.setHint("Akun Email");
         } else {
             if (deskripsi.equals("FACEBOOK")) {
-                etKontak.setHint("Akun Facebook");
+                tvKontak.setHint("Akun Facebook");
             } else if (deskripsi.equals("INSTAGRAM")) {
-                etKontak.setHint("Akun Instagram");
+                tvKontak.setHint("Akun Instagram");
             } else if (deskripsi.equals("TWITTER")) {
-                etKontak.setHint("Akun Twitter");
+                tvKontak.setHint("Akun Twitter");
             } else if (deskripsi.equals("LINE")) {
-                etKontak.setHint("Akun Line");
+                tvKontak.setHint("Akun Line");
             } else if (deskripsi.equals("PATH")) {
-                etKontak.setHint("Akun Path");
+                tvKontak.setHint("Akun Path");
             }
             int maxLength = 35;
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            etKontak.setFilters(FilterArray);
+            tvKontak.setFilters(FilterArray);
 
-            etKontak.setInputType(InputType.TYPE_CLASS_TEXT);
+            tvKontak.setInputType(InputType.TYPE_CLASS_TEXT);
         }
 
-        etKontak.setText(kontak);
+        tvKategori.setText(deskripsi);
+        tvKontak.setText(kontak);
 
         List<clsMediaKontakDetail> ltdt = null;
 
@@ -321,8 +332,50 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         int index = 0;
         String item = ltdt.get(childPosition).getTxtKategoriMedia().toString();
+
+        String kategoriMediaSpinner = null;
+        if (item.equals("")) {
+            kategoriMediaSpinner = "";
+        } else if (item.equals("0001")) {
+            kategoriMediaSpinner = "Home";
+        } else if (item.equals("0002")) {
+            kategoriMediaSpinner = "Office";
+        } else if (item.equals("0984")) {
+            kategoriMediaSpinner = "NOMOR BAPAK";
+        } else if (item.equals("0985")) {
+            kategoriMediaSpinner = "NOMOR IBU";
+        } else if (item.equals("0986")) {
+            kategoriMediaSpinner = "NOMOR ORANG TUA";
+        } else if (item.equals("0987")) {
+            kategoriMediaSpinner = "NOMOR KELUARGA";
+        } else if (item.equals("1019")) {
+            kategoriMediaSpinner = "EMAIL PIC";
+        } else if (item.equals("1020")) {
+            kategoriMediaSpinner = "NOMOR PIC";
+        } else if (item.equals("1118")) {
+            kategoriMediaSpinner = "NOMOR TOKO";
+        } else if (item.equals("1156")) {
+            kategoriMediaSpinner = "EMAIL VERIFICATION";
+        } else if (item.equals("1214")) {
+            kategoriMediaSpinner = "PATH";
+        } else if (item.equals("1215")) {
+            kategoriMediaSpinner = "FACEBOOK";
+        } else if (item.equals("1216")) {
+            kategoriMediaSpinner = "TWITTER";
+        } else if (item.equals("1217")) {
+            kategoriMediaSpinner = "EMAIL PELANGGAN";
+        } else if (item.equals("1218")) {
+            kategoriMediaSpinner = "ID LINE";
+        } else if (item.equals("1219")) {
+            kategoriMediaSpinner = "BLACKBERRY";
+        } else if (item.equals("1221")) {
+            kategoriMediaSpinner = "INSTAGRAM";
+        } else if (item.equals("1222")) {
+            kategoriMediaSpinner = "WHATS APP";
+        }
+
         for (int i = 0; i < spinnerKategoriMedia.getAdapter().getCount() - 1; i++) {
-            if (spinnerKategoriMedia.getItemAtPosition(i).equals(item)) {
+            if (spinnerKategoriMedia.getItemAtPosition(i).equals(kategoriMediaSpinner)) {
                 index = i;
             }
         }
@@ -358,108 +411,215 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         alertD.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
-                String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
+                final String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
+                final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
+                String txtMasterID = null;
+                if (kategoriMediaKontak.equals("")) {
+                    txtMasterID = "";
+                } else if (kategoriMediaKontak.equals("Home")) {
+                    txtMasterID = "0001";
+                } else if (kategoriMediaKontak.equals("Office")) {
+                    txtMasterID = "0002";
+                } else if (kategoriMediaKontak.equals("NOMOR BAPAK")) {
+                    txtMasterID = "0984";
+                } else if (kategoriMediaKontak.equals("NOMOR IBU")) {
+                    txtMasterID = "0985";
+                } else if (kategoriMediaKontak.equals("NOMOR ORANG TUA")) {
+                    txtMasterID = "0986";
+                } else if (kategoriMediaKontak.equals("NOMOR KELUARGA")) {
+                    txtMasterID = "0987";
+                } else if (kategoriMediaKontak.equals("EMAIL PIC")) {
+                    txtMasterID = "1019";
+                } else if (kategoriMediaKontak.equals("NOMOR PIC")) {
+                    txtMasterID = "1020";
+                } else if (kategoriMediaKontak.equals("NOMOR TOKO")) {
+                    txtMasterID = "1118";
+                } else if (kategoriMediaKontak.equals("EMAIL VERIFICATION")) {
+                    txtMasterID = "1156";
+                } else if (kategoriMediaKontak.equals("PATH")) {
+                    txtMasterID = "1214";
+                } else if (kategoriMediaKontak.equals("FACEBOOK")) {
+                    txtMasterID = "1215";
+                } else if (kategoriMediaKontak.equals("TWITTER")) {
+                    txtMasterID = "1216";
+                } else if (kategoriMediaKontak.equals("EMAIL PELANGGAN")) {
+                    txtMasterID = "1217";
+                } else if (kategoriMediaKontak.equals("ID LINE")) {
+                    txtMasterID = "1218";
+                } else if (kategoriMediaKontak.equals("BLACKBERRY")) {
+                    txtMasterID = "1219";
+                } else if (kategoriMediaKontak.equals("INSTAGRAM")) {
+                    txtMasterID = "1221";
+                } else if (kategoriMediaKontak.equals("WHATS APP")) {
+                    txtMasterID = "1222";
+                }
+
                 txtDeskripsi.setText(deskripsi);
-                if (etKontak.getText().toString().equals("")) {
+                if (tvKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
                 } else if (deskripsi.equals("Telepon")) {
-                    if (!isValidMobile(etKontak.getText().toString())) {
+                    if (!isValidMobile(tvKontak.getText().toString())) {
                         new clsActivity().showToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
                         validate = false;
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        List<clsMediaKontakDetail> dataKontak = null;
-                        try {
-                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        clsMediaKontakDetail dt = dataKontak.get(0);
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                        alertDialog.setTitle("Konfirmasi");
+                        alertDialog.setMessage("Apakah Anda yakin?");
+                        final String finalTxtMasterID = txtMasterID;
+                        alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                List<clsMediaKontakDetail> dataKontak = null;
+                                try {
+                                    dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                                clsMediaKontakDetail dt = dataKontak.get(0);
 
-                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
-                        dt.setLttxtMediaID(lttxtMediaID);
-                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                        dt.setTxtDetailMedia(etKontak.getText().toString());
-                        dt.setTxtKeterangan(etKeterangan.getText().toString());
-                        dt.setTxtExtension(etExtension.getText().toString());
-                        dt.setTxtKategoriMedia(kategoriMediaKontak);
+                                dt.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dt.setLttxtMediaID(lttxtMediaID);
+                                dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                dt.setTxtDetailMedia(tvKontak.getText().toString());
+                                dt.setTxtKeterangan(etKeterangan.getText().toString());
+                                dt.setTxtExtension(etExtension.getText().toString());
+                                dt.setTxtKategoriMedia(finalTxtMasterID);
 
-                        if (checkBoxStatus.isChecked()) {
-                            dt.setLttxtStatusAktif("Aktif");
-                        } else {
-                            dt.setLttxtStatusAktif("Tidak Aktif");
-                        }
-                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                        repoKontak.createOrUpdate(dt);
+                                if (checkBoxStatus.isChecked()) {
+                                    dt.setLttxtStatusAktif("Aktif");
+                                } else {
+                                    dt.setLttxtStatusAktif("Tidak Aktif");
+                                }
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                helper.refreshData2();
+                                repoKontak.createOrUpdate(dt);
 
-                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                        Log.d("Data info", "Kontak berhasil di perbarui");
-                        alertD.dismiss();
+                                alertD.dismiss();
+
+                                sendDataMediaKontakDetail();
+                                kontakDetail();
+                                dataUpdate();
+
+                                new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
+                                Log.d("Data info", "Kontak berhasil di perbarui");
+                            }
+                        });
+                        alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
                     }
                 } else if (deskripsi.equals("Email")) {
-                    if (!isValidEmail(etKontak.getText().toString())) {
+                    if (!isValidEmail(tvKontak.getText().toString())) {
                         new clsActivity().showToast(context.getApplicationContext(), "Email tidak valid", false);
                         validate = false;
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        List<clsMediaKontakDetail> dataKontak = null;
-                        try {
-                            dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        clsMediaKontakDetail dt = dataKontak.get(0);
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                        alertDialog.setTitle("Konfirmasi");
+                        alertDialog.setMessage("Apakah Anda yakin?");
+                        final String finalTxtMasterID1 = txtMasterID;
+                        alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                List<clsMediaKontakDetail> dataKontak = null;
+                                try {
+                                    dataKontak = new clsMediaKontakDetailRepo(getContext()).findByIdString(guiID);
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                                clsMediaKontakDetail dt = dataKontak.get(0);
 
-                        dt.setTxtKontakId(dataMember.get(0).txtKontakId);
-                        dt.setLttxtMediaID(lttxtMediaID);
-                        dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                        dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                        dt.setTxtDetailMedia(etKontak.getText().toString());
-                        dt.setTxtKeterangan(etKeterangan.getText().toString());
-                        dt.setTxtExtension(etExtension.getText().toString());
-                        dt.setTxtKategoriMedia(kategoriMediaKontak);
+                                dt.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dt.setLttxtMediaID(lttxtMediaID);
+                                dt.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                                dt.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                dt.setTxtDetailMedia(tvKontak.getText().toString());
+                                dt.setTxtKeterangan(etKeterangan.getText().toString());
+                                dt.setTxtExtension(etExtension.getText().toString());
+                                dt.setTxtKategoriMedia(finalTxtMasterID1);
 
-                        if (checkBoxStatus.isChecked()) {
-                            dt.setLttxtStatusAktif("Aktif");
-                        } else {
-                            dt.setLttxtStatusAktif("Tidak Aktif");
-                        }
-                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                        repoKontak.createOrUpdate(dt);
+                                if (checkBoxStatus.isChecked()) {
+                                    dt.setLttxtStatusAktif("Aktif");
+                                } else {
+                                    dt.setLttxtStatusAktif("Tidak Aktif");
+                                }
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                helper.refreshData2();
+                                repoKontak.createOrUpdate(dt);
 
-                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                        Log.d("Data info", "Kontak berhasil di perbarui");
-                        alertD.dismiss();
+                                alertD.dismiss();
+
+                                sendDataMediaKontakDetail();
+                                kontakDetail();
+                                dataUpdate();
+
+                                new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
+                                Log.d("Data info", "Kontak berhasil di perbarui");
+                            }
+                        });
+                        alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
                     }
                 } else if (etPrioritas.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                 } else {
-                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                    dataKontak.setTxtGuiId(guiID);
-                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                    dataKontak.setLttxtMediaID(lttxtMediaID);
-                    dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
-                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-                    dataKontak.setTxtExtension(etExtension.getText().toString());
-                    dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    alertDialog.setTitle("Konfirmasi");
+                    alertDialog.setMessage("Apakah Anda yakin?");
+                    final String finalTxtMasterID2 = txtMasterID;
+                    alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                            dataKontak.setTxtGuiId(guiID);
+                            dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                            dataKontak.setLttxtMediaID(lttxtMediaID);
+                            dataKontak.setTxtDeskripsi(txtDeskripsi.getText().toString());
+                            dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                            dataKontak.setTxtDetailMedia(tvKontak.getText().toString());
+                            dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                            dataKontak.setTxtExtension(etExtension.getText().toString());
+                            dataKontak.setTxtKategoriMedia(finalTxtMasterID2);
 
-                    if (checkBoxStatus.isChecked()) {
-                        dataKontak.setLttxtStatusAktif("Aktif");
-                    } else {
-                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                    }
-                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                    repoKontak.createOrUpdate(dataKontak);
+                            if (checkBoxStatus.isChecked()) {
+                                dataKontak.setLttxtStatusAktif("Aktif");
+                            } else {
+                                dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                            }
+                            repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                            helper.refreshData2();
+                            repoKontak.createOrUpdate(dataKontak);
 
-                    new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di perbarui", true);
-                    Log.d("Data info", "Kontak berhasil di perbarui");
-                    alertD.dismiss();
+                            alertD.dismiss();
+
+                            sendDataMediaKontakDetail();
+                            kontakDetail();
+                            dataUpdate();
+
+                            new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
+                            Log.d("Data info", "Kontak berhasil di perbarui");
+                        }
+                    });
+                    alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
 
                 dataUpdate();
@@ -500,7 +660,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         categories.add("TWITTER");
         categories.add("WHATSAPP");
 
-        List<String> kategoriMedia = new ArrayList<String>();
+        final List<String> kategoriMedia = new ArrayList<String>();
         kategoriMedia.add("");
         kategoriMedia.add("Home");
         kategoriMedia.add("Office");
@@ -518,7 +678,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         kategoriMedia.add("EMAIL PELANGGAN");
         kategoriMedia.add("ID LINE");
         kategoriMedia.add("BLACKBERRY");
-        kategoriMedia.add("BLOG");
         kategoriMedia.add("INSTAGRAM");
         kategoriMedia.add("WHATS APP");
 
@@ -600,17 +759,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             }
         });
 
-        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    checkBoxStatus.setText("Aktif");
-                } else {
-                    checkBoxStatus.setText("Tidak Aktif");
-                }
-            }
-        });
-
         try {
             repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
@@ -642,12 +790,53 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         alertD.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String kategori = spinnerKategori.getSelectedItem().toString();
-                String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
-                String mediaID = null;
+                final String kategori = spinnerKategori.getSelectedItem().toString();
+                final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
+                String txtMasterID = null;
+                if (kategoriMediaKontak.equals("")) {
+                    txtMasterID = "";
+                } else if (kategoriMediaKontak.equals("Home")) {
+                    txtMasterID = "0001";
+                } else if (kategoriMediaKontak.equals("Office")) {
+                    txtMasterID = "0002";
+                } else if (kategoriMediaKontak.equals("NOMOR BAPAK")) {
+                    txtMasterID = "0984";
+                } else if (kategoriMediaKontak.equals("NOMOR IBU")) {
+                    txtMasterID = "0985";
+                } else if (kategoriMediaKontak.equals("NOMOR ORANG TUA")) {
+                    txtMasterID = "0986";
+                } else if (kategoriMediaKontak.equals("NOMOR KELUARGA")) {
+                    txtMasterID = "0987";
+                } else if (kategoriMediaKontak.equals("EMAIL PIC")) {
+                    txtMasterID = "1019";
+                } else if (kategoriMediaKontak.equals("NOMOR PIC")) {
+                    txtMasterID = "1020";
+                } else if (kategoriMediaKontak.equals("NOMOR TOKO")) {
+                    txtMasterID = "1118";
+                } else if (kategoriMediaKontak.equals("EMAIL VERIFICATION")) {
+                    txtMasterID = "1156";
+                } else if (kategoriMediaKontak.equals("PATH")) {
+                    txtMasterID = "1214";
+                } else if (kategoriMediaKontak.equals("FACEBOOK")) {
+                    txtMasterID = "1215";
+                } else if (kategoriMediaKontak.equals("TWITTER")) {
+                    txtMasterID = "1216";
+                } else if (kategoriMediaKontak.equals("EMAIL PELANGGAN")) {
+                    txtMasterID = "1217";
+                } else if (kategoriMediaKontak.equals("ID LINE")) {
+                    txtMasterID = "1218";
+                } else if (kategoriMediaKontak.equals("BLACKBERRY")) {
+                    txtMasterID = "1219";
+                } else if (kategoriMediaKontak.equals("INSTAGRAM")) {
+                    txtMasterID = "1221";
+                } else if (kategoriMediaKontak.equals("WHATS APP")) {
+                    txtMasterID = "1222";
+                }
 
                 if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
+                } else if (etKontak.getText().toString().length() <= 5) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kurang dari 5 karakter", false);
                 } else if (kategori.equals("Telepon")) {
                     if (!isValidMobile(etKontak.getText().toString())) {
                         new clsActivity().showToast(context.getApplicationContext(), "No Telepon tidak Valid", false);
@@ -655,29 +844,50 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        mediaID = "0001";
-                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                        dataKontak.setLttxtMediaID(mediaID);
-                        dataKontak.setTxtDeskripsi(kategori);
-                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-                        dataKontak.setTxtExtension(etExtension.getText().toString());
-                        dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                        alertDialog.setTitle("Konfirmasi");
+                        alertDialog.setMessage("Apakah Anda yakin?");
+                        final String finalTxtMasterID = txtMasterID;
+                        alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                String mediaID = null;
+                                mediaID = "0001";
+                                clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dataKontak.setLttxtMediaID(mediaID);
+                                dataKontak.setTxtDeskripsi(kategori);
+                                dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                                dataKontak.setTxtExtension(etExtension.getText().toString());
+                                dataKontak.setTxtKategoriMedia(finalTxtMasterID);
 
-                        if (checkBoxStatus.isChecked()) {
-                            dataKontak.setLttxtStatusAktif("Aktif");
-                        } else {
-                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                        }
-                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                        repoKontak.createOrUpdate(dataKontak);
+                                if (checkBoxStatus.isChecked()) {
+                                    dataKontak.setLttxtStatusAktif("Aktif");
+                                } else {
+                                    dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                }
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                repoKontak.createOrUpdate(dataKontak);
 
-                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
-                        Log.d("Data info", "Kontak berhasil di buat");
-                        alertD.dismiss();
+                                alertD.dismiss();
+
+                                sendDataMediaKontakDetail();
+                                dataUpdate();
+
+                                new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
+                                Log.d("Data info", "Kontak berhasil di buat");
+                            }
+                        });
+                        alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
                     }
                 } else if (kategori.equals("Email")) {
                     if (!isValidEmail(etKontak.getText().toString())) {
@@ -686,126 +896,124 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     } else if (etPrioritas.getText().toString().equals("")) {
                         new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                     } else {
-                        mediaID = "0002";
-                        clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                        dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                        dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                        dataKontak.setLttxtMediaID(mediaID);
-                        dataKontak.setTxtDeskripsi(kategori);
-                        dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                        dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                        dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-                        dataKontak.setTxtExtension(etExtension.getText().toString());
-                        dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                        alertDialog.setTitle("Konfirmasi");
+                        alertDialog.setMessage("Apakah Anda yakin?");
+                        final String finalTxtMasterID1 = txtMasterID;
+                        alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                String mediaID = null;
+                                mediaID = "0002";
+                                clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dataKontak.setLttxtMediaID(mediaID);
+                                dataKontak.setTxtDeskripsi(kategori);
+                                dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                                dataKontak.setTxtExtension(etExtension.getText().toString());
+                                dataKontak.setTxtKategoriMedia(finalTxtMasterID1);
 
-                        if (checkBoxStatus.isChecked()) {
-                            dataKontak.setLttxtStatusAktif("Aktif");
-                        } else {
-                            dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                        }
-                        repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                        repoKontak.createOrUpdate(dataKontak);
+                                if (checkBoxStatus.isChecked()) {
+                                    dataKontak.setLttxtStatusAktif("Aktif");
+                                } else {
+                                    dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                }
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                repoKontak.createOrUpdate(dataKontak);
 
-                        new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
-                        Log.d("Data info", "Kontak berhasil di buat");
-                        alertD.dismiss();
+                                alertD.dismiss();
+
+                                sendDataMediaKontakDetail();
+                                dataUpdate();
+
+                                new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
+                                Log.d("Data info", "Kontak berhasil di buat");
+                            }
+                        });
+                        alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
                     }
                 } else if (etPrioritas.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
                 } else {
-                    if (kategori.equals("Fax")) {
-                        mediaID = "0003";
-                    } else if (kategori.equals("SMS")) {
-                        mediaID = "0004";
-                    } else if (kategori.equals("MMS")) {
-                        mediaID = "0006";
-                    } else if (kategori.equals("BLACKBERRY")) {
-                        mediaID = "0497";
-                    } else if (kategori.equals("TWITTER")) {
-                        mediaID = "0837";
-                    } else if (kategori.equals("FACEBOOK")) {
-                        mediaID = "0838";
-                    } else if (kategori.equals("LINE")) {
-                        mediaID = "1205";
-                    } else if (kategori.equals("PATH")) {
-                        mediaID = "1206";
-                    } else if (kategori.equals("INSTAGRAM")) {
-                        mediaID = "1207";
-                    } else if (kategori.equals("WHATSAPP")) {
-                        mediaID = "1208";
-                    }
-                    clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
-                    dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
-                    dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                    dataKontak.setLttxtMediaID(mediaID);
-                    dataKontak.setTxtDeskripsi(kategori);
-                    dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
-                    dataKontak.setTxtDetailMedia(etKontak.getText().toString());
-                    dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
-                    dataKontak.setTxtExtension(etExtension.getText().toString());
-                    dataKontak.setTxtKategoriMedia(kategoriMediaKontak);
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    alertDialog.setTitle("Konfirmasi");
+                    alertDialog.setMessage("Apakah Anda yakin?");
+                    final String finalTxtMasterID2 = txtMasterID;
+                    alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            String mediaID = null;
+                            if (kategori.equals("Fax")) {
+                                mediaID = "0003";
+                            } else if (kategori.equals("SMS")) {
+                                mediaID = "0004";
+                            } else if (kategori.equals("MMS")) {
+                                mediaID = "0006";
+                            } else if (kategori.equals("BLACKBERRY")) {
+                                mediaID = "0497";
+                            } else if (kategori.equals("TWITTER")) {
+                                mediaID = "0837";
+                            } else if (kategori.equals("FACEBOOK")) {
+                                mediaID = "0838";
+                            } else if (kategori.equals("LINE")) {
+                                mediaID = "1205";
+                            } else if (kategori.equals("PATH")) {
+                                mediaID = "1206";
+                            } else if (kategori.equals("INSTAGRAM")) {
+                                mediaID = "1207";
+                            } else if (kategori.equals("WHATSAPP")) {
+                                mediaID = "1208";
+                            }
+                            clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                            dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                            dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                            dataKontak.setLttxtMediaID(mediaID);
+                            dataKontak.setTxtDeskripsi(kategori);
+                            dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                            dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                            dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                            dataKontak.setTxtExtension(etExtension.getText().toString());
+                            dataKontak.setTxtKategoriMedia(finalTxtMasterID2);
 
-                    if (checkBoxStatus.isChecked()) {
-                        dataKontak.setLttxtStatusAktif("Aktif");
-                    } else {
-                        dataKontak.setLttxtStatusAktif("Tidak Aktif");
-                    }
-                    repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
-                    repoKontak.createOrUpdate(dataKontak);
+                            if (checkBoxStatus.isChecked()) {
+                                dataKontak.setLttxtStatusAktif("Aktif");
+                            } else {
+                                dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                            }
+                            repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                            repoKontak.createOrUpdate(dataKontak);
 
-                    new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
-                    Log.d("Data info", "Kontak berhasil di buat");
-                    alertD.dismiss();
+//                            new clsActivity().showToast(context.getApplicationContext(), "Kontak berhasil di buat", true);
+                            alertD.dismiss();
+
+                            sendDataMediaKontakDetail();
+                            dataUpdate();
+
+                            new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
+                            Log.d("Data info", "Kontak berhasil di buat");
+                        }
+                    });
+                    alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
 
                 dataUpdate();
             }
         });
-    }
-
-    private void sendData() {
-        String versionName = "";
-        clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
-        if (dtJson != null) {
-            try {
-                String strLinkAPI = new clsHardCode().linkSendData;
-                final String mRequestBody = "[" + dtJson.toString() + "]";
-
-                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
-                    @Override
-                    public void onError(String message) {
-                        String error;
-                    }
-
-                    @Override
-                    public void onResponse(String response, Boolean status, String strErrorMsg) {
-                        String warn = null;
-                        try {
-                            JSONObject jsonObject1 = new JSONObject(response);
-                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
-                            warn = jsn.getString("TxtMessage");
-                            String result = jsn.getString("IntResult");
-                            String res = response;
-
-                            if (result.equals("1")) {
-                                sendDataMediaKontakDetail();
-                            } else {
-//                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
-                                popup();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i(TAG, "Ski data from server - " + warn);
-                        clsUserMember userMemberData = new clsUserMember();
-                    }
-                });
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
     }
 
     private void sendDataMediaKontakDetail() {
@@ -816,7 +1024,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 String strLinkAPI = new clsHardCode().linkSendDataMediaKontak;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendDataMediaKontak(context.getApplicationContext(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                new VolleyUtils().makeJsonObjectRequestSendDataMediaKontak(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;
@@ -833,10 +1041,10 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             String res = response;
 
                             if (result.equals("1")) {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-                                getActivity().finish();
-                                startActivity(intent);
+                                Log.i(TAG, "Ski data from server - " + warn);
+//                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
+//                                getActivity().finish();
+//                                startActivity(intent);
                             } else {
 //                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
                                 popup();
@@ -854,6 +1062,95 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 e.printStackTrace();
             }
         }
+    }
+
+    public void kontakDetail() {
+        final ProgressDialog Dialog = new ProgressDialog(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
+        helper.refreshData2();
+        try {
+            dataMember = (List<clsUserMember>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        txtKontakID = dataMember.get(0).getTxtKontakId();
+        String strLinkAPI = new clsHardCode().linkGetDataKontakDetail;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtKontakID", txtKontakID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String lttxtMediaID = jsonobject.getString("LttxtMediaID");
+                                String txtDeskripsi = jsonobject.getString("TxtDeskripsi");
+                                String txtPrioritasKontak = jsonobject.getString("IntPrioritasKontak");
+                                String txtDetailMedia = jsonobject.getString("TxtDetailMedia");
+                                String txtKeterangan = jsonobject.getString("TxtKeterangan");
+                                String lttxtStatusAktif = jsonobject.getString("LttxtStatusAktif");
+                                String txtKategoriMedia = jsonobject.getString("TxtKategoriMedia");
+                                String txtExtension = jsonobject.getString("TxtExtension");
+                                txtDeskripsi = txtDeskripsi.trim();
+
+                                clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dataKontak.setLttxtMediaID(lttxtMediaID);
+                                dataKontak.setTxtDeskripsi(txtDeskripsi);
+                                dataKontak.setTxtPrioritasKontak(txtPrioritasKontak);
+                                dataKontak.setTxtDetailMedia(txtDetailMedia);
+                                dataKontak.setTxtKeterangan(txtKeterangan);
+                                dataKontak.setLttxtStatusAktif(lttxtStatusAktif);
+                                dataKontak.setTxtKategoriMedia(txtKategoriMedia);
+                                dataKontak.setTxtExtension(txtExtension);
+
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                repoKontak.createOrUpdate(dataKontak);
+                            }
+                            Log.d("Data info", "Data Kontak Detail berhasil di update");
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                            FragmentNewDetailPersonal fragmentDetailPersonalData = new FragmentNewDetailPersonal();
+                            FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
+                            fragmentTransactionPersonalData.commit();
+
+                        } else {
+                            new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
     }
 
     private void popup() {

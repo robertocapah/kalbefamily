@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -557,11 +558,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    new clsHelper().copydb(context);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 kontakDetail();
             }
         });
@@ -1460,6 +1456,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 repoKontakDetail.createOrUpdate(dataKontak);
                             }
                             Log.d("Data info", "Data Kontak Detail berhasil di update");
+                            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                            toolbar.setTitle("Media Komunikasi");
+
                             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                             FragmentNewDetailPersonal fragmentDetailPersonalData = new FragmentNewDetailPersonal();
                             FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();

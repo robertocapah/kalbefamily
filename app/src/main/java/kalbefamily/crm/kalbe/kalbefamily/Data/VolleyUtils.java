@@ -168,7 +168,16 @@ public class VolleyUtils {
         queue.add(multipartRequest);
     }
 
-    public void makeJsonObjectRequestSendDataMediaKontak(final Context ctx, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+    public void makeJsonObjectRequestSendDataMediaKontak(final Activity activity, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+        ProgressDialog Dialog = new ProgressDialog(activity);
+//        Dialog.setCancelable(false);
+//        Dialog.show();
+
+        Dialog = ProgressDialog.show(activity, "",
+                "Mohon Tunggu...", true);
+//        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
             @Override
@@ -176,11 +185,13 @@ public class VolleyUtils {
                 Boolean status = false;
                 String errorMessage = null;
                 listener.onResponse(response.toString(), status, errorMessage);
+                finalDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                finalDialog1.dismiss();
             }
         }) {
             @Override
@@ -202,7 +213,7 @@ public class VolleyUtils {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        RequestQueue queue = Volley.newRequestQueue(ctx.getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
         queue.add(multipartRequest);
     }
 
