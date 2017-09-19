@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +77,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     boolean validate = true;
     private String txtKontakID;
     DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_new_detail_personal, container, false);
@@ -299,7 +302,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         }
 
         tvKategori.setText(deskripsi);
-        tvKontak.setText(kontak);
+
 
         List<clsMediaKontakDetail> ltdt = null;
 
@@ -308,8 +311,9 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        tvKontak.setText(ltdt.get(childPosition).getTxtDetailMedia().toString());
         etKeterangan.setText(ltdt.get(childPosition).getTxtKeterangan().toString());
-        etPrioritas.setText(prioritasKontak);
+        etPrioritas.setText(ltdt.get(childPosition).getTxtPrioritasKontak().toString());
         etExtension.setText(ltdt.get(childPosition).getTxtExtension().toString());
 
         if (status.equals("Aktif")) {
@@ -835,7 +839,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                 if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
-                } else if (etKontak.getText().toString().length() <= 5) {
+                } else if (etKontak.getText().toString().length() < 5) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kurang dari 5 karakter", false);
                 } else if (kategori.equals("Telepon")) {
                     if (!isValidMobile(etKontak.getText().toString())) {
@@ -875,6 +879,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
+                                kontakDetail();
                                 dataUpdate();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
@@ -927,6 +932,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
+                                kontakDetail();
                                 dataUpdate();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
@@ -996,6 +1002,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             alertD.dismiss();
 
                             sendDataMediaKontakDetail();
+                            kontakDetail();
                             dataUpdate();
 
                             new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);

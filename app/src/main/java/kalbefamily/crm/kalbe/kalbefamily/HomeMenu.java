@@ -97,30 +97,123 @@ public class HomeMenu extends AppCompatActivity {
     private static Bitmap mybitmapImageProfile;
 
 
+//    @Override
+//    public void onBackPressed() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        builder.setTitle("Keluar");
+//        builder.setMessage("Apakah Anda ingin keluar?");
+//
+//        builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int which) {
+//                finish();
+//            }
+//        });
+//
+//        builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        AlertDialog alert = builder.create();
+//        alert.show();
+//    }
+
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        boolean isHome = false;
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() == 1) {
+                isHome = true;
 
-        builder.setTitle("Keluar");
-        builder.setMessage("Apakah Anda ingin keluar?");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+                builder.setTitle("Keluar");
+                builder.setMessage("Apakah Anda ingin keluar?");
 
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
+                builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
+                if (fragment.isVisible()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle("Keluar");
+                    builder.setMessage("Apakah Anda ingin keluar?");
+
+                    builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+
+                    builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            } else if (fragment != null && !fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
+                isHome = false;
             }
-        });
+        }
+        if (!isHome) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 
-        builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+            toolbar.setTitle("Home");
+            FragmentInfoContact homeFragment = new FragmentInfoContact();
+            FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
+            fragmentTransactionHome.replace(R.id.frame, homeFragment);
+            fragmentTransactionHome.commit();
+//            navigationView.getMenu().getItem(0).setChecked(true);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+            builder.setTitle("Keluar");
+            builder.setMessage("Apakah Anda ingin keluar?");
 
-        AlertDialog alert = builder.create();
-        alert.show();
+            builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +253,7 @@ public class HomeMenu extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNamaDepan());
+        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
         tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
 //        if (dataMember.get(0).getTxtEmail().equals("")) {
 //            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());

@@ -48,7 +48,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="( Base Point : 0 )"
+            android:text="( Poin Kalbe Family : 0 )"
             android:textColor="@color/white"/>
 
         <!--<TextView-->
