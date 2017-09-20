@@ -155,6 +155,9 @@ public class VolleyUtils {
                 if (mRequestBody.getFileUpload().get("txtFileName2") != null){
                     params.put("file_image2.jpg", new DataPart("file_image2.jpg", mRequestBody.getFileUpload().get("txtFileName2"), "image/jpeg"));
                 }
+                if (mRequestBody.getFileUpload().get("profile_picture") != null){
+                    params.put("profile_picture.jpg", new DataPart("profile_picture.jpg", mRequestBody.getFileUpload().get("profile_picture"), "image/jpeg"));
+                }
 
                 return params;
             }

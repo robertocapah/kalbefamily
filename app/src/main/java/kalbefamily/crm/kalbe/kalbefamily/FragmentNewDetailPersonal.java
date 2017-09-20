@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,6 +46,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaType;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
@@ -54,6 +56,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaTypeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
 import static com.android.volley.VolleyLog.TAG;
@@ -69,13 +72,16 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     Button btnTambah;
     List<clsUserMember> dataMember = null;
     List<clsMediaKontakDetail> dataParent, dataNoTelp, dataChild;
+    List<clsMediaType> dataMediaType;
     clsMediaKontakDetailRepo repoKontak;
     clsUserMemberRepo repoUserMember = null;
+    clsMediaTypeRepo mediaTypeRepo = null;
     private ExpandableListAdapter mAdapter;
 
     String child, deskripsi, lttxtMediaID;
     boolean validate = true;
     private String txtKontakID;
+    private HashMap<String, String> hashMapSpinnerKategori = new HashMap<>();
     DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
 
@@ -247,59 +253,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         deskripsi = dataParent.get(groupPosition).getTxtDeskripsi().toString();
         lttxtMediaID = dataParent.get(groupPosition).getLttxtMediaID().toString();
-        if (deskripsi.equals("Telepon") || deskripsi.equals("SMS") || deskripsi.equals("WHATSAPP") || deskripsi.equals("Fax") || deskripsi.equals("MMS")) {
-            if (deskripsi.equals("Telepon")) {
-                tvKontak.setHint("No Telepon");
-            } else if (deskripsi.equals("SMS")) {
-                tvKontak.setHint("No SMS");
-            } else if (deskripsi.equals("WHATSAPP")) {
-                tvKontak.setHint("No WhatsApp");
-            } else if (deskripsi.equals("Fax")) {
-                tvKontak.setHint("No Fax");
-            } else if (deskripsi.equals("MMS")) {
-                tvKontak.setHint("No MMS");
-            }
-            int maxLength = 14;
-            InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            tvKontak.setFilters(FilterArray);
-
-            tvKontak.setInputType(InputType.TYPE_CLASS_PHONE);
-        } else if (deskripsi.equals("BLACKBERRY")) {
-            int maxLength = 8;
-            InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            tvKontak.setFilters(FilterArray);
-
-            tvKontak.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-            tvKontak.setHint("ID BBM");
-        } else if (deskripsi.equals("Email")) {
-            int maxLength = 55;
-            InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            tvKontak.setFilters(FilterArray);
-
-            tvKontak.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            tvKontak.setHint("Akun Email");
-        } else {
-            if (deskripsi.equals("FACEBOOK")) {
-                tvKontak.setHint("Akun Facebook");
-            } else if (deskripsi.equals("INSTAGRAM")) {
-                tvKontak.setHint("Akun Instagram");
-            } else if (deskripsi.equals("TWITTER")) {
-                tvKontak.setHint("Akun Twitter");
-            } else if (deskripsi.equals("LINE")) {
-                tvKontak.setHint("Akun Line");
-            } else if (deskripsi.equals("PATH")) {
-                tvKontak.setHint("Akun Path");
-            }
-            int maxLength = 35;
-            InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-            tvKontak.setFilters(FilterArray);
-
-            tvKontak.setInputType(InputType.TYPE_CLASS_TEXT);
-        }
 
         tvKategori.setText(deskripsi);
 
@@ -505,7 +458,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                                 sendDataMediaKontakDetail();
                                 kontakDetail();
-                                dataUpdate();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                                 Log.d("Data info", "Kontak berhasil di perbarui");
@@ -563,7 +515,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                                 sendDataMediaKontakDetail();
                                 kontakDetail();
-                                dataUpdate();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                                 Log.d("Data info", "Kontak berhasil di perbarui");
@@ -611,7 +562,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                             sendDataMediaKontakDetail();
                             kontakDetail();
-                            dataUpdate();
 
                             new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                             Log.d("Data info", "Kontak berhasil di perbarui");
@@ -645,24 +595,37 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         etPrioritas = (EditText) promptView.findViewById(R.id.etPrioritas);
         etExtension = (EditText) promptView.findViewById(R.id.etExtension);
 
+        checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    checkBoxStatus.setText("Aktif");
+                } else {
+                    checkBoxStatus.setText("Tidak Aktif");
+                }
+            }
+        });
+
+        try {
+            mediaTypeRepo = new clsMediaTypeRepo(context);
+            dataMediaType = (List<clsMediaType>) mediaTypeRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Spinner click listener
         spinnerKategori.setOnItemSelectedListener(this);
         spinnerKategoriMedia.setOnItemSelectedListener(this);
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("BLACKBERRY");
-        categories.add("Email");
-        categories.add("FACEBOOK");
-        categories.add("Fax");
-        categories.add("INSTAGRAM");
-        categories.add("LINE");
-        categories.add("MMS");
-        categories.add("PATH");
-        categories.add("SMS");
-        categories.add("Telepon");
-        categories.add("TWITTER");
-        categories.add("WHATSAPP");
+        categories.add("PIlih salah satu");
+        if (dataMediaType.size() > 0) {
+            for (clsMediaType mediaType : dataMediaType) {
+                categories.add(mediaType.txtNamaMasterData);
+                hashMapSpinnerKategori.put(mediaType.txtNamaMasterData, mediaType.txtGuiId);
+            }
+        }
 
         final List<String> kategoriMedia = new ArrayList<String>();
         kategoriMedia.add("");
@@ -693,8 +656,40 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dataAdapterKategoriMedia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        // Initializing an ArrayAdapter with initial text like select one
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_item, categories){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
         // attaching data adapter to spinner
-        spinnerKategori.setAdapter(dataAdapter);
+        spinnerKategori.setAdapter(spinnerArrayAdapter);
         spinnerKategoriMedia.setAdapter(dataAdapterKategoriMedia);
 
         spinnerKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -747,6 +742,16 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         etKontak.setHint("Akun Line");
                     } else if (kategori.equals("PATH")) {
                         etKontak.setHint("Akun Path");
+                    } else if (kategori.equals("PIlih salah satu")) {
+                        etKontak.setHint("No Telpon");
+                    } else {
+                        int maxLength = 35;
+                        InputFilter[] FilterArray = new InputFilter[1];
+                        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                        etKontak.setFilters(FilterArray);
+                        etKontak.setHint(kategori);
+
+                        etKontak.setInputType(InputType.TYPE_CLASS_TEXT);
                     }
                     int maxLength = 35;
                     InputFilter[] FilterArray = new InputFilter[1];
@@ -797,6 +802,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 final String kategori = spinnerKategori.getSelectedItem().toString();
                 final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
                 String txtMasterID = null;
+
                 if (kategoriMediaKontak.equals("")) {
                     txtMasterID = "";
                 } else if (kategoriMediaKontak.equals("Home")) {
@@ -839,6 +845,8 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                 if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
+                } else if (kategori.equals("PIlih salah satu")){
+                    new clsActivity().showToast(context.getApplicationContext(), "Anda harus memilih type kontak", false);
                 } else if (etKontak.getText().toString().length() < 5) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kurang dari 5 karakter", false);
                 } else if (kategori.equals("Telepon")) {
@@ -855,12 +863,10 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
-                                String mediaID = null;
-                                mediaID = "0001";
                                 clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
                                 dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
                                 dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                dataKontak.setLttxtMediaID(mediaID);
+                                dataKontak.setLttxtMediaID(hashMapSpinnerKategori.get(kategori));
                                 dataKontak.setTxtDeskripsi(kategori);
                                 dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                                 dataKontak.setTxtDetailMedia(etKontak.getText().toString());
@@ -880,7 +886,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                                 sendDataMediaKontakDetail();
                                 kontakDetail();
-                                dataUpdate();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                                 Log.d("Data info", "Kontak berhasil di buat");
@@ -908,12 +913,10 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
-                                String mediaID = null;
-                                mediaID = "0002";
                                 clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
                                 dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
                                 dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                                dataKontak.setLttxtMediaID(mediaID);
+                                dataKontak.setLttxtMediaID(hashMapSpinnerKategori.get(kategori));
                                 dataKontak.setTxtDeskripsi(kategori);
                                 dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                                 dataKontak.setTxtDetailMedia(etKontak.getText().toString());
@@ -933,7 +936,60 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                                 sendDataMediaKontakDetail();
                                 kontakDetail();
-                                dataUpdate();
+
+                                new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
+                                Log.d("Data info", "Kontak berhasil di buat");
+                            }
+                        });
+                        alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                    }
+                } else if (kategori.equals("SMS")) {
+                    String noSMS = "";
+                    noSMS = etKontak.getText().toString().substring(0, 2);
+                    if (!noSMS.equals("08")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "No SMS harus diawali angka 08", false);
+                        validate = false;
+                    } else if (etKontak.getText().toString().length() < 8) {
+                        new clsActivity().showToast(context.getApplicationContext(), "No SMS tidak boleh kurang dari 8 angka", false);
+                    } else if (etPrioritas.getText().toString().equals("")) {
+                        new clsActivity().showToast(context.getApplicationContext(), "Prioritas Tidak boleh kosong", false);
+                    } else {
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                        alertDialog.setTitle("Konfirmasi");
+                        alertDialog.setMessage("Apakah Anda yakin?");
+                        final String finalTxtMasterID = txtMasterID;
+                        alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
+                                dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
+                                dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
+                                dataKontak.setLttxtMediaID(hashMapSpinnerKategori.get(kategori));
+                                dataKontak.setTxtDeskripsi(kategori);
+                                dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
+                                dataKontak.setTxtDetailMedia(etKontak.getText().toString());
+                                dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
+                                dataKontak.setTxtExtension(etExtension.getText().toString());
+                                dataKontak.setTxtKategoriMedia(finalTxtMasterID);
+
+                                if (checkBoxStatus.isChecked()) {
+                                    dataKontak.setLttxtStatusAktif("Aktif");
+                                } else {
+                                    dataKontak.setLttxtStatusAktif("Tidak Aktif");
+                                }
+                                repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
+                                repoKontak.createOrUpdate(dataKontak);
+
+                                alertD.dismiss();
+
+                                sendDataMediaKontakDetail();
+                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                                 Log.d("Data info", "Kontak berhasil di buat");
@@ -957,32 +1013,10 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            String mediaID = null;
-                            if (kategori.equals("Fax")) {
-                                mediaID = "0003";
-                            } else if (kategori.equals("SMS")) {
-                                mediaID = "0004";
-                            } else if (kategori.equals("MMS")) {
-                                mediaID = "0006";
-                            } else if (kategori.equals("BLACKBERRY")) {
-                                mediaID = "0497";
-                            } else if (kategori.equals("TWITTER")) {
-                                mediaID = "0837";
-                            } else if (kategori.equals("FACEBOOK")) {
-                                mediaID = "0838";
-                            } else if (kategori.equals("LINE")) {
-                                mediaID = "1205";
-                            } else if (kategori.equals("PATH")) {
-                                mediaID = "1206";
-                            } else if (kategori.equals("INSTAGRAM")) {
-                                mediaID = "1207";
-                            } else if (kategori.equals("WHATSAPP")) {
-                                mediaID = "1208";
-                            }
                             clsMediaKontakDetail dataKontak = new clsMediaKontakDetail();
                             dataKontak.setTxtGuiId(new clsActivity().GenerateGuid());
                             dataKontak.setTxtKontakId(dataMember.get(0).txtKontakId);
-                            dataKontak.setLttxtMediaID(mediaID);
+                            dataKontak.setLttxtMediaID(hashMapSpinnerKategori.get(kategori));
                             dataKontak.setTxtDeskripsi(kategori);
                             dataKontak.setTxtPrioritasKontak(etPrioritas.getText().toString());
                             dataKontak.setTxtDetailMedia(etKontak.getText().toString());
@@ -1003,7 +1037,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                             sendDataMediaKontakDetail();
                             kontakDetail();
-                            dataUpdate();
 
                             new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                             Log.d("Data info", "Kontak berhasil di buat");
@@ -1140,11 +1173,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 repoKontak.createOrUpdate(dataKontak);
                             }
                             Log.d("Data info", "Data Kontak Detail berhasil di update");
-                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                            FragmentNewDetailPersonal fragmentDetailPersonalData = new FragmentNewDetailPersonal();
-                            FragmentTransaction fragmentTransactionPersonalData = getActivity().getSupportFragmentManager().beginTransaction();
-                            fragmentTransactionPersonalData.replace(R.id.frame, fragmentDetailPersonalData);
-                            fragmentTransactionPersonalData.commit();
+                            dataUpdate();
 
                         } else {
                             new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);

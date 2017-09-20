@@ -32,11 +32,13 @@ import java.util.Map;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsQRCodeData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Common.dataJson;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsQRCodeRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 
@@ -100,11 +102,15 @@ public class clsHelper {
         clsSendData dtclsSendData = new clsSendData();
         dataJson dtSend = new dataJson();
         HashMap<String, byte[]> FileUpload = null;
+        HashMap<String, byte[]> FileUploadProfile = null;
         clsUserMemberRepo _ClsUserMemberRepo = new clsUserMemberRepo(context);
         clsUserMemberImageRepo _ClsUserMemberImageRepo = new clsUserMemberImageRepo(context);
+        clsUserImageProfileRepo _ClsUserImageProfileRepo = new clsUserImageProfileRepo(context);
         List<clsUserMember> ListOfUserMember = _ClsUserMemberRepo.getAllDataToSendData(context);
         List<clsUserMemberImage> ListOfUserMemberImage = _ClsUserMemberImageRepo.getAllDataToSendData(context);
+        List<clsUserImageProfile> ListOfUserImageProfile = _ClsUserImageProfileRepo.getAllDataToSendData(context);
         FileUpload = new HashMap<String, byte[]>();
+        FileUploadProfile = new HashMap<String, byte[]>();
         if (ListOfUserMemberImage != null) {
             dtSend.setListDataUserMemberImage(ListOfUserMemberImage);
             for (clsUserMemberImage dttUserMemberImage : ListOfUserMemberImage) {
@@ -118,12 +124,21 @@ public class clsHelper {
                 }
             }
         }
+        if (ListOfUserImageProfile != null) {
+            dtSend.setListDataUserImageProfile(ListOfUserImageProfile);
+            for (clsUserImageProfile dttUserImageProfile : ListOfUserImageProfile) {
+                if (dttUserImageProfile.getTxtImg() != null) {
+                    FileUploadProfile.put("profile_picture", dttUserImageProfile.getTxtImg());
+                }
+            }
+        }
         if (ListOfUserMember != null) {
             dtSend.setListDataUserMember(ListOfUserMember);
         }
 
         dtclsSendData.setDtdataJson(dtSend);
         dtclsSendData.setFileUpload(FileUpload);
+        dtclsSendData.setFileUpload(FileUploadProfile);
         return dtclsSendData;
     }
 

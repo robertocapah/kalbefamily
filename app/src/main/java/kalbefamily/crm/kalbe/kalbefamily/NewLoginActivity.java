@@ -101,9 +101,9 @@ public class NewLoginActivity extends AppCompatActivity {
 
     private void popupSubmit() {
         final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
-        pDialog.setTitleText("Are you sure?");
-        pDialog.setCancelText("No,cancel plx!");
-        pDialog.setConfirmText("Yes, sure!");
+        pDialog.setTitleText("Apakah Anda yakin ?");
+        pDialog.setCancelText("BATAL");
+        pDialog.setConfirmText("SUBMIT");
         pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -115,7 +115,7 @@ public class NewLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(SweetAlertDialog sDialog) {
                 // reuse previous dialog instance, keep widget user state, reset them if you need
-                sDialog.setTitleText("Cancelled!")
+                sDialog.setTitleText("BATAL!")
                         .setContentText("Anda batal Login :)")
                         .setConfirmText("OK")
                         .showCancelButton(false)
@@ -146,7 +146,7 @@ public class NewLoginActivity extends AppCompatActivity {
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(NewLoginActivity.this, strLinkAPI, mRequestBody, "Please wait !", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(NewLoginActivity.this, strLinkAPI, mRequestBody, "Mohon Tunggu Beberapa Saat...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(getApplicationContext(), response, false);

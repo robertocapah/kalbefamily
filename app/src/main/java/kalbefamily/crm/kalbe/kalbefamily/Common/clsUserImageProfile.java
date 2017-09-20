@@ -43,10 +43,10 @@ public class clsUserImageProfile implements Serializable {
     private byte[] txtImg;
 
     public String Property_txtGuiId = "txtGuiId";
-    public String Property_txtKontakId = "txtKontakID";
-    public String Property_txtImg = "txtImageName";
+    public String Property_txtHeaderId = "txtKontakID";
+    public String Property_txtImg = "txtImageProfile";
     public String Property_All=Property_txtGuiId +","+
-            Property_txtKontakId +","+
+            Property_txtHeaderId +","+
             Property_txtImg;
 
     public clsUserImageProfile(){}

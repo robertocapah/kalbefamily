@@ -201,7 +201,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(NewMemberActivity.this, strLinkAPI, mRequestBody, "Please wait !", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(NewMemberActivity.this, strLinkAPI, mRequestBody, "Mohon Tunggu...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(getApplicationContext(), response, false);

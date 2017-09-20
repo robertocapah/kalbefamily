@@ -128,54 +128,10 @@ public class HomeMenu extends AppCompatActivity {
         boolean isHome = false;
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() == 1) {
-                isHome = true;
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("Keluar");
-                builder.setMessage("Apakah Anda ingin keluar?");
-
-                builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-
-                builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
+                finish();
             } else if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
                 if (fragment.isVisible()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                    builder.setTitle("Keluar");
-                    builder.setMessage("Apakah Anda ingin keluar?");
-
-                    builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-
-                    builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    finish();
                 }
             } else if (fragment != null && !fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
                 isHome = false;
@@ -191,28 +147,7 @@ public class HomeMenu extends AppCompatActivity {
             fragmentTransactionHome.commit();
 //            navigationView.getMenu().getItem(0).setChecked(true);
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            builder.setTitle("Keluar");
-            builder.setMessage("Apakah Anda ingin keluar?");
-
-            builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-
-            builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog alert = builder.create();
-            alert.show();
+            finish();
         }
     }
 
@@ -295,7 +230,7 @@ public class HomeMenu extends AppCompatActivity {
                         final TextView _tvConfirm = (TextView) promptView.findViewById(R.id.tvTitle);
                         final TextView _tvDesc = (TextView) promptView.findViewById(R.id.tvDesc);
                         _tvDesc.setVisibility(View.INVISIBLE);
-                        _tvConfirm.setText("Log Out Application ?");
+                        _tvConfirm.setText("Log Out dari Aplikasi ?");
                         _tvConfirm.setTextSize(18);
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeMenu.this);
                         alertDialogBuilder.setView(promptView);
@@ -321,7 +256,7 @@ public class HomeMenu extends AppCompatActivity {
 //                                        Toast.makeText(getApplicationContext(), "Logout, Success", Toast.LENGTH_SHORT).show();
                                     }
                                 })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }

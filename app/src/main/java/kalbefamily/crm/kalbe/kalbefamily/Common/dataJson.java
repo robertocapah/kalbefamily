@@ -14,8 +14,8 @@ import java.util.List;
 public class dataJson {
     public List<clsUserMember> ListDataUserMember;
     public List<clsUserMemberImage> ListDataUserMemberImage;
+    public List<clsUserImageProfile> ListDataUserImageProfile;
     public List<clsQRCodeData> LisClsQRCodeData;
-
     public List<clsMediaKontakDetail> ListMediaKontakDetail;
 
     public synchronized List<clsUserMember> getListDataUserMember() {
@@ -32,6 +32,14 @@ public class dataJson {
 
     public synchronized void setListDataUserMemberImage(List<clsUserMemberImage> listDataUserMemberImage) {
         ListDataUserMemberImage = listDataUserMemberImage;
+    }
+
+    public synchronized List<clsUserImageProfile> getListDataUserImageProfile() {
+        return ListDataUserImageProfile;
+    }
+
+    public synchronized void setListDataUserImageProfile(List<clsUserImageProfile> listDataUserImageProfile) {
+        ListDataUserImageProfile = listDataUserImageProfile;
     }
 
     public synchronized List<clsQRCodeData> getLisClsQRCodeData() {
@@ -82,6 +90,16 @@ public class dataJson {
                 itemsListJquey.add(resJson);
             }
 //            resJson.put(dtUserMemberImage.Property_ListOfMemberImage, new JSONArray(itemsListJquey));
+        }
+
+        if (this.getListDataUserImageProfile() != null) {
+            clsUserImageProfile dtUserImageProfile = new clsUserImageProfile();
+            itemsListJquey = new ArrayList<JSONObject>();
+            for (clsUserImageProfile data : this.getListDataUserImageProfile()) {
+                resJson.put(dtUserImageProfile.Property_txtHeaderId, String.valueOf(data.getTxtKontakId()));
+                resJson.put(dtUserImageProfile.Property_txtImg, String.valueOf(data.getTxtImg()));
+                itemsListJquey.add(resJson);
+            }
         }
 
         return resJson;
