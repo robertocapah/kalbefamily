@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsJenisMedia;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
@@ -170,6 +171,40 @@ public class clsMediaKontakDetailRepo implements crud {
                                     dt.lttxtMediaID = resultColumns[0];
                                     dt.txtExtension = resultColumns[4];
                                     dt.txtKategoriMedia = resultColumns[6];
+                                    dt.txtNamaMasterData = resultColumns[3];
+                                    return dt;
+                                }
+                            });
+
+            items = rawResults.getResults();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public List<?> findDataChildJoin(String txtDeskripsi) throws SQLException {
+        List<clsMediaKontakDetail> items = null;
+        try {
+            GenericRawResults<clsMediaKontakDetail> rawResults =
+                    helper.getAvailablePoinDao().queryRaw(
+                            "select a.lttxtMediaID, a.lttxtStatusAktif, a.txtDeskripsi, a.txtDetailMedia, a.txtExtension, a.txtGuiId," +
+                                    "a.txtKategoriMedia, a.txtKeterangan, a.txtKontakId, a.txtPrioritasKontak, b.txtNamaMasterData" +
+                                    " from clsMediaKontakDetail a left join clsJenisMedia b on a.txtKategoriMedia = b.txtGuiId where a.txtDeskripsi='" + txtDeskripsi + "'",
+                            new RawRowMapper<clsMediaKontakDetail>() {
+                                public clsMediaKontakDetail mapRow(String[] columnNames,
+                                                                   String[] resultColumns) {
+                                    clsMediaKontakDetail dt = new clsMediaKontakDetail();
+                                    dt.txtGuiId = resultColumns[5];
+                                    dt.txtDetailMedia = resultColumns[3];
+                                    dt.txtPrioritasKontak = resultColumns[9];
+                                    dt.txtKeterangan = resultColumns[7];
+                                    dt.lttxtStatusAktif = resultColumns[1];
+                                    dt.txtDeskripsi = resultColumns[2];
+                                    dt.lttxtMediaID = resultColumns[0];
+                                    dt.txtExtension = resultColumns[4];
+                                    dt.txtKategoriMedia = resultColumns[6];
+                                    dt.txtNamaMasterData = resultColumns[10];
                                     return dt;
                                 }
                             });

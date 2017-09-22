@@ -29,4 +29,5 @@ public class clsHardCode {
     public String linkAvailablePoin = new mConfigRepo(context).API + "AvailablePoinCustomer";
     public String linkGetDataKontakDetail = new mConfigRepo(context).API + "GetDataMediaKontakDetail";
     public String linkGetDataMediaType = new mConfigRepo(context).API + "GetMediaType";
+    public String linkGetDataJenisMedia = new mConfigRepo(context).API + "GetJenisMedia";
 }

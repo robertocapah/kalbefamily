@@ -3,18 +3,13 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +40,7 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsJenisMedia;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaType;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
@@ -55,6 +51,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsJenisMediaRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaTypeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
@@ -71,17 +68,20 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     TextView txtDeskripsi;
     Button btnTambah;
     List<clsUserMember> dataMember = null;
-    List<clsMediaKontakDetail> dataParent, dataNoTelp, dataChild;
+    List<clsMediaKontakDetail> dataParent, dataChildJoin, dataChild;
     List<clsMediaType> dataMediaType;
+    List<clsJenisMedia> dataJenisMedia;
     clsMediaKontakDetailRepo repoKontak;
     clsUserMemberRepo repoUserMember = null;
     clsMediaTypeRepo mediaTypeRepo = null;
+    clsJenisMediaRepo jenisMediaRepo = null;
     private ExpandableListAdapter mAdapter;
 
     String child, deskripsi, lttxtMediaID;
     boolean validate = true;
     private String txtKontakID;
     private HashMap<String, String> hashMapSpinnerKategori = new HashMap<>();
+    private HashMap<String, String> hashMapSpinnerKategoriMedia = new HashMap<>();
     DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
 
@@ -141,7 +141,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         repoKontak = new clsMediaKontakDetailRepo(context.getApplicationContext());
         try {
             dataParent = (List<clsMediaKontakDetail>) repoKontak.findDataByParent();
-            dataNoTelp = (List<clsMediaKontakDetail>) repoKontak.findbyTelpon();
+//            dataChildJoin = (List<clsMediaKontakDetail>) repoKontak.findbyTelpon();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -220,36 +220,27 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         // spinner listener
         spinnerKategoriMedia.setOnItemSelectedListener(this);
 
+        try {
+            jenisMediaRepo = new clsJenisMediaRepo(context);
+            dataJenisMedia = (List<clsJenisMedia>) jenisMediaRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Spinner Drop down elements
-        List<String> kategoriMedia = new ArrayList<String>();
-        kategoriMedia.add("");
-        kategoriMedia.add("Home");
-        kategoriMedia.add("Office");
-        kategoriMedia.add("NOMOR BAPAK");
-        kategoriMedia.add("NOMOR IBU");
-        kategoriMedia.add("NOMOR ORANG TUA");
-        kategoriMedia.add("NOMOR KELUARGA");
-        kategoriMedia.add("EMAIL PIC");
-        kategoriMedia.add("NOMOR PIC");
-        kategoriMedia.add("NOMOR TOKO");
-        kategoriMedia.add("EMAIL VERIFICATION");
-        kategoriMedia.add("PATH");
-        kategoriMedia.add("fACEBOOK");
-        kategoriMedia.add("TWITTER");
-        kategoriMedia.add("EMAIL PELANGGAN");
-        kategoriMedia.add("ID LINE");
-        kategoriMedia.add("BLACKBERRY");
-        kategoriMedia.add("INSTAGRAM");
-        kategoriMedia.add("WHATS APP");
+        final List<String> kategoriMedia = new ArrayList<String>();
+        kategoriMedia.add("Pilih Salah satu");
+        if (dataJenisMedia.size() > 0) {
+            for (clsJenisMedia jenisMedia : dataJenisMedia) {
+                kategoriMedia.add(jenisMedia.txtNamaMasterData);
+                hashMapSpinnerKategoriMedia.put(jenisMedia.txtNamaMasterData, jenisMedia.txtGuiId);
+            }
+        }
 
-        // Creating adapter for spinnerTelp
-        ArrayAdapter<String> dataAdapterKategoriMedia = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, kategoriMedia);
-
-        // Drop down layout style - list view with radio button
-        dataAdapterKategoriMedia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<String> spinnerArrayAdapterKategoriMedia = new ArrayAdapter<String>(getActivity(),R.layout.spinner_item, kategoriMedia);
 
         // attaching data adapter to spinner
-        spinnerKategoriMedia.setAdapter(dataAdapterKategoriMedia);
+        spinnerKategoriMedia.setAdapter(spinnerArrayAdapterKategoriMedia);
 
         deskripsi = dataParent.get(groupPosition).getTxtDeskripsi().toString();
         lttxtMediaID = dataParent.get(groupPosition).getLttxtMediaID().toString();
@@ -261,6 +252,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         try {
             ltdt = (List<clsMediaKontakDetail>) new clsMediaKontakDetailRepo(getContext()).findWhere(dataParent.get(groupPosition).getTxtDeskripsi());
+            dataChildJoin = (List<clsMediaKontakDetail>) repoKontak.findDataChildJoin(dataParent.get(groupPosition).getTxtDeskripsi());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -288,51 +280,15 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         });
 
         int index = 0;
-        String item = ltdt.get(childPosition).getTxtKategoriMedia().toString();
-
-        String kategoriMediaSpinner = null;
-        if (item.equals("")) {
-            kategoriMediaSpinner = "";
-        } else if (item.equals("0001")) {
-            kategoriMediaSpinner = "Home";
-        } else if (item.equals("0002")) {
-            kategoriMediaSpinner = "Office";
-        } else if (item.equals("0984")) {
-            kategoriMediaSpinner = "NOMOR BAPAK";
-        } else if (item.equals("0985")) {
-            kategoriMediaSpinner = "NOMOR IBU";
-        } else if (item.equals("0986")) {
-            kategoriMediaSpinner = "NOMOR ORANG TUA";
-        } else if (item.equals("0987")) {
-            kategoriMediaSpinner = "NOMOR KELUARGA";
-        } else if (item.equals("1019")) {
-            kategoriMediaSpinner = "EMAIL PIC";
-        } else if (item.equals("1020")) {
-            kategoriMediaSpinner = "NOMOR PIC";
-        } else if (item.equals("1118")) {
-            kategoriMediaSpinner = "NOMOR TOKO";
-        } else if (item.equals("1156")) {
-            kategoriMediaSpinner = "EMAIL VERIFICATION";
-        } else if (item.equals("1214")) {
-            kategoriMediaSpinner = "PATH";
-        } else if (item.equals("1215")) {
-            kategoriMediaSpinner = "FACEBOOK";
-        } else if (item.equals("1216")) {
-            kategoriMediaSpinner = "TWITTER";
-        } else if (item.equals("1217")) {
-            kategoriMediaSpinner = "EMAIL PELANGGAN";
-        } else if (item.equals("1218")) {
-            kategoriMediaSpinner = "ID LINE";
-        } else if (item.equals("1219")) {
-            kategoriMediaSpinner = "BLACKBERRY";
-        } else if (item.equals("1221")) {
-            kategoriMediaSpinner = "INSTAGRAM";
-        } else if (item.equals("1222")) {
-            kategoriMediaSpinner = "WHATS APP";
+        String itemJoin = "";
+        if (dataChildJoin.get(childPosition).getTxtNamaMasterData() == null) {
+            itemJoin = "";
+        } else {
+            itemJoin = dataChildJoin.get(childPosition).getTxtNamaMasterData().toString();
         }
 
         for (int i = 0; i < spinnerKategoriMedia.getAdapter().getCount() - 1; i++) {
-            if (spinnerKategoriMedia.getItemAtPosition(i).equals(kategoriMediaSpinner)) {
+            if (spinnerKategoriMedia.getItemAtPosition(i).equals(itemJoin)) {
                 index = i;
             }
         }
@@ -370,46 +326,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             public void onClick(View view) {
                 final String guiID = finalLtdt.get(childPosition).getTxtGuiId().toString();
                 final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
-                String txtMasterID = null;
-                if (kategoriMediaKontak.equals("")) {
-                    txtMasterID = "";
-                } else if (kategoriMediaKontak.equals("Home")) {
-                    txtMasterID = "0001";
-                } else if (kategoriMediaKontak.equals("Office")) {
-                    txtMasterID = "0002";
-                } else if (kategoriMediaKontak.equals("NOMOR BAPAK")) {
-                    txtMasterID = "0984";
-                } else if (kategoriMediaKontak.equals("NOMOR IBU")) {
-                    txtMasterID = "0985";
-                } else if (kategoriMediaKontak.equals("NOMOR ORANG TUA")) {
-                    txtMasterID = "0986";
-                } else if (kategoriMediaKontak.equals("NOMOR KELUARGA")) {
-                    txtMasterID = "0987";
-                } else if (kategoriMediaKontak.equals("EMAIL PIC")) {
-                    txtMasterID = "1019";
-                } else if (kategoriMediaKontak.equals("NOMOR PIC")) {
-                    txtMasterID = "1020";
-                } else if (kategoriMediaKontak.equals("NOMOR TOKO")) {
-                    txtMasterID = "1118";
-                } else if (kategoriMediaKontak.equals("EMAIL VERIFICATION")) {
-                    txtMasterID = "1156";
-                } else if (kategoriMediaKontak.equals("PATH")) {
-                    txtMasterID = "1214";
-                } else if (kategoriMediaKontak.equals("FACEBOOK")) {
-                    txtMasterID = "1215";
-                } else if (kategoriMediaKontak.equals("TWITTER")) {
-                    txtMasterID = "1216";
-                } else if (kategoriMediaKontak.equals("EMAIL PELANGGAN")) {
-                    txtMasterID = "1217";
-                } else if (kategoriMediaKontak.equals("ID LINE")) {
-                    txtMasterID = "1218";
-                } else if (kategoriMediaKontak.equals("BLACKBERRY")) {
-                    txtMasterID = "1219";
-                } else if (kategoriMediaKontak.equals("INSTAGRAM")) {
-                    txtMasterID = "1221";
-                } else if (kategoriMediaKontak.equals("WHATS APP")) {
-                    txtMasterID = "1222";
-                }
 
                 txtDeskripsi.setText(deskripsi);
                 if (tvKontak.getText().toString().equals("")) {
@@ -424,7 +340,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                         alertDialog.setTitle("Konfirmasi");
                         alertDialog.setMessage("Apakah Anda yakin?");
-                        final String finalTxtMasterID = txtMasterID;
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
@@ -443,7 +358,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 dt.setTxtDetailMedia(tvKontak.getText().toString());
                                 dt.setTxtKeterangan(etKeterangan.getText().toString());
                                 dt.setTxtExtension(etExtension.getText().toString());
-                                dt.setTxtKategoriMedia(finalTxtMasterID);
+                                if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                    dt.setTxtKategoriMedia("");
+                                } else {
+                                    dt.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                                }
 
                                 if (checkBoxStatus.isChecked()) {
                                     dt.setLttxtStatusAktif("Aktif");
@@ -481,7 +400,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                         alertDialog.setTitle("Konfirmasi");
                         alertDialog.setMessage("Apakah Anda yakin?");
-                        final String finalTxtMasterID1 = txtMasterID;
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
@@ -500,7 +418,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 dt.setTxtDetailMedia(tvKontak.getText().toString());
                                 dt.setTxtKeterangan(etKeterangan.getText().toString());
                                 dt.setTxtExtension(etExtension.getText().toString());
-                                dt.setTxtKategoriMedia(finalTxtMasterID1);
+                                if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                    dt.setTxtKategoriMedia("");
+                                } else {
+                                    dt.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                                }
 
                                 if (checkBoxStatus.isChecked()) {
                                     dt.setLttxtStatusAktif("Aktif");
@@ -534,7 +456,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                     alertDialog.setTitle("Konfirmasi");
                     alertDialog.setMessage("Apakah Anda yakin?");
-                    final String finalTxtMasterID2 = txtMasterID;
                     alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
@@ -547,7 +468,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             dataKontak.setTxtDetailMedia(tvKontak.getText().toString());
                             dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                             dataKontak.setTxtExtension(etExtension.getText().toString());
-                            dataKontak.setTxtKategoriMedia(finalTxtMasterID2);
+                            if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                dataKontak.setTxtKategoriMedia("");
+                            } else {
+                                dataKontak.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                            }
 
                             if (checkBoxStatus.isChecked()) {
                                 dataKontak.setLttxtStatusAktif("Aktif");
@@ -613,6 +538,13 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             e.printStackTrace();
         }
 
+        try {
+            jenisMediaRepo = new clsJenisMediaRepo(context);
+            dataJenisMedia = (List<clsJenisMedia>) jenisMediaRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Spinner click listener
         spinnerKategori.setOnItemSelectedListener(this);
         spinnerKategoriMedia.setOnItemSelectedListener(this);
@@ -628,25 +560,13 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         }
 
         final List<String> kategoriMedia = new ArrayList<String>();
-        kategoriMedia.add("");
-        kategoriMedia.add("Home");
-        kategoriMedia.add("Office");
-        kategoriMedia.add("NOMOR BAPAK");
-        kategoriMedia.add("NOMOR IBU");
-        kategoriMedia.add("NOMOR ORANG TUA");
-        kategoriMedia.add("NOMOR KELUARGA");
-        kategoriMedia.add("EMAIL PIC");
-        kategoriMedia.add("NOMOR PIC");
-        kategoriMedia.add("NOMOR TOKO");
-        kategoriMedia.add("EMAIL VERIFICATION");
-        kategoriMedia.add("PATH");
-        kategoriMedia.add("fACEBOOK");
-        kategoriMedia.add("TWITTER");
-        kategoriMedia.add("EMAIL PELANGGAN");
-        kategoriMedia.add("ID LINE");
-        kategoriMedia.add("BLACKBERRY");
-        kategoriMedia.add("INSTAGRAM");
-        kategoriMedia.add("WHATS APP");
+        kategoriMedia.add("Pilih salah satu");
+        if (dataJenisMedia.size() > 0) {
+            for (clsJenisMedia jenisMedia : dataJenisMedia) {
+                kategoriMedia.add(jenisMedia.txtNamaMasterData);
+                hashMapSpinnerKategoriMedia.put(jenisMedia.txtNamaMasterData, jenisMedia.txtGuiId);
+            }
+        }
 
         // Creating adapter for spinnerTelp
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
@@ -688,9 +608,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             }
         };
 
+        final ArrayAdapter<String> spinnerArrayAdapterKategoriMedia = new ArrayAdapter<String>(getActivity(),R.layout.spinner_item, kategoriMedia);
+
         // attaching data adapter to spinner
         spinnerKategori.setAdapter(spinnerArrayAdapter);
-        spinnerKategoriMedia.setAdapter(dataAdapterKategoriMedia);
+        spinnerKategoriMedia.setAdapter(spinnerArrayAdapterKategoriMedia);
 
         spinnerKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -801,52 +723,9 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             public void onClick(View view) {
                 final String kategori = spinnerKategori.getSelectedItem().toString();
                 final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
-                String txtMasterID = null;
-
-                if (kategoriMediaKontak.equals("")) {
-                    txtMasterID = "";
-                } else if (kategoriMediaKontak.equals("Home")) {
-                    txtMasterID = "0001";
-                } else if (kategoriMediaKontak.equals("Office")) {
-                    txtMasterID = "0002";
-                } else if (kategoriMediaKontak.equals("NOMOR BAPAK")) {
-                    txtMasterID = "0984";
-                } else if (kategoriMediaKontak.equals("NOMOR IBU")) {
-                    txtMasterID = "0985";
-                } else if (kategoriMediaKontak.equals("NOMOR ORANG TUA")) {
-                    txtMasterID = "0986";
-                } else if (kategoriMediaKontak.equals("NOMOR KELUARGA")) {
-                    txtMasterID = "0987";
-                } else if (kategoriMediaKontak.equals("EMAIL PIC")) {
-                    txtMasterID = "1019";
-                } else if (kategoriMediaKontak.equals("NOMOR PIC")) {
-                    txtMasterID = "1020";
-                } else if (kategoriMediaKontak.equals("NOMOR TOKO")) {
-                    txtMasterID = "1118";
-                } else if (kategoriMediaKontak.equals("EMAIL VERIFICATION")) {
-                    txtMasterID = "1156";
-                } else if (kategoriMediaKontak.equals("PATH")) {
-                    txtMasterID = "1214";
-                } else if (kategoriMediaKontak.equals("FACEBOOK")) {
-                    txtMasterID = "1215";
-                } else if (kategoriMediaKontak.equals("TWITTER")) {
-                    txtMasterID = "1216";
-                } else if (kategoriMediaKontak.equals("EMAIL PELANGGAN")) {
-                    txtMasterID = "1217";
-                } else if (kategoriMediaKontak.equals("ID LINE")) {
-                    txtMasterID = "1218";
-                } else if (kategoriMediaKontak.equals("BLACKBERRY")) {
-                    txtMasterID = "1219";
-                } else if (kategoriMediaKontak.equals("INSTAGRAM")) {
-                    txtMasterID = "1221";
-                } else if (kategoriMediaKontak.equals("WHATS APP")) {
-                    txtMasterID = "1222";
-                }
 
                 if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
-                } else if (kategori.equals("PIlih salah satu")){
-                    new clsActivity().showToast(context.getApplicationContext(), "Anda harus memilih type kontak", false);
                 } else if (etKontak.getText().toString().length() < 5) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kurang dari 5 karakter", false);
                 } else if (kategori.equals("Telepon")) {
@@ -859,7 +738,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                         alertDialog.setTitle("Konfirmasi");
                         alertDialog.setMessage("Apakah Anda yakin?");
-                        final String finalTxtMasterID = txtMasterID;
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
@@ -872,7 +750,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                                 dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                                 dataKontak.setTxtExtension(etExtension.getText().toString());
-                                dataKontak.setTxtKategoriMedia(finalTxtMasterID);
+                                if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                    dataKontak.setTxtKategoriMedia("");
+                                } else {
+                                    dataKontak.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                                }
 
                                 if (checkBoxStatus.isChecked()) {
                                     dataKontak.setLttxtStatusAktif("Aktif");
@@ -909,7 +791,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                         alertDialog.setTitle("Konfirmasi");
                         alertDialog.setMessage("Apakah Anda yakin?");
-                        final String finalTxtMasterID1 = txtMasterID;
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
@@ -922,7 +803,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                                 dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                                 dataKontak.setTxtExtension(etExtension.getText().toString());
-                                dataKontak.setTxtKategoriMedia(finalTxtMasterID1);
+                                if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                    dataKontak.setTxtKategoriMedia("");
+                                } else {
+                                    dataKontak.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                                }
 
                                 if (checkBoxStatus.isChecked()) {
                                     dataKontak.setLttxtStatusAktif("Aktif");
@@ -963,7 +848,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                         alertDialog.setTitle("Konfirmasi");
                         alertDialog.setMessage("Apakah Anda yakin?");
-                        final String finalTxtMasterID = txtMasterID;
                         alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
@@ -976,7 +860,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                                 dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                                 dataKontak.setTxtExtension(etExtension.getText().toString());
-                                dataKontak.setTxtKategoriMedia(finalTxtMasterID);
+                                if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                    dataKontak.setTxtKategoriMedia("");
+                                } else {
+                                    dataKontak.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                                }
 
                                 if (checkBoxStatus.isChecked()) {
                                     dataKontak.setLttxtStatusAktif("Aktif");
@@ -1009,7 +897,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
                     alertDialog.setTitle("Konfirmasi");
                     alertDialog.setMessage("Apakah Anda yakin?");
-                    final String finalTxtMasterID2 = txtMasterID;
                     alertDialog.setPositiveButton("SIMPAN", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
@@ -1022,7 +909,11 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             dataKontak.setTxtDetailMedia(etKontak.getText().toString());
                             dataKontak.setTxtKeterangan(etKeterangan.getText().toString());
                             dataKontak.setTxtExtension(etExtension.getText().toString());
-                            dataKontak.setTxtKategoriMedia(finalTxtMasterID2);
+                            if (kategoriMediaKontak.equals("Pilih Salah satu")) {
+                                dataKontak.setTxtKategoriMedia("");
+                            } else {
+                                dataKontak.setTxtKategoriMedia(hashMapSpinnerKategoriMedia.get(kategoriMediaKontak));
+                            }
 
                             if (checkBoxStatus.isChecked()) {
                                 dataKontak.setLttxtStatusAktif("Aktif");

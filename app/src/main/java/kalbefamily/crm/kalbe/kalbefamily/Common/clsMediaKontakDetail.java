@@ -111,6 +111,16 @@ public class clsMediaKontakDetail implements Serializable {
     @DatabaseField(columnName = "txtExtension")
     public String txtExtension;
 
+    public String getTxtNamaMasterData() {
+        return txtNamaMasterData;
+    }
+
+    public void setTxtNamaMasterData(String txtNamaMasterData) {
+        this.txtNamaMasterData = txtNamaMasterData;
+    }
+
+    public String txtNamaMasterData;
+
     public String Property_txtGuiId = "txtGuiId";
     public String Property_txtKontakId = "txtKontakID";
     public String Property_lttxtMediaID = "lttxtMediaID";

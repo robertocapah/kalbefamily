@@ -63,6 +63,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsJenisMedia;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaType;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
@@ -75,6 +76,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsJenisMediaRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaTypeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
@@ -128,6 +130,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     clsUserImageProfileRepo repoUserImageProfile = null;
     clsMediaKontakDetailRepo repoKontakDetail;
     clsMediaTypeRepo mediaTypeRepo;
+    clsJenisMediaRepo jenisMediaRepo;
     clsUserMemberImage dtImage;
     clsUserImageProfile dtImageProfile;
     boolean validate = true;
@@ -562,6 +565,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 mediaType();
+                jenisMedia();
                 kontakDetail();
             }
         });
@@ -1544,6 +1548,82 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 mediaTypeRepo.createOrUpdate(dataMedia);
                             }
                             Log.d("Data info", "Get Data media type success");
+
+                        } else {
+                            new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
+    }
+
+    public void jenisMedia() {
+        final ProgressDialog Dialog = new ProgressDialog(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        txtKontakID = dataMember.get(0).getTxtKontakId();
+        String strLinkAPI = new clsHardCode().linkGetDataJenisMedia;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtKontakID", txtKontakID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String txtMasterID = jsonobject.getString("TxtMasterID");
+                                String txtGrupMasterID = jsonobject.getString("TxtGrupMasterID");
+                                String txtNamaMasterData = jsonobject.getString("TxtNamaMasterData");
+                                String txtNamaGrupMaster = jsonobject.getString("TxtNamaGrupMaster");
+                                txtMasterID = txtMasterID.trim();
+                                txtGrupMasterID = txtGrupMasterID.trim();
+                                txtNamaMasterData = txtNamaMasterData.trim();
+                                txtNamaGrupMaster = txtNamaGrupMaster.trim();
+
+                                clsJenisMedia dataJenisMedia = new clsJenisMedia();
+                                dataJenisMedia.setTxtGuiId(txtMasterID);
+                                dataJenisMedia.setTxtNamaMasterData(txtNamaMasterData);
+                                dataJenisMedia.setTxtGrupMasterID(txtGrupMasterID);
+                                dataJenisMedia.setTxtNamaGrupMaster(txtNamaGrupMaster);
+
+                                jenisMediaRepo = new clsJenisMediaRepo(context);
+                                jenisMediaRepo.createOrUpdate(dataJenisMedia);
+                            }
+                            Log.d("Data info", "Get Data jenis media success");
 
                         } else {
                             new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
