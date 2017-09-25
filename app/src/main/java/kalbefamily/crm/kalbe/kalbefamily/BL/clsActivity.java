@@ -205,19 +205,19 @@ public class clsActivity extends Activity {
         int hour = today.get(Calendar.HOUR_OF_DAY);
         String greeting = "Welcome, ";
         if(hour > 2 && hour < 12){
-            greeting = "Good morning, ";
+            greeting = "Selamat Pagi, ";
         }
         else if(hour >= 12 && hour < 16){
-            greeting = "Good afternoon, ";
+            greeting = "Selamat Siang, ";
         }
         else if(hour >= 16 && hour < 19){
-            greeting = "Good evening, ";
+            greeting = "Selamat Sore, ";
         }
         else if(hour >= 19 && hour < 2){
-            greeting = "Good night, ";
+            greeting = "Selamat Malam, ";
         }
         else{
-            greeting = "Welcome, ";
+            greeting = "Selamat Datang, ";
         }
 
         return greeting;

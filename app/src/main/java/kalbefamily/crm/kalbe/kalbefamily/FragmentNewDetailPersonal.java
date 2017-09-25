@@ -287,7 +287,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
             itemJoin = dataChildJoin.get(childPosition).getTxtNamaMasterData().toString();
         }
 
-        for (int i = 0; i < spinnerKategoriMedia.getAdapter().getCount() - 1; i++) {
+        for (int i = 0; i < spinnerKategoriMedia.getAdapter().getCount(); i++) {
             if (spinnerKategoriMedia.getItemAtPosition(i).equals(itemJoin)) {
                 index = i;
             }
@@ -376,7 +376,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
-                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                                 Log.d("Data info", "Kontak berhasil di perbarui");
@@ -436,7 +435,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
-                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                                 Log.d("Data info", "Kontak berhasil di perbarui");
@@ -486,7 +484,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             alertD.dismiss();
 
                             sendDataMediaKontakDetail();
-                            kontakDetail();
 
                             new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di perbarui", true);
                             Log.d("Data info", "Kontak berhasil di perbarui");
@@ -767,7 +764,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
-                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                                 Log.d("Data info", "Kontak berhasil di buat");
@@ -820,7 +816,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
-                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                                 Log.d("Data info", "Kontak berhasil di buat");
@@ -877,7 +872,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                                 alertD.dismiss();
 
                                 sendDataMediaKontakDetail();
-                                kontakDetail();
 
                                 new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                                 Log.d("Data info", "Kontak berhasil di buat");
@@ -927,7 +921,6 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                             alertD.dismiss();
 
                             sendDataMediaKontakDetail();
-                            kontakDetail();
 
                             new clsActivity().showToast(context.getApplicationContext(), "Kontak Berhasil di buat", true);
                             Log.d("Data info", "Kontak berhasil di buat");
@@ -986,6 +979,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
                         Log.i(TAG, "Ski data from server - " + warn);
                         clsUserMember userMemberData = new clsUserMember();
+                        kontakDetail();
                     }
                 });
             } catch (Exception e) {

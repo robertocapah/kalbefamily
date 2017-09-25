@@ -28,7 +28,7 @@
             android:checked="true"
             android:icon="@drawable/ic_qrcode"
             android:orderInCategory="0"
-            android:title="Start Scan QR-Code"
+            android:title="Scan QR-Code"
             app:actionLayout="@layout/menu_counter"
             />
 
