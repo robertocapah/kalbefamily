@@ -30,6 +30,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.HomeMenu;
 import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
 
@@ -78,7 +79,7 @@ public class VolleyUtils {
                 }
             }
             private void popup() {
-                new SweetAlertDialog(activity, SweetAlertDialog.NORMAL_TYPE)
+                new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Oops...")
                         .setContentText("Mohon check kembali koneksi internet anda")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -86,6 +87,18 @@ public class VolleyUtils {
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                                 sweetAlertDialog.dismiss();
+
+                                final SweetAlertDialog pDialog = new SweetAlertDialog(activity, SweetAlertDialog.NORMAL_TYPE);
+                                pDialog.setTitleText("Refresh Data ?");
+                                pDialog.setConfirmText("Refresh");
+                                pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        Intent intent = new Intent(activity, HomeMenu.class);
+                                        activity.startActivity(intent);
+                                    }
+                                });
+                                pDialog.show();
                             }
                         })
                         .show();
