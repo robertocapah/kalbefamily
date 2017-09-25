@@ -3,7 +3,9 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.SyncStateContract;
 import android.support.annotation.RequiresApi;
@@ -25,6 +27,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
 import kalbefamily.crm.kalbe.kalbefamily.R;
@@ -69,7 +72,23 @@ public class VolleyUtils {
                     if (error.getMessage() != null) {
                         listener.onError(error.getMessage());
                     }
+                } else {
+                    popup();
+                    finalDialog1.dismiss();
                 }
+            }
+            private void popup() {
+                new SweetAlertDialog(activity, SweetAlertDialog.NORMAL_TYPE)
+                        .setTitleText("Oops...")
+                        .setContentText("Mohon check kembali koneksi internet anda")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .show();
             }
 //            @Override
 //            public void onErrorResponse(VolleyError error) {

@@ -665,7 +665,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                     } else if (kategori.equals("PATH")) {
                         etKontak.setHint("Akun Path");
                     } else if (kategori.equals("PIlih salah satu")) {
-                        etKontak.setHint("No Telpon");
+                        etKontak.setHint("No Kontak");
                     } else {
                         int maxLength = 35;
                         InputFilter[] FilterArray = new InputFilter[1];
