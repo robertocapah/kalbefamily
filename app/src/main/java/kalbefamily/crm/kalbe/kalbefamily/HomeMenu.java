@@ -2,6 +2,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import org.apache.http.util.ByteArrayBuffer;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -32,7 +34,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -168,44 +172,19 @@ public class HomeMenu extends AppCompatActivity {
         toolbar.setTitle("Home");
         setSupportActionBar(toolbar);
 
-//        UserMember();
+        UserMember();
 
-        FragmentInfoContact ContactFragment = new FragmentInfoContact();
-        FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
-        fragmentTransactionHome.replace(R.id.frame, ContactFragment);
-        fragmentTransactionHome.commit();
-        selectedId = 99;
+//        FragmentInfoContact ContactFragment = new FragmentInfoContact();
+//        FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
+//        fragmentTransactionHome.replace(R.id.frame, ContactFragment);
+//        fragmentTransactionHome.commit();
+//        selectedId = 99;
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View vwHeader = navigationView.getHeaderView(0);
         ivProfile = (CircleImageView) vwHeader.findViewById(R.id.profile_image);
         tvUsername = (TextView) vwHeader.findViewById(R.id.username);
         tvEmail = (TextView) vwHeader.findViewById(R.id.email);
-        clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
-        try {
-            dataMember = (List<clsUserMember>) repo.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
-        tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
-//        if (dataMember.get(0).getTxtEmail().equals("")) {
-//            tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
-//        } else {
-//            tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
-//        }
-
-        try {
-            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
-            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (dataUserImageProfile.size() > 0) {
-            viewImageProfile();
-        }
 
         Menu header = navigationView.getMenu();
         SubMenu subMenuVersion = header.addSubMenu(R.id.groupVersion, 0, 3, "Version");
@@ -406,7 +385,7 @@ public class HomeMenu extends AppCompatActivity {
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(HomeMenu.this, strLinkAPI, mRequestBody, "Updating Data, Please wait !", new VolleyResponseListener() {
+        new VolleyUtils().makeJsonObjectRequest(HomeMenu.this, strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(getApplicationContext(), response, false);
@@ -433,7 +412,8 @@ public class HomeMenu extends AppCompatActivity {
                                 String txtEmail = jsonobject.getString("TxtEmail");
                                 String txtTelp = jsonobject.getString("TxtTelp");
                                 String txtNoKTP = jsonobject.getString("TxtNoKTP");
-                                String txtNamaKeluarga = jsonobject.getString("TxtNamaKeluarga");
+                                String txtNamaDepan = jsonobject.getString("TxtNamaDepan");
+                                String txtNamaBelakang = jsonobject.getString("TxtNamaKeluarga");
                                 String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
                                 String intBasePoin = jsonobject.getString("IntBasePoin");
                                 String txtTglAwal = jsonobject.getString("DtTglAwal");
@@ -448,50 +428,49 @@ public class HomeMenu extends AppCompatActivity {
                                 dataUser.setTxtEmail(txtEmail);
                                 dataUser.setTxtNoTelp(txtTelp);
                                 dataUser.setTxtNoKTP(txtNoKTP);
-                                dataUser.setTxtNamaBelakang(txtNamaKeluarga);
+                                dataUser.setTxtNamaDepan(txtNamaDepan);
+                                dataUser.setTxtNamaBelakang(txtNamaBelakang);
                                 dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
                                 dataUser.setTxtBasePoin(intBasePoin);
                                 dataUser.setTxtTglAwal(txtTglAwal);
                                 dataUser.setTxtTglBerlaku(txtTglBerlaku);
 
                                 repoUserMember = new clsUserMemberRepo(getApplicationContext());
+                                repoUserMember.createOrUpdate(dataUser);
 //
-                                int h = 0;
-                                h = repoUserMember.createOrUpdate(dataUser);
-                                if(h > -1) {
-                                    Log.d("Data info", "Data Member berhasil di update");
-//                                    status = true;
-                                }
+//                                int h = 0;
+//                                h = repoUserMember.createOrUpdate(dataUser);
+//                                if(h > -1) {
+//                                    Log.d("Data info", "Data Member berhasil di update");
+////                                    status = true;
+//                                }
 
-                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
-                                if (listtkontakImage != "null") {
-                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
-                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
-                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+                                String listtkontakImageProfile = jsonobject.getString("ListtkontakImageProfile");
+                                if (listtkontakImageProfile != "null") {
+                                    JSONArray jsonDataUserMemberImageProfile = jsonobject.getJSONArray("ListtkontakImageProfile");
+                                    for (int j = 0; j < jsonDataUserMemberImageProfile.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImageProfile.getJSONObject(j);
                                         String txtGuiID = jsonobjectImage.getString("TxtDataID");
                                         String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
                                         String txtImageName = jsonobjectImage.getString("TxtImageName");
                                         String txtType = jsonobjectImage.getString("TxtType");
 
-                                        clsUserMemberImage dataImage = new clsUserMemberImage();
-                                        dataImage.setTxtGuiId(txtGuiID);
-                                        dataImage.setTxtHeaderId(txtKontakIDImage);
-                                        dataImage.setTxtPosition(txtType);
+                                        clsUserImageProfile imageProfile = new clsUserImageProfile();
+                                        imageProfile.setTxtGuiId(txtGuiID);
+                                        imageProfile.setTxtKontakId(txtKontakIDImage);
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
-
                                         byte[] logoImage = getLogoImage(url);
 
                                         if (logoImage != null) {
-                                            dataImage.setTxtImg(logoImage);
+                                            imageProfile.setTxtImg(logoImage);
 
-                                            imageRepo = new clsUserMemberImageRepo(getApplicationContext());
+                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
 
                                             int k = 0;
-                                            k = imageRepo.createOrUpdate(dataImage);
+                                            k = repoUserImageProfile.createOrUpdate(imageProfile);
                                             if(k > -1) {
-                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
-                                                Log.d("Data info", "Data Member Image berhasil di update");
+                                                Log.d("Data info", "Data Member Image profile berhasil di update");
 //                                    status = true;
                                             }
                                         }
@@ -499,13 +478,37 @@ public class HomeMenu extends AppCompatActivity {
                                 }
 
                             }
-                            new clsActivity().showCustomToast(getApplicationContext(), "Update Data, Success", true);
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
                             new clsActivity().showCustomToast(getApplicationContext(), warn, false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
+                    try {
+                        dataMember = (List<clsUserMember>) repo.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    tvUsername.setText(_clsMainActivity.greetings() + dataMember.get(0).getTxtNama());
+                    tvEmail.setText(dataMember.get(0).getTxtMemberId().toString());
+
+                    try {
+                        repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+                        dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if (dataUserImageProfile.size() > 0) {
+                        viewImageProfile();
+                    }
+
+                    FragmentInfoContact ContactFragment = new FragmentInfoContact();
+                    FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
+                    fragmentTransactionHome.replace(R.id.frame, ContactFragment);
+                    fragmentTransactionHome.commit();
+                    selectedId = 99;
                 }
 //                if(!status){
 //                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);

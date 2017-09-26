@@ -3,13 +3,18 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.SyncStateContract;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -24,14 +29,19 @@ import com.android.volley.toolbox.Volley;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.BL.clsMainBL;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.HomeMenu;
+import kalbefamily.crm.kalbe.kalbefamily.NewMemberActivity;
 import kalbefamily.crm.kalbe.kalbefamily.R;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
 
 import static android.provider.Telephony.Carriers.PASSWORD;
@@ -43,7 +53,6 @@ import static android.provider.Telephony.Carriers.PASSWORD;
 public class VolleyUtils {
 //    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void makeJsonObjectRequest(final Activity activity, String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
-
         ProgressDialog Dialog = new ProgressDialog(activity);
 //        Dialog.setCancelable(false);
 //        Dialog.show();
@@ -78,30 +87,49 @@ public class VolleyUtils {
                     finalDialog1.dismiss();
                 }
             }
-            private void popup() {
-                new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Oops...")
-                        .setContentText("Mohon check kembali koneksi internet anda")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
-                                sweetAlertDialog.dismiss();
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.show();
+                dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                        dialog.dismiss();
+                        sweetAlertDialog.dismiss();
 
-                                final SweetAlertDialog pDialog = new SweetAlertDialog(activity, SweetAlertDialog.NORMAL_TYPE);
-                                pDialog.setTitleText("Refresh Data ?");
-                                pDialog.setConfirmText("Refresh");
-                                pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        Intent intent = new Intent(activity, HomeMenu.class);
-                                        activity.startActivity(intent);
-                                    }
-                                });
-                                pDialog.show();
+                        LayoutInflater layoutInflater = LayoutInflater.from(activity);
+                        final View promptView = layoutInflater.inflate(R.layout.confirm_data, null);
+
+                        final TextView _tvConfirm = (TextView) promptView.findViewById(R.id.tvTitle);
+                        final TextView _tvDesc = (TextView) promptView.findViewById(R.id.tvDesc);
+                        _tvDesc.setVisibility(View.INVISIBLE);
+                        _tvConfirm.setText("Refresh Data ?");
+                        _tvConfirm.setTextSize(18);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+                        alertDialogBuilder.setView(promptView);
+                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                clsStatusMenuStart _clsStatusMenuStart = new clsMainBL().checkUserActive2(activity.getApplicationContext());
+                                if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
+                                    Intent intent = new Intent(activity, HomeMenu.class);
+                                    activity.startActivity(intent);
+                                    activity.finish();
+                                    dialogInterface.dismiss();
+                                } else {
+                                    Intent intent = new Intent(activity, NewMemberActivity.class);
+                                    activity.startActivity(intent);
+                                    activity.finish();
+                                    dialogInterface.dismiss();
+                                }
                             }
-                        })
-                        .show();
+                        });
+                        final AlertDialog alertD = alertDialogBuilder.create();
+                        alertD.show();
+                    }
+                });
             }
 //            @Override
 //            public void onErrorResponse(VolleyError error) {

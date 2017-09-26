@@ -76,18 +76,15 @@ public class FragmentInfoContact extends Fragment {
         tvAddress = (TextView) v.findViewById(R.id.tvNumber5);
         tvBasePoint = (TextView) v.findViewById(R.id.tvBasePoint);
         refreshButton = (FloatingActionButton) v.findViewById(R.id.fab);
-//        ctvStatus = (CircleTextView) v.findViewById(R.id.status);
-//        clsUserLoginData data = new clsUserLoginRepo(context).getDataLogin(context);
-//        clsAbsenData dataAbsen = new clsAbsenDataRepo(context).getDataCheckinActive(context);
 
         UserMember();
 
-        try {
-            repoUserMember = new clsUserMemberRepo(context);
-            dataMember = (List<clsUserMember>) repoUserMember.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            repoUserMember = new clsUserMemberRepo(context);
+//            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 //        tvUsername.setText(dataMember.get(0).getTxtNama().toString());
 //        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
 //        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
@@ -247,6 +244,39 @@ public class FragmentInfoContact extends Fragment {
                                     }
                                 }
 
+                                String listtkontakImageProfile = jsonobject.getString("ListtkontakImageProfile");
+                                if (listtkontakImageProfile != "null") {
+                                    JSONArray jsonDataUserMemberImageProfile = jsonobject.getJSONArray("ListtkontakImageProfile");
+                                    for (int j = 0; j < jsonDataUserMemberImageProfile.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImageProfile.getJSONObject(j);
+                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+                                        String txtType = jsonobjectImage.getString("TxtType");
+
+                                        clsUserImageProfile imageProfile = new clsUserImageProfile();
+                                        imageProfile.setTxtGuiId(txtGuiID);
+                                        imageProfile.setTxtKontakId(txtKontakIDImage);
+
+                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+                                        byte[] logoImage = getLogoImage(url);
+
+                                        if (logoImage != null) {
+                                            imageProfile.setTxtImg(logoImage);
+
+                                            repoUserImageProfile = new clsUserImageProfileRepo(context);
+
+                                            int k = 0;
+                                            k = repoUserImageProfile.createOrUpdate(imageProfile);
+                                            if(k > -1) {
+                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+                                                Log.d("Data info", "Data Member Image profile berhasil di update");
+//                                    status = true;
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
@@ -269,6 +299,16 @@ public class FragmentInfoContact extends Fragment {
                         tvBasePoint.setText("( Poin Kalbe Family : 0 )");
                     } else {
                         tvBasePoint.setText("( Poin Kalbe Family : " +dataMember.get(0).getTxtBasePoin()+ " )");
+                    }
+
+                    try {
+                        repoUserImageProfile = new clsUserImageProfileRepo(context);
+                        dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if (dataUserImageProfile.size() > 0) {
+                        viewImageProfile();
                     }
                 }
 //                if(!status){

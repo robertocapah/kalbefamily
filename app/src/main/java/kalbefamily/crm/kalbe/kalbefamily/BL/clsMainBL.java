@@ -57,4 +57,30 @@ public class clsMainBL {
         return _clsStatusMenuStart;
     }
 
+    public clsStatusMenuStart checkUserActive2(Context context) {
+        clsUserLoginRepo repo = new clsUserLoginRepo(context);
+        clsUserMemberRepo repoUser = new clsUserMemberRepo(context);
+        clsStatusMenuStart _clsStatusMenuStart =new clsStatusMenuStart();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        String now = dateFormat.format(cal.getTime()).toString();
+//        if(repo.CheckLoginNow()){
+        List<clsUserLoginData> listData= null;
+        List<clsUserMember> listDataMember = null;
+        try {
+            listData = (List<clsUserLoginData>) repo.findAll();
+            listDataMember = (List<clsUserMember>) repoUser.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (clsUserMember data : listDataMember){
+            if (!data.getTxtKontakId().equals(null)){
+                _clsStatusMenuStart.set_intStatus(enumStatusMenuStart.UserActiveLogin);
+            }
+        }
+
+//        }
+        return _clsStatusMenuStart;
+    }
+
 }
