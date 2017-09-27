@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
@@ -66,7 +67,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
     View v;
     Context context;
     TextView txtDeskripsi;
-    Button btnTambah;
+    FloatingActionButton fabAddKontak;
     List<clsUserMember> dataMember = null;
     List<clsMediaKontakDetail> dataParent, dataChildJoin, dataChild;
     List<clsMediaType> dataMediaType;
@@ -89,9 +90,9 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
         v = inflater.inflate(R.layout.fragment_new_detail_personal, container, false);
         context = getActivity().getApplicationContext();
         txtDeskripsi = (TextView) v.findViewById(R.id.txtDeskripsi);
-        btnTambah = (Button) v.findViewById(R.id.btnTambah);
+        fabAddKontak = (FloatingActionButton) v.findViewById(R.id.fabAddKontak);
 
-        btnTambah.setOnClickListener(new View.OnClickListener() {
+        fabAddKontak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupTambah();
@@ -548,7 +549,7 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("PIlih salah satu");
+        categories.add("Pilih salah satu");
         if (dataMediaType.size() > 0) {
             for (clsMediaType mediaType : dataMediaType) {
                 categories.add(mediaType.txtNamaMasterData);
@@ -721,7 +722,9 @@ public class FragmentNewDetailPersonal extends Fragment implements AdapterView.O
                 final String kategori = spinnerKategori.getSelectedItem().toString();
                 final String kategoriMediaKontak = spinnerKategoriMedia.getSelectedItem().toString();
 
-                if (etKontak.getText().toString().equals("")) {
+                if (kategori.equals("Pilih salah satu")) {
+                    new clsActivity().showToast(context.getApplicationContext(), "Anda harus memilih type kontak", false);
+                } else if (etKontak.getText().toString().equals("")) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kosong", false);
                 } else if (etKontak.getText().toString().length() < 5) {
                     new clsActivity().showToast(context.getApplicationContext(), "Kontak Tidak boleh kurang dari 5 karakter", false);
