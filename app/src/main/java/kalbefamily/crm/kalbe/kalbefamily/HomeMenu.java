@@ -132,10 +132,11 @@ public class HomeMenu extends AppCompatActivity {
         boolean isHome = false;
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() == 1) {
-                finish();
+                isHome = true;
+
             } else if (fragment != null && fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
                 if (fragment.isVisible()) {
-                    finish();
+                    isHome = true;
                 }
             } else if (fragment != null && !fragment.toString().contains("FragmentInfoContact") && getSupportFragmentManager().getFragments().size() > 1) {
                 isHome = false;
@@ -149,9 +150,31 @@ public class HomeMenu extends AppCompatActivity {
             FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
             fragmentTransactionHome.replace(R.id.frame, homeFragment);
             fragmentTransactionHome.commit();
+
 //            navigationView.getMenu().getItem(0).setChecked(true);
-        } else {
-            finish();
+        } else if (isHome) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Keluar");
+            builder.setMessage("Apakah Anda ingin keluar?");
+
+            builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 

@@ -19,7 +19,7 @@
             android:id="@+id/tampakDepan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/kartu_virtual_2" />
+            android:src="@drawable/kartu_virtual_batik" />
 
         <TextView
             android:id="@+id/textView7"
@@ -91,7 +91,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/kartu_virtual_belakang" />
+            android:src="@drawable/kartu_virtual_back_desain" />
     </AbsoluteLayout>
 
     <RelativeLayout

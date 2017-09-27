@@ -79,21 +79,21 @@ public class FragmentInfoContact extends Fragment {
 
         UserMember();
 
-//        try {
-//            repoUserMember = new clsUserMemberRepo(context);
-//            dataMember = (List<clsUserMember>) repoUserMember.findAll();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        tvUsername.setText(dataMember.get(0).getTxtNama().toString());
-//        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
-//        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
-//        tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
-//        if (dataMember.get(0).getTxtBasePoin().equals("null")) {
-//            tvBasePoint.setText("( Base Point : 0 )");
-//        } else {
-//            tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
-//        }
+        try {
+            repoUserMember = new clsUserMemberRepo(context);
+            dataMember = (List<clsUserMember>) repoUserMember.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        tvUsername.setText(dataMember.get(0).getTxtNama().toString());
+        tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
+        tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+        tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
+        if (dataMember.get(0).getTxtBasePoin().equals("null")) {
+            tvBasePoint.setText("( Base Point : 0 )");
+        } else {
+            tvBasePoint.setText("( Base Point : " +dataMember.get(0).getTxtBasePoin()+ " )");
+        }
 
         try {
             repoUserImageProfile = new clsUserImageProfileRepo(context);
