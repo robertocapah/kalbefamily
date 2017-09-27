@@ -89,6 +89,7 @@
         android:layout_centerVertical="true">
 
         <ImageView
+            android:id="@+id/tampakBelakang"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/kartu_virtual_back_desain" />

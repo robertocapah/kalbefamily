@@ -47,16 +47,12 @@ public class VolleyUtils {
         ProgressDialog Dialog = new ProgressDialog(activity);
 //        Dialog.setCancelable(false);
 //        Dialog.show();
-        Dialog.setMessage(progressBarType);
-        Dialog.setIndeterminate(false);
 
-//        Dialog = ProgressDialog.show(activity, "",
-//                progressBarType, false);
+        Dialog = ProgressDialog.show(activity, "",
+                progressBarType, false);
 //        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));
         final ProgressDialog finalDialog = Dialog;
         final ProgressDialog finalDialog1 = Dialog;
-
-        Dialog.show();
 
         StringRequest req = new StringRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
             @Override
@@ -64,14 +60,7 @@ public class VolleyUtils {
                 Boolean status = false;
                 String errorMessage = null;
                 listener.onResponse(response, status, errorMessage);
-
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                finalDialog.dismiss();
-                            }
-                        }, 2500);
+                finalDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override

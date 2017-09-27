@@ -32,7 +32,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
     TextView etNumber, etNama, etTglBerlaku;
     Spinner spinner;
     AbsoluteLayout layoutDepan, layoutBelakang;
-    ImageView tampakDepan;
+    ImageView tampakDepan, tampakBelakang;
     PhotoViewAttacher photoViewAttacher;
 
     List<clsUserMember> dataMember = null;
@@ -58,6 +58,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         layoutDepan = (AbsoluteLayout) findViewById(R.id.absoluteLayout);
         layoutBelakang = (AbsoluteLayout) findViewById(R.id.absoluteLayout_belakang);
         tampakDepan = (ImageView) findViewById(R.id.tampakDepan);
+        tampakBelakang = (ImageView) findViewById(R.id.tampakBelakang);
 //        spinNama = (Spinner) findViewById(R.id.spnNama);
 
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
@@ -104,9 +105,9 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         etNama.setText(dataMember.get(0).getTxtNama().toUpperCase());
         etTglBerlaku.setText(dataMember.get(0).getTxtTglBerlaku());
 
-//        photoViewAttacher = new PhotoViewAttacher(tampakDepan);
-//
-//        photoViewAttacher.update();
+        photoViewAttacher = new PhotoViewAttacher(tampakBelakang);
+
+        photoViewAttacher.update();
 
     }
 
