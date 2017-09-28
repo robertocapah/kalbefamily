@@ -52,7 +52,7 @@ public class NewLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.title_login));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_theme));
         }
 
         setContentView(R.layout.activity_new_login);

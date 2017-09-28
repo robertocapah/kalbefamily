@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.util.Base64;
 
 import com.android.volley.AuthFailureError;
@@ -86,7 +87,8 @@ public class VolleyUtils {
                 dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+//                        activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)); // turn on internet with wifi
+//                        activity.startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)); // turn on internet with mobile data
                         dialog.dismiss();
                         sweetAlertDialog.dismiss();
 

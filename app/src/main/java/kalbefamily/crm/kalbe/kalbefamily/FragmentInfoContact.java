@@ -243,40 +243,6 @@ public class FragmentInfoContact extends Fragment {
                                         }
                                     }
                                 }
-
-                                String listtkontakImageProfile = jsonobject.getString("ListtkontakImageProfile");
-                                if (listtkontakImageProfile != "null") {
-                                    JSONArray jsonDataUserMemberImageProfile = jsonobject.getJSONArray("ListtkontakImageProfile");
-                                    for (int j = 0; j < jsonDataUserMemberImageProfile.length(); j++) {
-                                        JSONObject jsonobjectImage = jsonDataUserMemberImageProfile.getJSONObject(j);
-                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
-                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
-                                        String txtType = jsonobjectImage.getString("TxtType");
-
-                                        clsUserImageProfile imageProfile = new clsUserImageProfile();
-                                        imageProfile.setTxtGuiId(txtGuiID);
-                                        imageProfile.setTxtKontakId(txtKontakIDImage);
-
-                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
-                                        byte[] logoImage = getLogoImage(url);
-
-                                        if (logoImage != null) {
-                                            imageProfile.setTxtImg(logoImage);
-
-                                            repoUserImageProfile = new clsUserImageProfileRepo(context);
-
-                                            int k = 0;
-                                            k = repoUserImageProfile.createOrUpdate(imageProfile);
-                                            if(k > -1) {
-                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
-                                                Log.d("Data info", "Data Member Image profile berhasil di update");
-//                                    status = true;
-                                            }
-                                        }
-                                    }
-                                }
-
                             }
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
