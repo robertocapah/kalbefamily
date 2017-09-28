@@ -564,9 +564,33 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaType();
-                jenisMedia();
-                kontakDetail();
+                clsUserMember dataUser = new clsUserMember();
+                dataUser.setTxtKontakId(dataMember.get(0).getTxtKontakId().toString());
+                dataUser.setTxtMemberId(member1);
+                dataUser.setTxtNama(tvNama.getText().toString());
+                dataUser.setTxtNamaDepan(etNamaDepan.getText().toString());
+                dataUser.setTxtAlamat(etAlamat.getText().toString());
+                dataUser.setTxtNoKTP(etNoKTP.getText().toString());
+                dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
+                dataUser.setTxtNamaBelakang(etNamaBelakang.getText().toString());
+                dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
+
+                dataUser.setTxtEmail(etEmail.getText().toString());
+                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+
+                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
+                RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
+
+                dataUser.setTxtJenisKelamin(rbGender.getText().toString());
+
+                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                repoUserMember.createOrUpdate(dataUser);
+
+                savePicture1();
+                savePicture2();
+                savePictureProfile();
+
+                sendDataForwardMediaKomunikasi();
             }
         });
 
@@ -1056,6 +1080,52 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
                                 getActivity().finish();
                                 startActivity(intent);
+                            } else {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i(TAG, "Ski data from server - " + response);
+                        clsUserMember userMemberData = new clsUserMember();
+                    }
+                });
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendDataForwardMediaKomunikasi() {
+        String versionName = "";
+        clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
+        if (dtJson != null) {
+            try {
+                String strLinkAPI = new clsHardCode().linkSendData;
+                final String mRequestBody = "[" + dtJson.toString() + "]";
+
+                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        String error;
+                    }
+
+                    @Override
+                    public void onResponse(String response, Boolean status, String strErrorMsg) {
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response);
+                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                            String warn = jsn.getString("TxtMessage");
+                            String result = jsn.getString("IntResult");
+                            String res = response;
+
+                            if (result.equals("1")) {
+                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                mediaType();
+                                jenisMedia();
+                                kontakDetail();
                             } else {
                                 new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
                             }

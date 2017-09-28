@@ -151,6 +151,7 @@ public class QrCodeActivity extends AppCompatActivity {
             clsQRCodeData qrCodeData = new clsQRCodeData();
             qrCodeData.setIntQRCodeID(result);
             qrCodeData.setTxtKontakID(dataMember.get(0).txtKontakId.toString());
+            qrCodeData.setTxtMemberID(dataMember.get(0).txtMemberId.toString());
 
             qrCodeRepo = new clsQRCodeRepo(getApplicationContext());
 

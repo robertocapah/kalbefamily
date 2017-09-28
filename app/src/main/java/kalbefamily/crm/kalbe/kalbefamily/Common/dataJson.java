@@ -137,6 +137,7 @@ public class dataJson {
             for (clsQRCodeData data : this.getLisClsQRCodeData()) {
                 resJson.put(dtQRCodeData.Property_IntQRCodeID, String.valueOf(data.getIntQRCodeID()));
                 resJson.put(dtQRCodeData.Property_txtKontakID, String.valueOf(data.getTxtKontakID()));
+                resJson.put(dtQRCodeData.Property_txtMemberID, String.valueOf(data.getTxtMemberID()));
                 itemsListJquey.add(resJson);
             }
         }

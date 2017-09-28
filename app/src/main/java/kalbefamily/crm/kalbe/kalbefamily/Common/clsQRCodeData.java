@@ -31,8 +31,20 @@ public class clsQRCodeData implements Serializable {
     @DatabaseField(columnName = "txtKontakID")
     public String txtKontakID;
 
+    public String getTxtMemberID() {
+        return txtMemberID;
+    }
+
+    public void setTxtMemberID(String txtMemberID) {
+        this.txtMemberID = txtMemberID;
+    }
+
+    @DatabaseField(columnName = "txtMemberID")
+    public String txtMemberID;
+
     public String Property_IntQRCodeID = "IntQRCodeID";
     public String Property_txtKontakID = "txtKontakID";
+    public String Property_txtMemberID = "txtMemberID";
     public String Property_All=Property_IntQRCodeID +","+
             Property_txtKontakID;
 
