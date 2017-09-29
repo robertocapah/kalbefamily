@@ -74,13 +74,15 @@
                 android:clickable="false"
                 android:padding="@dimen/activity_horizontal_margin">
 
-                <ImageView
-                    android:id="@+id/ivContactItem1"
+                <TextView
+                    android:id="@+id/labelNamaDepan"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_person" />
+                    android:text="Nama Depan"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView
                     android:id="@+id/textViewNamaKeluarga"
@@ -89,7 +91,7 @@
                     android:layout_below="@id/tvNumber1"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="8dp"
-                    android:layout_toEndOf="@id/ivContactItem1"
+                    android:layout_toEndOf="@id/labelNamaDepan"
                     android:hint="Nama Depan"
                     android:textSize="15dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -116,25 +118,27 @@
                 android:clickable="false"
                 android:padding="@dimen/activity_horizontal_margin">
 
-                <ImageView
-                    android:id="@+id/ivContactItem2"
-                    android:layout_width="30dp"
+                <TextView
+                    android:id="@+id/labelNamaBelakang"
+                    android:layout_width="45dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_person" />
+                    android:text="Nama Belakang"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView
                     android:id="@+id/textViewNamaBelakang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="1dp"
                     android:hint="Nama Belakang"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/ivContactItem2"
-                    android:layout_toEndOf="@+id/ivContactItem2"
+                    android:layout_toRightOf="@+id/labelNamaBelakang"
+                    android:layout_toEndOf="@+id/labelNamaBelakang"
                     android:layout_marginLeft="12dp" />
 
             </RelativeLayout>
@@ -148,22 +152,24 @@
                 android:clickable="false"
                 android:padding="@dimen/activity_horizontal_margin">
 
-                <ImageView
-                    android:id="@+id/ivContactItem10"
-                    android:layout_width="30dp"
+                <TextView
+                    android:id="@+id/labelNamaPanggilan"
+                    android:layout_width="45dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_person" />
+                    android:text="Nama Panggilan"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView
                     android:id="@+id/textViewNamaPanggilan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvNumber1"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="1dp"
                     android:layout_marginTop="8dp"
-                    android:layout_toEndOf="@id/ivContactItem10"
+                    android:layout_toEndOf="@id/labelNamaPanggilan"
                     android:hint="Nama Panggilan"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#727272" />
@@ -359,15 +365,15 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="false"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/ivContactItem7"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="50dp"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_card" />
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_ktp" />
 
                 <TextView
                     android:id="@+id/textViewNoKTP"

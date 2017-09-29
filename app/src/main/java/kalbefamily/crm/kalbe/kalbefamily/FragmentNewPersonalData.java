@@ -1,8 +1,10 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -13,12 +15,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -35,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -133,8 +138,10 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     clsJenisMediaRepo jenisMediaRepo;
     clsUserMemberImage dtImage;
     clsUserImageProfile dtImageProfile;
-    boolean validate = true;
+    boolean validate = false;
+    boolean validate_2 = false;
     private String txtKontakID;
+    Bitmap thePic, thePic2;
 
     @Nullable
     @Override
@@ -344,38 +351,20 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         etNoKTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan No KTP Anda");
+                final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+                dialog2.setIndeterminate(true);
+                dialog2.setMessage("Mohon Tunggu...");
+                dialog2.show();
 
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                // max lenght
-                int maxLength = 16;
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-                input.setFilters(FilterArray);
-
-                input.setTextColor(Color.BLACK);
-                input.setText(etNoKTP.getText().toString());
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                input.setHint(" No KTP");
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        etNoKTP.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+                                showDialog();
+                                // onLoginFailed();
+                                dialog2.dismiss();
+                            }
+                        }, 2500);
             }
         });
 
@@ -725,9 +714,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                thePic = extras.getParcelable("data");
+                validate = true;
 
                 previewCaptureImage1(thePic);
+                dialogPopupImage(thePic);
             } else if (resultCode == 0) {
                 new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
             }
@@ -766,9 +757,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                thePic2 = extras.getParcelable("data");
+                validate_2 = true;
 
-                previewCaptureImage2(thePic);
+                previewCaptureImage2(thePic2);
+                dialogPopupImage(thePic2);
             } else if (resultCode == 0) {
                 new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
             }
@@ -807,7 +800,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                thePic = extras.getParcelable("data");
 
                 previewCaptureImageProfile(thePic);
             } else if (resultCode == 0) {
@@ -1707,6 +1700,355 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 //                }
             }
         });
+    }
+
+    Dialog dialog;
+    private void showDialog() {
+        // custom dialog
+        dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setCancelable(false);
+
+        // set the custom dialog components - text, image and button
+        FloatingActionButton ktp1 = (FloatingActionButton) dialog.findViewById(R.id.editImageKtp1);
+        FloatingActionButton ktp2 = (FloatingActionButton) dialog.findViewById(R.id.editImageKtp2);
+        CircleImageView imageKTP1 = (CircleImageView) dialog.findViewById(R.id.image_ktp1);
+        CircleImageView imageKTP2 = (CircleImageView) dialog.findViewById(R.id.image_ktp2);
+        ImageButton close = (ImageButton) dialog.findViewById(R.id.btnClose);
+        Button simpan = (Button) dialog.findViewById(R.id.btnBuy);
+        final TextView tvKTPDialog = (TextView) dialog.findViewById(R.id.tvKTPDialog);
+
+        tvKTPDialog.setText(etNoKTP.getText().toString());
+
+        // Close Button
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                //TODO Close button action
+            }
+        });
+
+        // edit no ktp
+        tvKTPDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage("Masukan No KTP Anda");
+
+                // Layout Dynamic
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(25, 20, 25, 10);
+
+                final EditText input = new EditText(context);
+                // max lenght
+                int maxLength = 16;
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                input.setFilters(FilterArray);
+
+                input.setTextColor(Color.BLACK);
+                input.setText(tvKTPDialog.getText().toString());
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setHint(" No KTP");
+                layout.addView(input, layoutParams);
+
+                alert.setView(layout);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tvKTPDialog.setText(input.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
+            }
+        });
+
+        // Buy Button
+        simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etNoKTP.setText(tvKTPDialog.getText().toString());
+                dialog.dismiss();
+                //TODO Buy button action
+            }
+        });
+
+        ktp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage1();
+                dialog.dismiss();
+            }
+        });
+
+        ktp2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage2();
+                dialog.dismiss();
+            }
+        });
+
+        if (validate == true) {
+            Bitmap photo = thePic;
+            try {
+                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+                imageKTP1.setVisibility(View.VISIBLE);
+                output = null;
+                try {
+                    output = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (output != null){
+                            output.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                phtImage1 = output.toByteArray();
+                imageKTP1.setImageBitmap(photo_view);
+
+                if (dtImage == null){
+                    dtImage.setTxtImg(phtImage1);
+                } else {
+                    dtImage.setTxtImg(phtImage1);
+                }
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } if (validate_2 == true) {
+            Bitmap photo = thePic2;
+            try {
+                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+                imageKTP2.setVisibility(View.VISIBLE);
+                output = null;
+                try {
+                    output = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (output != null){
+                            output.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                phtImage2 = output.toByteArray();
+                imageKTP2.setImageBitmap(photo_view);
+
+                if (dtImage == null){
+                    dtImage.setTxtImg(phtImage2);
+                } else {
+                    dtImage.setTxtImg(phtImage2);
+                }
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show();
+    }
+
+    private void dialogPopupImage(Bitmap photo) {
+        // custom dialog
+        dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setCancelable(false);
+
+        // set the custom dialog components - text, image and button
+        FloatingActionButton ktp1 = (FloatingActionButton) dialog.findViewById(R.id.editImageKtp1);
+        FloatingActionButton ktp2 = (FloatingActionButton) dialog.findViewById(R.id.editImageKtp2);
+        CircleImageView imageKTP1 = (CircleImageView) dialog.findViewById(R.id.image_ktp1);
+        CircleImageView imageKTP2 = (CircleImageView) dialog.findViewById(R.id.image_ktp2);
+        ImageButton close = (ImageButton) dialog.findViewById(R.id.btnClose);
+        Button simpan = (Button) dialog.findViewById(R.id.btnBuy);
+        final TextView tvKTPDialog = (TextView) dialog.findViewById(R.id.tvKTPDialog);
+
+        tvKTPDialog.setText(etNoKTP.getText().toString());
+
+        // Close Button
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                //TODO Close button action
+            }
+        });
+
+        // edit no ktp
+        tvKTPDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage("Masukan No KTP Anda");
+
+                // Layout Dynamic
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(25, 20, 25, 10);
+
+                final EditText input = new EditText(context);
+                // max lenght
+                int maxLength = 16;
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                input.setFilters(FilterArray);
+
+                input.setTextColor(Color.BLACK);
+                input.setText(tvKTPDialog.getText().toString());
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setHint(" No KTP");
+                layout.addView(input, layoutParams);
+
+                alert.setView(layout);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tvKTPDialog.setText(input.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
+            }
+        });
+
+        // Buy Button
+        simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etNoKTP.setText(tvKTPDialog.getText().toString());
+                dialog.dismiss();
+                //TODO Buy button action
+            }
+        });
+
+        ktp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage1();
+                dialog.dismiss();
+            }
+        });
+
+        ktp2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage2();
+                dialog.dismiss();
+            }
+        });
+
+        if (validate == true) {
+            Bitmap photo_ktp1 = thePic;
+            try {
+                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo_ktp1);
+                imageKTP1.setVisibility(View.VISIBLE);
+                output = null;
+                try {
+                    output = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (output != null){
+                            output.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                phtImage1 = output.toByteArray();
+                imageKTP1.setImageBitmap(photo_view);
+
+                if (dtImage == null){
+                    dtImage.setTxtImg(phtImage1);
+                } else {
+                    dtImage.setTxtImg(phtImage1);
+                }
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } if (validate_2 = true) {
+            Bitmap photo_ktp2 = thePic2;
+            try {
+                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo_ktp2);
+                imageKTP2.setVisibility(View.VISIBLE);
+                output = null;
+                try {
+                    output = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (output != null){
+                            output.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                phtImage2 = output.toByteArray();
+                imageKTP2.setImageBitmap(photo_view);
+
+                if (dtImage == null){
+                    dtImage.setTxtImg(phtImage2);
+                } else {
+                    dtImage.setTxtImg(phtImage2);
+                }
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        imageKTP1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dataMemberImage.size() > 0){
+                    new clsActivity().zoomImage(mybitmap1, getActivity());
+                }
+            }
+        });
+
+//        imageKTP2.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                return false;
+//            }
+//        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show();
     }
 
     public final static boolean isValidEmail(CharSequence target) {

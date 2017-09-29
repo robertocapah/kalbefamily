@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp">
+
+        <!--<ImageView-->
+            <!--android:id="@+id/ivKtp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/ktp" />-->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/btnBuy"
+                android:layout_marginLeft="10dp"
+                android:text="Nomor KTP Anda"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvKTPDialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTitle"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="123456789" />
+
+            <Button
+                android:id="@+id/btnBuy"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:background="@android:color/holo_green_light"
+                android:text="Simpan"
+                android:textColor="@android:color/white"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/item_divider" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_ktp1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/profile" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/editImageKtp1"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/w_camera"
+                app:backgroundTint="@color/title_login"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_ktp2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/profile"
+                android:layout_alignParentRight="true" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/editImageKtp2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="end"
+                android:src="@drawable/w_camera"
+                android:layout_alignTop="@+id/editImageKtp1"
+                android:layout_alignRight="@+id/image_ktp2"
+                android:layout_alignEnd="@+id/image_ktp2"
+                app:backgroundTint="@color/title_login"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/black"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+</RelativeLayout>
