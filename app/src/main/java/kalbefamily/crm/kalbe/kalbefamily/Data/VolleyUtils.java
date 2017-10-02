@@ -176,7 +176,15 @@ public class VolleyUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                popup();
                 finalDialog1.dismiss();
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.show();
             }
         }) {
             @Override
@@ -242,7 +250,15 @@ public class VolleyUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                popup();
                 finalDialog1.dismiss();
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.show();
             }
         }) {
             @Override

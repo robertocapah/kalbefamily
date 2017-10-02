@@ -1,7 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -66,6 +65,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsJenisMedia;
@@ -120,6 +120,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     private static Bitmap mybitmap1;
     private static Bitmap mybitmap2;
     private static Bitmap mybitmapImageProfile;
+    private Bitmap bitmap;
+    private Bitmap bitmap2;
     final int PIC_CROP = 2;
     final int PIC_CROP2 = 3;
     final int SELECT_FILE = 1;
@@ -386,9 +388,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             viewImageProfile();
         }
 
-        if (dataMemberImage.size() > 0) {
-            viewImage();
-        }
+//        if (dataMemberImage.size() > 0) {
+//            viewImage();
+//        }
 
         phtImage1 = null;
         phtImage2 = null;
@@ -699,7 +701,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 }
             }
             else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }  else {
                 try {
                     photoImage1 = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
@@ -717,10 +719,10 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 thePic = extras.getParcelable("data");
                 validate = true;
 
-                previewCaptureImage1(thePic);
+//                previewCaptureImage1(thePic);
                 dialogPopupImage(thePic);
             } else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }
         }
 
@@ -741,7 +743,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 }
             }
             else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }  else {
                 try {
                     photoImage2 = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
@@ -760,10 +762,10 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 thePic2 = extras.getParcelable("data");
                 validate_2 = true;
 
-                previewCaptureImage2(thePic2);
+//                previewCaptureImage2(thePic2);
                 dialogPopupImage(thePic2);
             } else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }
         }
 
@@ -784,7 +786,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 }
             }
             else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }  else {
                 try {
                     photoProfile = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), data.getData());
@@ -800,11 +802,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                thePic = extras.getParcelable("data");
+                Bitmap thePic = extras.getParcelable("data");
 
                 previewCaptureImageProfile(thePic);
             } else if (resultCode == 0) {
-                new clsActivity().showCustomToast(getContext(), "User canceled to capture image", false);
+                new clsActivity().showCustomToast(getContext(), "User batal mengambil gambar", false);
             }
         }
 
@@ -949,11 +951,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             phtProfile = output.toByteArray();
             ivProfile.setImageBitmap(photo_view);
 
-            if (dtImageProfile == null){
-                dtImageProfile.setTxtImg(phtProfile);
-            } else {
-                dtImageProfile.setTxtImg(phtProfile);
-            }
+//            if (dtImageProfile == null){
+//                dtImageProfile.setTxtImg(phtProfile);
+//            } else {
+//                dtImageProfile.setTxtImg(phtProfile);
+//            }
             repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
 
         } catch (NullPointerException e) {
@@ -1115,12 +1117,14 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                             String res = response;
 
                             if (result.equals("1")) {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                Log.d("Personal Data Status", "Saved");
                                 mediaType();
                                 jenisMedia();
                                 kontakDetail();
                             } else {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                                popup();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1716,9 +1720,14 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         CircleImageView imageKTP2 = (CircleImageView) dialog.findViewById(R.id.image_ktp2);
         ImageButton close = (ImageButton) dialog.findViewById(R.id.btnClose);
         Button simpan = (Button) dialog.findViewById(R.id.btnBuy);
-        final TextView tvKTPDialog = (TextView) dialog.findViewById(R.id.tvKTPDialog);
+        final EditText etKTPDialog = (EditText) dialog.findViewById(R.id.etKTPDialog);
 
-        tvKTPDialog.setText(etNoKTP.getText().toString());
+        etKTPDialog.setText(etNoKTP.getText().toString());
+        int maxLength = 16;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKTPDialog.setFilters(FilterArray);
+        etKTPDialog.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         // Close Button
         close.setOnClickListener(new View.OnClickListener() {
@@ -1729,50 +1738,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        // edit no ktp
-        tvKTPDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan No KTP Anda");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                // max lenght
-                int maxLength = 16;
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-                input.setFilters(FilterArray);
-
-                input.setTextColor(Color.BLACK);
-                input.setText(tvKTPDialog.getText().toString());
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                input.setHint(" No KTP");
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        tvKTPDialog.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
-            }
-        });
-
-        // Buy Button
+        // save Button
         simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etNoKTP.setText(tvKTPDialog.getText().toString());
+                etNoKTP.setText(etKTPDialog.getText().toString());
                 dialog.dismiss();
                 //TODO Buy button action
             }
@@ -1793,6 +1763,37 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 dialog.dismiss();
             }
         });
+
+        if (dataMemberImage.size() > 0) {
+            try {
+                repoUserMemberImage = new clsUserMemberImageRepo(context);
+                dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP");
+            folder.mkdir();
+
+            for (clsUserMemberImage imgDt : dataMemberImage) {
+                final byte[] imgFile = imgDt.getTxtImg();
+                if (imgFile != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName1")) {
+                        mybitmap1 = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                        Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap1, 150, 150, true);
+                        imageKTP1.setImageBitmap(bitmap);
+                    }
+                }
+
+                final byte[] imgFile2 = imgDt.getTxtImg();
+                if (imgFile2 != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName2")) {
+                        mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
+                        Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
+                        image2.setImageBitmap(bitmap);
+                    }
+                }
+            }
+        }
 
         if (validate == true) {
             Bitmap photo = thePic;
@@ -1818,11 +1819,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 phtImage1 = output.toByteArray();
                 imageKTP1.setImageBitmap(photo_view);
 
-                if (dtImage == null){
-                    dtImage.setTxtImg(phtImage1);
-                } else {
-                    dtImage.setTxtImg(phtImage1);
-                }
+//                if (dtImage == null){
+//                    dtImage.setTxtImg(phtImage1);
+//                } else {
+//                    dtImage.setTxtImg(phtImage1);
+//                }
                 repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
 
             } catch (NullPointerException e) {
@@ -1852,17 +1853,43 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 phtImage2 = output.toByteArray();
                 imageKTP2.setImageBitmap(photo_view);
 
-                if (dtImage == null){
-                    dtImage.setTxtImg(phtImage2);
-                } else {
-                    dtImage.setTxtImg(phtImage2);
-                }
+//                if (dtImage == null){
+//                    dtImage.setTxtImg(phtImage2);
+//                } else {
+//                    dtImage.setTxtImg(phtImage2);
+//                }
                 repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
 
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
+
+        imageKTP1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dataMemberImage.size() > 0){
+                    new clsActivity().zoomImage(mybitmap1, getActivity());
+                } else {
+                    if (bitmap != null) {
+                        new clsActivity().zoomImage(bitmap, getActivity());
+                    }
+                }
+            }
+        });
+
+        imageKTP2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dataMemberImage.size() > 0) {
+                    new clsActivity().zoomImage(mybitmap2, getActivity());
+                } else {
+                    if (bitmap2 != null) {
+                        new clsActivity().zoomImage(bitmap2, getActivity());
+                    }
+                }
+            }
+        });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -1882,9 +1909,15 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         CircleImageView imageKTP2 = (CircleImageView) dialog.findViewById(R.id.image_ktp2);
         ImageButton close = (ImageButton) dialog.findViewById(R.id.btnClose);
         Button simpan = (Button) dialog.findViewById(R.id.btnBuy);
-        final TextView tvKTPDialog = (TextView) dialog.findViewById(R.id.tvKTPDialog);
+        final EditText etKTPDialog = (EditText) dialog.findViewById(R.id.etKTPDialog);
 
-        tvKTPDialog.setText(etNoKTP.getText().toString());
+        etKTPDialog.setText(etNoKTP.getText().toString());
+//         max lenght
+        int maxLength = 16;
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        etKTPDialog.setFilters(FilterArray);
+        etKTPDialog.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         // Close Button
         close.setOnClickListener(new View.OnClickListener() {
@@ -1895,50 +1928,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
-        // edit no ktp
-        tvKTPDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("Masukan No KTP Anda");
-
-                // Layout Dynamic
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(25, 20, 25, 10);
-
-                final EditText input = new EditText(context);
-                // max lenght
-                int maxLength = 16;
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-                input.setFilters(FilterArray);
-
-                input.setTextColor(Color.BLACK);
-                input.setText(tvKTPDialog.getText().toString());
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                input.setHint(" No KTP");
-                layout.addView(input, layoutParams);
-
-                alert.setView(layout);
-                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        tvKTPDialog.setText(input.getText().toString());
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
-            }
-        });
-
-        // Buy Button
+        // Save Button
         simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etNoKTP.setText(tvKTPDialog.getText().toString());
+                etNoKTP.setText(etKTPDialog.getText().toString());
                 dialog.dismiss();
                 //TODO Buy button action
             }
@@ -1960,10 +1954,61 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
+        if (dataMemberImage.size() > 0) {
+            try {
+                repoUserMemberImage = new clsUserMemberImageRepo(context);
+                dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP");
+            folder.mkdir();
+
+            for (clsUserMemberImage imgDt : dataMemberImage) {
+                final byte[] imgFile = imgDt.getTxtImg();
+                if (imgFile != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName1")) {
+                        mybitmap1 = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                        Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap1, 150, 150, true);
+                        imageKTP1.setImageBitmap(bitmap);
+
+//                    File file = null;
+//                    try {
+//                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        out.write(imgFile);
+//                        out.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    }
+                }
+
+                final byte[] imgFile2 = imgDt.getTxtImg();
+                if (imgFile2 != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName2")) {
+                        mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
+                        Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
+                        image2.setImageBitmap(bitmap);
+
+//                    File file = null;
+//                    try {
+//                        file = File.createTempFile("image-", ".jpg", new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP"));
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        out.write(imgFile2);
+//                        out.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    }
+                }
+            }
+        }
+
         if (validate == true) {
             Bitmap photo_ktp1 = thePic;
             try {
-                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo_ktp1);
+                bitmap = new clsActivity().resizeImageForBlob(photo_ktp1);
                 imageKTP1.setVisibility(View.VISIBLE);
                 output = null;
                 try {
@@ -1984,25 +2029,25 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 phtImage1 = output.toByteArray();
                 imageKTP1.setImageBitmap(photo_view);
 
-                if (dtImage == null){
-                    dtImage.setTxtImg(phtImage1);
-                } else {
-                    dtImage.setTxtImg(phtImage1);
-                }
+//                if (dtImage == null){
+//                    dtImage.setTxtImg(phtImage1);
+//                } else {
+//                    dtImage.setTxtImg(phtImage1);
+//                }
                 repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
 
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-        } if (validate_2 = true) {
+        } if (validate_2 == true) {
             Bitmap photo_ktp2 = thePic2;
             try {
-                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo_ktp2);
+                bitmap2 = new clsActivity().resizeImageForBlob(photo_ktp2);
                 imageKTP2.setVisibility(View.VISIBLE);
                 output = null;
                 try {
                     output = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 0, output);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -2014,15 +2059,15 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         e.printStackTrace();
                     }
                 }
-                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap2, 150, 150, true);
                 phtImage2 = output.toByteArray();
                 imageKTP2.setImageBitmap(photo_view);
 
-                if (dtImage == null){
-                    dtImage.setTxtImg(phtImage2);
-                } else {
-                    dtImage.setTxtImg(phtImage2);
-                }
+//                if (dtImage == null){
+//                    dtImage.setTxtImg(phtImage2);
+//                } else {
+//                    dtImage.setTxtImg(phtImage2);
+//                }
                 repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
 
             } catch (NullPointerException e) {
@@ -2033,33 +2078,33 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         imageKTP1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dataMemberImage.size() > 0){
-                    new clsActivity().zoomImage(mybitmap1, getActivity());
+                if (bitmap != null) {
+                    new clsActivity().zoomImage(bitmap, getActivity());
                 }
+//                if (dataMemberImage.size() > 0){
+//                    new clsActivity().zoomImage(bitmap, getActivity());
+//                }
             }
         });
 
-//        imageKTP2.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                return false;
-//            }
-//        });
+        imageKTP2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bitmap2 != null) {
+                    new clsActivity().zoomImage(bitmap2, getActivity());
+                }
+            }
+        });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.show();
     }
 
-    public final static boolean isValidEmail(CharSequence target) {
-        if (target == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
-    }
-
-    private boolean isValidMobile(String phone) {
-        return android.util.Patterns.PHONE.matcher(phone).matches();
+    private void popup() {
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Oops...")
+                .setContentText("Data Gagal disimpan, silahkan coba lagi...")
+                .show();
     }
 }
