@@ -138,7 +138,7 @@ public class clsHelper {
 
         dtclsSendData.setDtdataJson(dtSend);
         dtclsSendData.setFileUpload(FileUpload);
-        dtclsSendData.setFileUpload(FileUploadProfile);
+        dtclsSendData.setFileUploadProfile(FileUploadProfile);
         return dtclsSendData;
     }
 

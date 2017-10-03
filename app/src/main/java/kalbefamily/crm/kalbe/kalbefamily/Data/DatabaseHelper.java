@@ -169,6 +169,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.clearTable(connectionSource, clsAvailablePoin.class);
             TableUtils.clearTable(connectionSource, clsMediaKontakDetail.class);
+            TableUtils.clearTable(connectionSource, clsUserMemberImage.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

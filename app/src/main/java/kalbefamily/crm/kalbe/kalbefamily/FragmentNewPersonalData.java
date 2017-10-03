@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -50,14 +51,19 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +112,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     Context context;
     Spinner spinner;
     private Uri uriImage, selectedImage;
+    DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
     private static final int CAMERA_REQUEST_PROFILE = 120;
     private static final int CAMERA_REQUEST = 1888;
@@ -142,7 +149,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     clsUserImageProfile dtImageProfile;
     boolean validate = false;
     boolean validate_2 = false;
-    private String txtKontakID;
+    private String txtKontakID, txtMember;
     Bitmap thePic, thePic2;
 
     @Nullable
@@ -353,20 +360,32 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         etNoKTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
-                dialog2.setIndeterminate(true);
-                dialog2.setMessage("Mohon Tunggu...");
-                dialog2.show();
+                getImageFromAPI();
 
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                showDialog();
-                                // onLoginFailed();
-                                dialog2.dismiss();
-                            }
-                        }, 2500);
+//                try {
+//                    repoUserMemberImage = new clsUserMemberImageRepo(context);
+//                    dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//                if (dataMemberImage.size() == 0) {
+//                    getImageFromAPI();
+//                } else {
+//                    final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+//                    dialog2.setIndeterminate(true);
+//                    dialog2.setMessage("Mohon Tunggu...");
+//                    dialog2.show();
+//
+//                    new android.os.Handler().postDelayed(
+//                            new Runnable() {
+//                                public void run() {
+//                                    // On complete call either onLoginSuccess or onLoginFailed
+//                                    showDialog();
+//                                    // onLoginFailed();
+//                                    dialog2.dismiss();
+//                                }
+//                            }, 2500);
+//                }
             }
         });
 
@@ -1007,43 +1026,99 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     }
 
     protected void savePicture1() {
-        clsUserMemberImage dataImage = new clsUserMemberImage();
+        try {
+            repoUserMemberImage = new clsUserMemberImageRepo(context);
+            dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        if (phtImage1 != null) {
-            dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
-            dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-            dataImage.setTxtImg(phtImage1);
-            dataImage.setTxtPosition("txtFileName1");
+        for (clsUserMemberImage imgDt : dataMemberImage) {
+            clsUserMemberImage dataImage = new clsUserMemberImage();
 
-            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-            repoUserMemberImage.createOrUpdate(dataImage);
+            if (phtImage1 != null) {
+                if (imgDt.getTxtPosition().equals("txtFileName1")) {
+                    dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
+                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                    dataImage.setTxtImg(phtImage1);
+                    dataImage.setTxtPosition("txtFileName1");
+
+                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                    repoUserMemberImage.createOrUpdate(dataImage);
+                } else {
+                    dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                    dataImage.setTxtImg(phtImage1);
+                    dataImage.setTxtPosition("txtFileName1");
+
+                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                    repoUserMemberImage.createOrUpdate(dataImage);
+                }
+            }
         }
     }
 
     protected void savePicture2() {
-        clsUserMemberImage dataImage = new clsUserMemberImage();
+        try {
+            repoUserMemberImage = new clsUserMemberImageRepo(context);
+            dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        if (phtImage2 != null) {
-            dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
-            dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-            dataImage.setTxtImg(phtImage2);
-            dataImage.setTxtPosition("txtFileName2");
+        for (clsUserMemberImage imgDt : dataMemberImage) {
+            clsUserMemberImage dataImage = new clsUserMemberImage();
 
-            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-            repoUserMemberImage.createOrUpdate(dataImage);
+            if (phtImage2 != null) {
+                if (imgDt.getTxtPosition().equals("txtFileName2")) {
+                    dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
+                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                    dataImage.setTxtImg(phtImage2);
+                    dataImage.setTxtPosition("txtFileName2");
+
+                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                    repoUserMemberImage.createOrUpdate(dataImage);
+                } else {
+                    dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                    dataImage.setTxtImg(phtImage2);
+                    dataImage.setTxtPosition("txtFileName2");
+
+                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                    repoUserMemberImage.createOrUpdate(dataImage);
+                }
+            }
         }
     }
 
     protected void savePictureProfile() {
-        clsUserImageProfile dataImageProfile = new clsUserImageProfile();
+        try {
+            repoUserImageProfile = new clsUserImageProfileRepo(context);
+            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        if (phtProfile != null) {
-            dataImageProfile.setTxtGuiId(new clsActivity().GenerateGuid());
-            dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
-            dataImageProfile.setTxtImg(phtProfile);
+        for (clsUserImageProfile imgProfile : dataUserImageProfile) {
+            clsUserImageProfile dataImageProfile = new clsUserImageProfile();
 
-            repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
-            repoUserImageProfile.createOrUpdate(dataImageProfile);
+            if (phtProfile != null) {
+                if (dataUserImageProfile.size() == 0) {
+                    dataImageProfile.setTxtGuiId(new clsActivity().GenerateGuid());
+                    dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
+                    dataImageProfile.setTxtImg(phtProfile);
+
+                    repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
+                    repoUserImageProfile.createOrUpdate(dataImageProfile);
+                } else if (dataUserImageProfile.size() > 0) {
+                    dataImageProfile.setTxtGuiId(imgProfile.getTxtGuiId().toString());
+                    dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
+                    dataImageProfile.setTxtImg(phtProfile);
+
+                    repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
+                    repoUserImageProfile.createOrUpdate(dataImageProfile);
+                }
+            }
         }
     }
 
@@ -1071,12 +1146,12 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                             String res = response;
 
                             if (result.equals("1")) {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                new clsActivity().showToast(context.getApplicationContext(), "Saved", true);
                                 Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
                                 getActivity().finish();
                                 startActivity(intent);
                             } else {
-                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                                new clsActivity().showToast(context.getApplicationContext(), warn, false);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1706,6 +1781,130 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         });
     }
 
+    private void getImageFromAPI() {
+        final ProgressDialog Dialog = new ProgressDialog(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
+        helper.refreshData2();
+        try {
+            dataMember = (List<clsUserMember>) repo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        txtMember = dataMember.get(0).getTxtMemberId();
+        String strLinkAPI = new clsHardCode().linkGetDetailCustomer;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtMemberId", txtMember);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
+                                if (listtkontakImage != "null") {
+                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
+                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+                                        String txtType = jsonobjectImage.getString("TxtType");
+
+                                        clsUserMemberImage dataImage = new clsUserMemberImage();
+                                        dataImage.setTxtGuiId(txtGuiID);
+                                        dataImage.setTxtHeaderId(txtKontakIDImage);
+                                        dataImage.setTxtPosition(txtType);
+
+                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+
+                                        byte[] logoImage = getLogoImage(url);
+
+                                        if (logoImage != null) {
+                                            dataImage.setTxtImg(logoImage);
+
+                                            repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+
+                                            int k = 0;
+                                            k = repoUserMemberImage.createOrUpdate(dataImage);
+                                            if(k > -1) {
+                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+                                                Log.d("Data info", "Data Member Image berhasil di update");
+//                                    status = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
+                        } else {
+                            new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    showDialog();
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
+    }
+
+    private byte[] getLogoImage(String url) {
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            String contentType = ucon.getHeaderField("Content-Type");
+            boolean image = contentType.startsWith("image/");
+
+            if (image) {
+                InputStream is = ucon.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+
+                ByteArrayBuffer baf = new ByteArrayBuffer(500);
+                int current = 0;
+                while ((current = bis.read()) != -1) {
+                    baf.append((byte) current);
+                }
+
+                return baf.toByteArray();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Log.d("ImageManager", "Error: " + e.toString());
+        }
+        return null;
+    }
+
     Dialog dialog;
     private void showDialog() {
         // custom dialog
@@ -1764,13 +1963,13 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             }
         });
 
+        try {
+            repoUserMemberImage = new clsUserMemberImageRepo(context);
+            dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if (dataMemberImage.size() > 0) {
-            try {
-                repoUserMemberImage = new clsUserMemberImageRepo(context);
-                dataMemberImage = (List<clsUserMemberImage>) repoUserMemberImage.findAll();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
             File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP");
             folder.mkdir();
 
@@ -1789,7 +1988,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                     if (imgDt.getTxtPosition().equals("txtFileName2")) {
                         mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
                         Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
-                        image2.setImageBitmap(bitmap);
+                        imageKTP2.setImageBitmap(bitmap);
                     }
                 }
             }
@@ -1798,7 +1997,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         if (validate == true) {
             Bitmap photo = thePic;
             try {
-                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+                bitmap = new clsActivity().resizeImageForBlob(photo);
                 imageKTP1.setVisibility(View.VISIBLE);
                 output = null;
                 try {
@@ -1832,12 +2031,12 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         } if (validate_2 == true) {
             Bitmap photo = thePic2;
             try {
-                Bitmap bitmap = new clsActivity().resizeImageForBlob(photo);
+                bitmap2 = new clsActivity().resizeImageForBlob(photo);
                 imageKTP2.setVisibility(View.VISIBLE);
                 output = null;
                 try {
                     output = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, output);
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 0, output);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -1849,7 +2048,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         e.printStackTrace();
                     }
                 }
-                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+                Bitmap photo_view = Bitmap.createScaledBitmap(bitmap2, 150, 150, true);
                 phtImage2 = output.toByteArray();
                 imageKTP2.setImageBitmap(photo_view);
 
@@ -1868,11 +2067,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         imageKTP1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dataMemberImage.size() > 0){
-                    new clsActivity().zoomImage(mybitmap1, getActivity());
+                if (bitmap != null) {
+                    new clsActivity().zoomImage(bitmap, getActivity());
                 } else {
-                    if (bitmap != null) {
-                        new clsActivity().zoomImage(bitmap, getActivity());
+                    if (dataMemberImage.size() > 0 && mybitmap1 != null){
+                        new clsActivity().zoomImage(mybitmap1, getActivity());
                     }
                 }
             }
@@ -1881,11 +2080,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         imageKTP2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dataMemberImage.size() > 0) {
-                    new clsActivity().zoomImage(mybitmap2, getActivity());
+                if (bitmap2 != null) {
+                    new clsActivity().zoomImage(bitmap2, getActivity());
                 } else {
-                    if (bitmap2 != null) {
-                        new clsActivity().zoomImage(bitmap2, getActivity());
+                    if (dataMemberImage.size() > 0 && mybitmap2 != null) {
+                        new clsActivity().zoomImage(mybitmap2, getActivity());
                     }
                 }
             }
@@ -1989,7 +2188,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                     if (imgDt.getTxtPosition().equals("txtFileName2")) {
                         mybitmap2 = BitmapFactory.decodeByteArray(imgFile2, 0, imgFile2.length);
                         Bitmap bitmap = Bitmap.createScaledBitmap(mybitmap2, 150, 150, true);
-                        image2.setImageBitmap(bitmap);
+                        imageKTP2.setImageBitmap(bitmap);
 
 //                    File file = null;
 //                    try {
@@ -2080,10 +2279,11 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             public void onClick(View view) {
                 if (bitmap != null) {
                     new clsActivity().zoomImage(bitmap, getActivity());
+                } else {
+                    if (dataMemberImage.size() > 0 && mybitmap1 != null){
+                        new clsActivity().zoomImage(mybitmap1, getActivity());
+                    }
                 }
-//                if (dataMemberImage.size() > 0){
-//                    new clsActivity().zoomImage(bitmap, getActivity());
-//                }
             }
         });
 
@@ -2092,6 +2292,10 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             public void onClick(View view) {
                 if (bitmap2 != null) {
                     new clsActivity().zoomImage(bitmap2, getActivity());
+                } else {
+                    if (dataMemberImage.size() > 0 && mybitmap2 != null) {
+                        new clsActivity().zoomImage(mybitmap2, getActivity());
+                    }
                 }
             }
         });

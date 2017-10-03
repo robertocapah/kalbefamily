@@ -209,40 +209,40 @@ public class FragmentInfoContact extends Fragment {
 ////                                    status = true;
 //                                }
 
-                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
-                                if (listtkontakImage != "null") {
-                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
-                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
-                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
-                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
-                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
-                                        String txtType = jsonobjectImage.getString("TxtType");
-
-                                        clsUserMemberImage dataImage = new clsUserMemberImage();
-                                        dataImage.setTxtGuiId(txtGuiID);
-                                        dataImage.setTxtHeaderId(txtKontakIDImage);
-                                        dataImage.setTxtPosition(txtType);
-
-                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
-
-                                        byte[] logoImage = getLogoImage(url);
-
-                                        if (logoImage != null) {
-                                            dataImage.setTxtImg(logoImage);
-
-                                            imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
-
-                                            int k = 0;
-                                            k = imageRepo.createOrUpdate(dataImage);
-                                            if(k > -1) {
-                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
-                                                Log.d("Data info", "Data Member Image berhasil di update");
-//                                    status = true;
-                                            }
-                                        }
-                                    }
-                                }
+//                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
+//                                if (listtkontakImage != "null") {
+//                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
+//                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
+//                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+//                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+//                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+//                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+//                                        String txtType = jsonobjectImage.getString("TxtType");
+//
+//                                        clsUserMemberImage dataImage = new clsUserMemberImage();
+//                                        dataImage.setTxtGuiId(txtGuiID);
+//                                        dataImage.setTxtHeaderId(txtKontakIDImage);
+//                                        dataImage.setTxtPosition(txtType);
+//
+//                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+//
+//                                        byte[] logoImage = getLogoImage(url);
+//
+//                                        if (logoImage != null) {
+//                                            dataImage.setTxtImg(logoImage);
+//
+//                                            imageRepo = new clsUserMemberImageRepo(context.getApplicationContext());
+//
+//                                            int k = 0;
+//                                            k = imageRepo.createOrUpdate(dataImage);
+//                                            if(k > -1) {
+//                                                Log.d("Data info", "Image " +txtType+ " Berhasil di update");
+//                                                Log.d("Data info", "Data Member Image berhasil di update");
+////                                    status = true;
+//                                            }
+//                                        }
+//                                    }
+//                                }
                             }
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
