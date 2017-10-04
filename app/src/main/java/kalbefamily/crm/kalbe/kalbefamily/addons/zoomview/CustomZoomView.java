@@ -115,7 +115,7 @@ public class CustomZoomView extends View implements View.OnTouchListener, View.O
         if (mode == DRAG) {
             if ((mStartPoint.x > dst.left && mStartPoint.x < dst.right) && (mStartPoint.y < dst.bottom && mStartPoint.y > dst.top)
                     && (mMovePoint.x > dst.left && mMovePoint.x < dst.right) && (mMovePoint.y < dst.bottom && mMovePoint.y > dst.top)) {
-                mode = MOVE;
+//                mode = MOVE;
 //                v.vibrate(500);
             }
         }

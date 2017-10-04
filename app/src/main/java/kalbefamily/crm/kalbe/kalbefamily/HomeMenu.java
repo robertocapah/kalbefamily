@@ -479,7 +479,19 @@ public class HomeMenu extends AppCompatActivity {
                                         String txtType = jsonobjectImage.getString("TxtType");
 
                                         clsUserImageProfile imageProfile = new clsUserImageProfile();
-                                        imageProfile.setTxtGuiId(txtGuiID);
+
+                                        try {
+                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+                                            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (dataUserImageProfile.size() == 0) {
+                                            imageProfile.setTxtGuiId(txtGuiID);
+                                        } else {
+                                            imageProfile.setTxtGuiId(dataUserImageProfile.get(0).txtGuiId);
+                                        }
                                         imageProfile.setTxtKontakId(txtKontakIDImage);
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));

@@ -1099,18 +1099,21 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
 
-        for (clsUserImageProfile imgProfile : dataUserImageProfile) {
-            clsUserImageProfile dataImageProfile = new clsUserImageProfile();
-
+        if (dataUserImageProfile.size() == 0) {
             if (phtProfile != null) {
-                if (dataUserImageProfile.size() == 0) {
-                    dataImageProfile.setTxtGuiId(new clsActivity().GenerateGuid());
-                    dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
-                    dataImageProfile.setTxtImg(phtProfile);
+                clsUserImageProfile dataImageProfile = new clsUserImageProfile();
 
-                    repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
-                    repoUserImageProfile.createOrUpdate(dataImageProfile);
-                } else if (dataUserImageProfile.size() > 0) {
+                dataImageProfile.setTxtGuiId(new clsActivity().GenerateGuid());
+                dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
+                dataImageProfile.setTxtImg(phtProfile);
+
+                repoUserImageProfile = new clsUserImageProfileRepo(context.getApplicationContext());
+                repoUserImageProfile.createOrUpdate(dataImageProfile);
+            }
+        } else {
+            for (clsUserImageProfile imgProfile : dataUserImageProfile) {
+                if (phtProfile != null) {
+                    clsUserImageProfile dataImageProfile = new clsUserImageProfile();
                     dataImageProfile.setTxtGuiId(imgProfile.getTxtGuiId().toString());
                     dataImageProfile.setTxtKontakId(dataMember.get(0).txtKontakId);
                     dataImageProfile.setTxtImg(phtProfile);
