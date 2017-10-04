@@ -2,6 +2,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -109,9 +111,17 @@ public class FragmentInfoContact extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dataUserImageProfile.size() > 0) {
-                    new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
-                }
+//                if (dataUserImageProfile.size() > 0) {
+//                    new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
+//                }
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                intent.putExtra("gambar profile", byteArray);
+                startActivity(intent);
             }
         });
 
