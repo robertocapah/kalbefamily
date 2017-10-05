@@ -60,6 +60,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -2071,10 +2072,40 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 if (bitmap != null) {
-                    new clsActivity().zoomImage(bitmap, getActivity());
+//                    new clsActivity().zoomImage(bitmap, getActivity());
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("takeImageKTP1", byteArray);
+                    startActivity(intent);
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap1 != null){
-                        new clsActivity().zoomImage(mybitmap1, getActivity());
+//                        new clsActivity().zoomImage(mybitmap1, getActivity());
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                        FileOutputStream fOut = null;
+                        try {
+                            fOut = new FileOutputStream(file);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        mybitmap1.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        try {
+                            fOut.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fOut.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                        intent.putExtra("imageKTP1", "GambarKTP1");
+                        startActivity(intent);
                     }
                 }
             }
@@ -2281,10 +2312,40 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 if (bitmap != null) {
-                    new clsActivity().zoomImage(bitmap, getActivity());
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("takeImageKTP1", byteArray);
+                    startActivity(intent);
+//                    new clsActivity().zoomImage(bitmap, getActivity());
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap1 != null){
-                        new clsActivity().zoomImage(mybitmap1, getActivity());
+//                        new clsActivity().zoomImage(mybitmap1, getActivity());
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                        FileOutputStream fOut = null;
+                        try {
+                            fOut = new FileOutputStream(file);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        mybitmap1.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        try {
+                            fOut.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fOut.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                        intent.putExtra("imageKTP1", "GambarKTP1");
+                        startActivity(intent);
                     }
                 }
             }

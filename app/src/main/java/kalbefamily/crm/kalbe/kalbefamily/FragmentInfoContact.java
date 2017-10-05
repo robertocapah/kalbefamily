@@ -111,17 +111,16 @@ public class FragmentInfoContact extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (dataUserImageProfile.size() > 0) {
+                if (dataUserImageProfile.size() > 0) {
 //                    new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
-//                }
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-
-                Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                intent.putExtra("gambar profile", byteArray);
-                startActivity(intent);
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("gambar profile", byteArray);
+                    startActivity(intent);
+                }
             }
         });
 
