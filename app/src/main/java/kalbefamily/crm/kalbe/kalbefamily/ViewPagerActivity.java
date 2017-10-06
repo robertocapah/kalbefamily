@@ -36,19 +36,25 @@ public class ViewPagerActivity extends AppCompatActivity {
         viewPager.setAdapter(new SamplePagerAdapter());
 
         // zoom image for profile photo
-        byte[] byteArray = getIntent().getByteArrayExtra("gambar profile");
+//        byte[] byteArray = getIntent().getByteArrayExtra("gambar profile");
+        String fNameProfile = getIntent().getStringExtra("gambar profile");
+        String pathProfile = Environment.getExternalStorageDirectory() + File.separator + fNameProfile + ".png";
 
         // zoom image for image 1 ktp
-        byte[] byteArrayKTP1 = getIntent().getByteArrayExtra("takeImageKTP1");
-        String fName = getIntent().getStringExtra("imageKTP1");
-        String path = Environment.getExternalStorageDirectory() + File.separator + fName + ".png";
+        String fNameKTP1 = getIntent().getStringExtra("imageKTP1");
+        String pathKTP1 = Environment.getExternalStorageDirectory() + File.separator + fNameKTP1 + ".png";
 
-        if (byteArray != null) {
-            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        } else if (byteArrayKTP1 == null) {
-            bmp = BitmapFactory.decodeFile(path);
-        } else if (byteArrayKTP1 != null) {
-            bmp = BitmapFactory.decodeByteArray(byteArrayKTP1, 0, byteArrayKTP1.length);
+        // zoom image for image ktp 2
+        String fNameKTP2 = getIntent().getStringExtra("imageKTP2");
+        String pathKTP2 = Environment.getExternalStorageDirectory() + File.separator + fNameKTP2 + ".png";
+
+        if (pathProfile.equals("/storage/emulated/0/GambarProfil.png")) {
+//            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            bmp = BitmapFactory.decodeFile(pathProfile);
+        } else if (pathKTP1.equals("/storage/emulated/0/GambarKTP1.png")) {
+            bmp = BitmapFactory.decodeFile(pathKTP1);
+        } else if (pathKTP2.equals("/storage/emulated/0/GambarKTP2.png")) {
+            bmp = BitmapFactory.decodeFile(pathKTP2);
         }
 
         String asd = "";

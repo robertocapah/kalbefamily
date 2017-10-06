@@ -29,6 +29,9 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -112,13 +115,33 @@ public class FragmentInfoContact extends Fragment {
             @Override
             public void onClick(View view) {
                 if (dataUserImageProfile.size() > 0) {
-//                    new clsActivity().zoomImage(mybitmapImageProfile, getActivity());
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
+
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                    intent.putExtra("gambar profile", byteArray);
+                    intent.putExtra("gambar profile", "GambarProfil");
                     startActivity(intent);
                 }
             }

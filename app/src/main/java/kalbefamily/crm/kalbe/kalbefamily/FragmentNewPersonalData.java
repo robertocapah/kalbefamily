@@ -1388,21 +1388,21 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     // select take image from camera or gallery
     private void selectImage1() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = { "Ambil Foto", "Pilih dari Galeri",
+                "Batal" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Tambah Foto!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result= Utility.checkPermission(getActivity());
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals("Ambil Foto")) {
                     if(result)
                         captureImage1();
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals("Pilih dari Galeri")) {
                     if(result)
                         galleryIntent();
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Batal")) {
                     dialog.dismiss();
                 }
             }
@@ -1411,21 +1411,21 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     }
 
     private void selectImage2() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = { "Ambil Foto", "Pilih dari Galeri",
+                "Batal" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Tambah Foto!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result= Utility.checkPermission(getActivity());
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals("Ambil Foto")) {
                     if(result)
                         captureImage2();
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals("Pilih dari Galeri")) {
                     if(result)
                         galleryIntent2();
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Batal")) {
                     dialog.dismiss();
                 }
             }
@@ -1434,21 +1434,21 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     }
 
     private void selectImageProfile() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = { "Ambil Foto", "Pilih dari Galeri",
+                "Batal" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Photo Profile");
+        builder.setTitle("Tambah Foto Profile");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result= Utility.checkPermission(getActivity());
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals("Ambil Foto")) {
                     if(result)
                         captureImageProfile();
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals("Pilih dari Galeri")) {
                     if(result)
                         galleryIntentProfile();
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Batal")) {
                     dialog.dismiss();
                 }
             }
@@ -1845,9 +1845,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
 
-                                        byte[] logoImage = getLogoImage(url);
+                                        if (!url.equals("null")) {
+                                            byte[] logoImage = getLogoImage(url);
 
-                                        if (logoImage != null) {
                                             dataImage.setTxtImg(logoImage);
 
                                             repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
@@ -2073,17 +2073,39 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             public void onClick(View view) {
                 if (bitmap != null) {
 //                    new clsActivity().zoomImage(bitmap, getActivity());
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
+
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                    intent.putExtra("takeImageKTP1", byteArray);
+                    intent.putExtra("imageKTP1", "GambarKTP1");
                     startActivity(intent);
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap1 != null){
 //                        new clsActivity().zoomImage(mybitmap1, getActivity());
                         File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                        file.delete();
                         FileOutputStream fOut = null;
                         try {
                             fOut = new FileOutputStream(file);
@@ -2115,10 +2137,58 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 if (bitmap2 != null) {
-                    new clsActivity().zoomImage(bitmap2, getActivity());
+//                    new clsActivity().zoomImage(bitmap2, getActivity());
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP2" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("imageKTP2", "GambarKTP2");
+                    startActivity(intent);
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap2 != null) {
-                        new clsActivity().zoomImage(mybitmap2, getActivity());
+//                        new clsActivity().zoomImage(mybitmap2, getActivity());
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP2" + ".png");
+                        file.delete();
+                        FileOutputStream fOut = null;
+                        try {
+                            fOut = new FileOutputStream(file);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        mybitmap2.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        try {
+                            fOut.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fOut.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                        intent.putExtra("imageKTP2", "GambarKTP2");
+                        startActivity(intent);
                     }
                 }
             }
@@ -2312,18 +2382,40 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 if (bitmap != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
+
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                    intent.putExtra("takeImageKTP1", byteArray);
+                    intent.putExtra("imageKTP1", "GambarKTP1");
                     startActivity(intent);
 //                    new clsActivity().zoomImage(bitmap, getActivity());
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap1 != null){
 //                        new clsActivity().zoomImage(mybitmap1, getActivity());
                         File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP1" + ".png");
+                        file.delete();
                         FileOutputStream fOut = null;
                         try {
                             fOut = new FileOutputStream(file);
@@ -2355,10 +2447,58 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View view) {
                 if (bitmap2 != null) {
-                    new clsActivity().zoomImage(bitmap2, getActivity());
+//                    new clsActivity().zoomImage(bitmap2, getActivity());
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP2" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("imageKTP2", "GambarKTP2");
+                    startActivity(intent);
                 } else {
                     if (dataMemberImage.size() > 0 && mybitmap2 != null) {
-                        new clsActivity().zoomImage(mybitmap2, getActivity());
+//                        new clsActivity().zoomImage(mybitmap2, getActivity());
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarKTP2" + ".png");
+                        file.delete();
+                        FileOutputStream fOut = null;
+                        try {
+                            fOut = new FileOutputStream(file);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        mybitmap2.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        try {
+                            fOut.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fOut.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                        intent.putExtra("imageKTP2", "GambarKTP2");
+                        startActivity(intent);
                     }
                 }
             }

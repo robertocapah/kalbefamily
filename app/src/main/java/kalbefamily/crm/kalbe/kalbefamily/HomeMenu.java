@@ -495,9 +495,8 @@ public class HomeMenu extends AppCompatActivity {
                                         imageProfile.setTxtKontakId(txtKontakIDImage);
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
-                                        byte[] logoImage = getLogoImage(url);
-
-                                        if (logoImage != null) {
+                                        if (!url.equals("null")) {
+                                            byte[] logoImage = getLogoImage(url);
                                             imageProfile.setTxtImg(logoImage);
 
                                             repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
