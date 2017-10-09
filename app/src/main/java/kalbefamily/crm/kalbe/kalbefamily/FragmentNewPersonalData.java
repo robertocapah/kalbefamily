@@ -1034,26 +1034,40 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
 
-        for (clsUserMemberImage imgDt : dataMemberImage) {
-            clsUserMemberImage dataImage = new clsUserMemberImage();
-
+        if (dataMemberImage.size() == 0) {
             if (phtImage1 != null) {
-                if (imgDt.getTxtPosition().equals("txtFileName1")) {
-                    dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
-                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-                    dataImage.setTxtImg(phtImage1);
-                    dataImage.setTxtPosition("txtFileName1");
+                clsUserMemberImage dataImage = new clsUserMemberImage();
 
-                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-                    repoUserMemberImage.createOrUpdate(dataImage);
-                } else {
-                    dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
-                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-                    dataImage.setTxtImg(phtImage1);
-                    dataImage.setTxtPosition("txtFileName1");
+                dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                dataImage.setTxtImg(phtImage1);
+                dataImage.setTxtPosition("txtFileName1");
 
-                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-                    repoUserMemberImage.createOrUpdate(dataImage);
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                repoUserMemberImage.createOrUpdate(dataImage);
+            }
+        } else {
+            for (clsUserMemberImage imgDt : dataMemberImage) {
+                clsUserMemberImage dataImage = new clsUserMemberImage();
+
+                if (phtImage1 != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName1")) {
+                        dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
+                        dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                        dataImage.setTxtImg(phtImage1);
+                        dataImage.setTxtPosition("txtFileName1");
+
+                        repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                        repoUserMemberImage.createOrUpdate(dataImage);
+                    } else {
+                        dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                        dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                        dataImage.setTxtImg(phtImage1);
+                        dataImage.setTxtPosition("txtFileName1");
+
+                        repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                        repoUserMemberImage.createOrUpdate(dataImage);
+                    }
                 }
             }
         }
@@ -1067,29 +1081,44 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
 
-        for (clsUserMemberImage imgDt : dataMemberImage) {
-            clsUserMemberImage dataImage = new clsUserMemberImage();
-
+        if (dataMemberImage.size() == 0) {
             if (phtImage2 != null) {
-                if (imgDt.getTxtPosition().equals("txtFileName2")) {
-                    dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
-                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-                    dataImage.setTxtImg(phtImage2);
-                    dataImage.setTxtPosition("txtFileName2");
+                clsUserMemberImage dataImage = new clsUserMemberImage();
 
-                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-                    repoUserMemberImage.createOrUpdate(dataImage);
-                } else {
-                    dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
-                    dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
-                    dataImage.setTxtImg(phtImage2);
-                    dataImage.setTxtPosition("txtFileName2");
+                dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                dataImage.setTxtImg(phtImage2);
+                dataImage.setTxtPosition("txtFileName2");
 
-                    repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
-                    repoUserMemberImage.createOrUpdate(dataImage);
+                repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                repoUserMemberImage.createOrUpdate(dataImage);
+            }
+        } else {
+            for (clsUserMemberImage imgDt : dataMemberImage) {
+                clsUserMemberImage dataImage = new clsUserMemberImage();
+
+                if (phtImage2 != null) {
+                    if (imgDt.getTxtPosition().equals("txtFileName2")) {
+                        dataImage.setTxtGuiId(imgDt.getTxtGuiId().toString());
+                        dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                        dataImage.setTxtImg(phtImage2);
+                        dataImage.setTxtPosition("txtFileName2");
+
+                        repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                        repoUserMemberImage.createOrUpdate(dataImage);
+                    } else {
+                        dataImage.setTxtGuiId(new clsActivity().GenerateGuid());
+                        dataImage.setTxtHeaderId(dataMember.get(0).txtKontakId);
+                        dataImage.setTxtImg(phtImage2);
+                        dataImage.setTxtPosition("txtFileName2");
+
+                        repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
+                        repoUserMemberImage.createOrUpdate(dataImage);
+                    }
                 }
             }
         }
+
     }
 
     protected void savePictureProfile() {

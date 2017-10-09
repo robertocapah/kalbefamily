@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,8 +34,9 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class RewardCardActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView etNumber, etNama, etTglBerlaku;
     Spinner spinner;
-    AbsoluteLayout layoutDepan, layoutBelakang;
+    AbsoluteLayout layoutDepan, layoutBelakang, layoutWebView;
     ImageView tampakDepan, tampakBelakang;
+    private WebView mWebView;
     PhotoViewAttacher photoViewAttacher;
 
     List<clsUserMember> dataMember = null;
@@ -57,8 +61,10 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         spinner = (Spinner) findViewById(R.id.spinner);
         layoutDepan = (AbsoluteLayout) findViewById(R.id.absoluteLayout);
         layoutBelakang = (AbsoluteLayout) findViewById(R.id.absoluteLayout_belakang);
+        layoutWebView = (AbsoluteLayout) findViewById(R.id.absoluteLayout_webView);
         tampakDepan = (ImageView) findViewById(R.id.tampakDepan);
         tampakBelakang = (ImageView) findViewById(R.id.tampakBelakang);
+        mWebView = (WebView) findViewById(R.id.webView);
 //        spinNama = (Spinner) findViewById(R.id.spnNama);
 
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
@@ -109,6 +115,22 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
 
         photoViewAttacher.update();
 
+        // Enable Javascript
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+//        mWebView.loadUrl("http://beta.html5test.com/");
+        mWebView.loadUrl("https://www.google.co.id");
+
+        // Force links and redirects to open in the WebView instead of in a browser
+        mWebView.setWebViewClient(new WebViewClient());
+
+        // Stop local links and redirects from opening in browser instead of WebView
+        mWebView.setWebViewClient(new MyAppWebViewClient());
+
+        // set background
+        mWebView.setBackgroundResource(R.drawable.kartu_virtual_back_desain);
+
     }
 
     @Override
@@ -118,9 +140,11 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         if (depan == "Tampak Depan") {
             layoutDepan.setVisibility(View.VISIBLE);
             layoutBelakang.setVisibility(View.GONE);
+//            layoutWebView.setVisibility(View.GONE);
         } else {
             layoutDepan.setVisibility(View.GONE);
             layoutBelakang.setVisibility(View.VISIBLE);
+//            layoutWebView.setVisibility(View.VISIBLE);
         }
 
     }

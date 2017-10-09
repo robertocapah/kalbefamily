@@ -72,10 +72,10 @@ public class NewMemberActivity extends AppCompatActivity {
     public void onBackPressed() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
 
-        builder.setTitle("Exit");
-        builder.setMessage("Do you want to exit?");
+        builder.setTitle("Keluar");
+        builder.setMessage("Apakah Anda ingin keluar?");
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("KELUAR", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -83,7 +83,7 @@ public class NewMemberActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

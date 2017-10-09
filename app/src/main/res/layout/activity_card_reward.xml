@@ -9,11 +9,85 @@
     android:screenOrientation="landscape">
 
     <AbsoluteLayout
-        android:id="@+id/absoluteLayout"
+        android:id="@+id/absoluteLayout_belakang"
         android:layout_width="400dp"
         android:layout_height="270dp"
         android:layout_centerHorizontal="true"
+        android:visibility="gone"
         android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/tampakBelakang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/kartu_virtual_back_desain" />
+    </AbsoluteLayout>
+
+    <AbsoluteLayout
+        android:id="@+id/absoluteLayout_webView"
+        android:layout_width="400dp"
+        android:layout_height="270dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </WebView>
+    </AbsoluteLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#CCF0F0F0"
+        android:padding="3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
+            android:text="© Kalbe Nutritionals 2017" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:text="Arick Anjasmara" />-->
+
+        <!--<Spinner-->
+            <!--android:id="@+id/spnNama"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:background="@drawable/bg_edtext"/>-->
+
+    </RelativeLayout>
+
+    <AbsoluteLayout
+        android:id="@+id/absoluteLayout"
+        android:layout_width="400dp"
+        android:layout_height="270dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/tampakDepan"
@@ -79,61 +153,4 @@
             android:textSize="12sp"
             android:textStyle="bold" />
     </AbsoluteLayout>
-
-    <AbsoluteLayout
-        android:id="@+id/absoluteLayout_belakang"
-        android:layout_width="400dp"
-        android:layout_height="270dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:layout_centerVertical="true">
-
-        <ImageView
-            android:id="@+id/tampakBelakang"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/kartu_virtual_back_desain" />
-    </AbsoluteLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#CCF0F0F0"
-        android:padding="3dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:fontFamily="sans-serif"
-            android:text="© Kalbe Nutritionals 2017" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:text="Arick Anjasmara" />-->
-
-        <!--<Spinner-->
-            <!--android:id="@+id/spnNama"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:background="@drawable/bg_edtext"/>-->
-
-    </RelativeLayout>
 </RelativeLayout>

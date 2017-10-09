@@ -392,12 +392,14 @@
 
             <include layout="@layout/item_divider" />
 
+            <!--imageView foto ktp lama-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="false"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="@dimen/activity_horizontal_margin"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/ivContactItem8"
