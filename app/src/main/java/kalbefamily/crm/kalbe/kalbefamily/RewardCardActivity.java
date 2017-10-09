@@ -139,12 +139,12 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
 
         if (depan == "Tampak Depan") {
             layoutDepan.setVisibility(View.VISIBLE);
-            layoutBelakang.setVisibility(View.GONE);
-//            layoutWebView.setVisibility(View.GONE);
+//            layoutBelakang.setVisibility(View.GONE);
+            layoutWebView.setVisibility(View.GONE);
         } else {
             layoutDepan.setVisibility(View.GONE);
-            layoutBelakang.setVisibility(View.VISIBLE);
-//            layoutWebView.setVisibility(View.VISIBLE);
+//            layoutBelakang.setVisibility(View.VISIBLE);
+            layoutWebView.setVisibility(View.VISIBLE);
         }
 
     }
