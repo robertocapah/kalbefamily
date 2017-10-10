@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.owater.library.CircleTextView;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
@@ -66,7 +68,7 @@ public class FragmentInfoContact extends Fragment {
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
     clsUserImageProfileRepo repoUserImageProfile = null;
-    private String txtMember;
+    private String txtMember, linkImageProfile;
     private static Bitmap mybitmapImageProfile;
 
     @Nullable
@@ -107,43 +109,47 @@ public class FragmentInfoContact extends Fragment {
             e.printStackTrace();
         }
 
-        if (dataUserImageProfile.size() > 0) {
-            viewImageProfile();
-        }
+//        if (dataUserImageProfile.size() > 0) {
+//            viewImageProfile();
+//        }
 
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dataUserImageProfile.size() > 0) {
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                    byte[] byteArray = stream.toByteArray();
 
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
-                    file.delete();
-                    FileOutputStream fOut = null;
-                    try {
-                        fOut = new FileOutputStream(file);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-                    try {
-                        fOut.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fOut.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                    intent.putExtra("gambar profile", "GambarProfil");
-                    startActivity(intent);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
+                file.delete();
+                FileOutputStream fOut = null;
+                try {
+                    fOut = new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
+
+                mybitmapImageProfile = ((BitmapDrawable)ivProfile.getDrawable()).getBitmap();
+                mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                try {
+                    fOut.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                intent.putExtra("gambar profile", "GambarProfil");
+                startActivity(intent);
+
+//                if (dataUserImageProfile.size() > 0) {
+////                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+////                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 100, stream);
+////                    byte[] byteArray = stream.toByteArray();
+//
+//
+//                }
             }
         });
 
@@ -241,23 +247,26 @@ public class FragmentInfoContact extends Fragment {
 ////                                    status = true;
 //                                }
 
-//                                String listtkontakImage = jsonobject.getString("ListtkontakImage");
-//                                if (listtkontakImage != "null") {
-//                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImage");
-//                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
-//                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
-//                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
-//                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-//                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
-//                                        String txtType = jsonobjectImage.getString("TxtType");
-//
-//                                        clsUserMemberImage dataImage = new clsUserMemberImage();
-//                                        dataImage.setTxtGuiId(txtGuiID);
-//                                        dataImage.setTxtHeaderId(txtKontakIDImage);
-//                                        dataImage.setTxtPosition(txtType);
-//
-//                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
-//
+                                String listtkontakImage = jsonobject.getString("ListtkontakImageProfile");
+                                if (listtkontakImage != "null") {
+                                    JSONArray jsonDataUserMemberImage = jsonobject.getJSONArray("ListtkontakImageProfile");
+                                    for(int j=0; j < jsonDataUserMemberImage.length(); j++) {
+                                        JSONObject jsonobjectImage = jsonDataUserMemberImage.getJSONObject(j);
+                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+                                        String txtType = jsonobjectImage.getString("TxtType");
+
+                                        clsUserMemberImage dataImage = new clsUserMemberImage();
+                                        dataImage.setTxtGuiId(txtGuiID);
+                                        dataImage.setTxtHeaderId(txtKontakIDImage);
+                                        dataImage.setTxtPosition(txtType);
+
+                                        String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+                                        if (!url.equals("null")) {
+                                            linkImageProfile = url;
+                                        }
+
 //                                        byte[] logoImage = getLogoImage(url);
 //
 //                                        if (logoImage != null) {
@@ -273,8 +282,8 @@ public class FragmentInfoContact extends Fragment {
 ////                                    status = true;
 //                                            }
 //                                        }
-//                                    }
-//                                }
+                                    }
+                                }
                             }
 //                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
                         } else {
@@ -305,9 +314,10 @@ public class FragmentInfoContact extends Fragment {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    if (dataUserImageProfile.size() > 0) {
-                        viewImageProfile();
-                    }
+//                    if (dataUserImageProfile.size() > 0) {
+//                        viewImageProfile();
+//                    }
+                    viewImageProfile();
                 }
 //                if(!status){
 //                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
@@ -353,17 +363,20 @@ public class FragmentInfoContact extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
-        folder.mkdir();
+//        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
+//        folder.mkdir();
 
-        for (clsUserImageProfile imgDt : dataUserImageProfile){
-            final byte[] imgFile = imgDt.getTxtImg();
-            if (imgFile != null) {
-                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
-                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
-                ivProfile.setImageBitmap(bitmap);
-            }
-        }
+//        for (clsUserImageProfile imgDt : dataUserImageProfile){
+//            final byte[] imgFile = imgDt.getTxtImg();
+//            if (imgFile != null) {
+//                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+//                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+//                ivProfile.setImageBitmap(bitmap);
+//            }
+//        }
+
+        Picasso.with(getContext()).load(linkImageProfile).fit().into(ivProfile);
+        int a = 0;
     }
 
 }

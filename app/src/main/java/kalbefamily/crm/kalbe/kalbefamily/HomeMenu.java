@@ -40,6 +40,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,6 +85,7 @@ public class HomeMenu extends AppCompatActivity {
     CircleImageView ivProfile;
     PackageInfo pInfo = null;
     int selectedId;
+    String linkImageProfile;
     Boolean isSubMenu = false;
     List<clsUserMember> dataMember = null;
 
@@ -496,17 +498,18 @@ public class HomeMenu extends AppCompatActivity {
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
                                         if (!url.equals("null")) {
-                                            byte[] logoImage = getLogoImage(url);
-                                            imageProfile.setTxtImg(logoImage);
-
-                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
-
-                                            int k = 0;
-                                            k = repoUserImageProfile.createOrUpdate(imageProfile);
-                                            if(k > -1) {
-                                                Log.d("Data info", "Data Member Image profile berhasil di update");
-//                                    status = true;
-                                            }
+//                                            byte[] logoImage = getLogoImage(url);
+//                                            imageProfile.setTxtImg(logoImage);
+//
+//                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+//
+//                                            int k = 0;
+//                                            k = repoUserImageProfile.createOrUpdate(imageProfile);
+//                                            if(k > -1) {
+//                                                Log.d("Data info", "Data Member Image profile berhasil di update");
+////                                    status = true;
+//                                            }
+                                            linkImageProfile = url;
                                         }
                                     }
                                 }
@@ -534,9 +537,10 @@ public class HomeMenu extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    if (dataUserImageProfile.size() > 0) {
-                        viewImageProfile();
-                    }
+//                    if (dataUserImageProfile.size() > 0) {
+//                        viewImageProfile();
+//                    }
+                    viewImageProfile();
 
                     FragmentInfoContact ContactFragment = new FragmentInfoContact();
                     FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
@@ -591,14 +595,19 @@ public class HomeMenu extends AppCompatActivity {
 //        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
 //        folder.mkdir();
 
-        for (clsUserImageProfile imgDt : dataUserImageProfile){
-            final byte[] imgFile = imgDt.getTxtImg();
-            if (imgFile != null) {
-                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
-                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
-                ivProfile.setImageBitmap(bitmap);
-            }
-        }
+//        for (clsUserImageProfile imgDt : dataUserImageProfile){
+//            final byte[] imgFile = imgDt.getTxtImg();
+//            if (imgFile != null) {
+//                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+//                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+//                ivProfile.setImageBitmap(bitmap);
+//
+////                Picasso.with(getApplicationContext()).load(linkImageProfile).fit().into(ivProfile);
+//            }
+//        }
+
+        Picasso.with(getApplicationContext()).load(linkImageProfile).fit().into(ivProfile);
+        int a = 0 ;
     }
 
     private void logout() {
