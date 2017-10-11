@@ -17,10 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.owater.library.CircleTextView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.util.ByteArrayBuffer;
@@ -68,7 +72,8 @@ public class FragmentInfoContact extends Fragment {
     clsUserMemberRepo repoUserMember = null;
     clsUserMemberImageRepo imageRepo = null;
     clsUserImageProfileRepo repoUserImageProfile = null;
-    private String txtMember, linkImageProfile;
+    private String txtMember;
+    private String linkImageProfile = "null";
     private static Bitmap mybitmapImageProfile;
 
     @Nullable
@@ -116,32 +121,33 @@ public class FragmentInfoContact extends Fragment {
         ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!linkImageProfile.equals("null")) {
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
+                    file.delete();
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = new FileOutputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
-                file.delete();
-                FileOutputStream fOut = null;
-                try {
-                    fOut = new FileOutputStream(file);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                    mybitmapImageProfile = ((BitmapDrawable)ivProfile.getDrawable()).getBitmap();
+                    mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    try {
+                        fOut.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fOut.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                mybitmapImageProfile = ((BitmapDrawable)ivProfile.getDrawable()).getBitmap();
-                mybitmapImageProfile.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-                try {
-                    fOut.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
+                    intent.putExtra("gambar profile", "GambarProfil");
+                    startActivity(intent);
                 }
-                try {
-                    fOut.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                intent.putExtra("gambar profile", "GambarProfil");
-                startActivity(intent);
 
 //                if (dataUserImageProfile.size() > 0) {
 ////                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -156,7 +162,7 @@ public class FragmentInfoContact extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserMember();
+                UserMemberRefresh();
             }
         });
 
@@ -317,7 +323,9 @@ public class FragmentInfoContact extends Fragment {
 //                    if (dataUserImageProfile.size() > 0) {
 //                        viewImageProfile();
 //                    }
-                    viewImageProfile();
+                    if (!linkImageProfile.equals("null")) {
+                        viewImageProfile();
+                    }
                 }
 //                if(!status){
 //                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
@@ -326,43 +334,131 @@ public class FragmentInfoContact extends Fragment {
         });
     }
 
-    private byte[] getLogoImage(String url) {
+    public void UserMemberRefresh() {
+        final ProgressDialog Dialog = new ProgressDialog(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
         try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            URL imageUrl = new URL(url);
-            URLConnection ucon = imageUrl.openConnection();
-            String contentType = ucon.getHeaderField("Content-Type");
-            boolean image = contentType.startsWith("image/");
-
-            if (image) {
-                InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-
-                ByteArrayBuffer baf = new ByteArrayBuffer(500);
-                int current = 0;
-                while ((current = bis.read()) != -1) {
-                    baf.append((byte) current);
-                }
-
-                return baf.toByteArray();
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            Log.d("ImageManager", "Error: " + e.toString());
-        }
-        return null;
-    }
-
-    private void viewImageProfile() {
-        try {
-            repoUserImageProfile = new clsUserImageProfileRepo(context);
-            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+            dataMember = (List<clsUserMember>) repo.findAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        txtMember = dataMember.get(0).getTxtMemberId();
+        String strLinkAPI = new clsHardCode().linkGetDetailCustomer;
+//        String nameRole = selectedRole;
+        JSONObject resJson = new JSONObject();
+
+        try {
+            resJson.put("txtMemberId", txtMember);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String mRequestBody = "[" + resJson.toString() + "]";
+
+        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    try {
+                        JSONObject jsonObject1 = new JSONObject(response);
+                        JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                        String warn = jsn.getString("TxtMessage");
+                        String result = jsn.getString("IntResult");
+
+                        if (result.equals("1")) {
+                            JSONArray jsonDataUserMember = jsn.getJSONArray("ListOfObjectData");
+                            for(int i=0; i < jsonDataUserMember.length(); i++) {
+                                JSONObject jsonobject = jsonDataUserMember.getJSONObject(i);
+                                String txtKontakId = jsonobject.getString("TxtKontakId");
+                                String memberID = jsonobject.getString("TxtMemberId");
+                                String txtNama = jsonobject.getString("TxtNama");
+                                String txtAlamat = jsonobject.getString("TxtAlamat");
+                                String txtJenisKelamin = jsonobject.getString("TxtJenisKelamin");
+                                String txtEmail = jsonobject.getString("TxtEmail");
+                                String txtTelp = jsonobject.getString("TxtTelp");
+                                String txtNoKTP = jsonobject.getString("TxtNoKTP");
+                                String txtNamaDepan = jsonobject.getString("TxtNamaDepan");
+                                String txtNamaBelakang = jsonobject.getString("TxtNamaKeluarga");
+                                String txtNamaPanggilan = jsonobject.getString("TxtNamaPanggilan");
+                                String intBasePoin = jsonobject.getString("IntBasePoin");
+                                String txtTglAwal = jsonobject.getString("DtTglAwal");
+                                String txtTglBerlaku = jsonobject.getString("TxttglBerlaku");
+
+                                clsUserMember dataUser = new clsUserMember();
+                                dataUser.setTxtKontakId(txtKontakId);
+                                dataUser.setTxtMemberId(memberID);
+                                dataUser.setTxtNama(txtNama);
+                                dataUser.setTxtAlamat(txtAlamat);
+                                dataUser.setTxtJenisKelamin(txtJenisKelamin);
+                                dataUser.setTxtEmail(txtEmail);
+                                dataUser.setTxtNoTelp(txtTelp);
+                                dataUser.setTxtNoKTP(txtNoKTP);
+                                dataUser.setTxtNamaDepan(txtNamaDepan);
+                                dataUser.setTxtNamaBelakang(txtNamaBelakang);
+                                dataUser.setTxtNamaPanggilan(txtNamaPanggilan);
+                                dataUser.setTxtBasePoin(intBasePoin);
+                                dataUser.setTxtTglAwal(txtTglAwal);
+                                dataUser.setTxtTglBerlaku(txtTglBerlaku);
+
+                                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                                repoUserMember.createOrUpdate(dataUser);
+                                Log.d("Data info", "Data Member berhasil di update");
+//
+                            }
+//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Update Data, Success", true);
+                        } else {
+                            new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
+                    try {
+                        dataMember = (List<clsUserMember>) repo.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    tvUsername.setText(dataMember.get(0).getTxtNama().toString());
+                    tvPhone.setText(dataMember.get(0).getTxtNoTelp().toString());
+                    tvEmail.setText(dataMember.get(0).getTxtEmail().toString());
+                    tvAddress.setText(dataMember.get(0).getTxtAlamat().toString());
+                    if (dataMember.get(0).getTxtBasePoin().equals("null")) {
+                        tvBasePoint.setText("( Poin Kalbe Family : 0 )");
+                    } else {
+                        tvBasePoint.setText("( Poin Kalbe Family : " +dataMember.get(0).getTxtBasePoin()+ " )");
+                    }
+
+                    try {
+                        repoUserImageProfile = new clsUserImageProfileRepo(context);
+                        dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+//                    if (dataUserImageProfile.size() > 0) {
+//                        viewImageProfile();
+//                    }
+                }
+//                if(!status){
+//                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
+//                }
+            }
+        });
+    }
+
+    private void viewImageProfile() {
+//        try {
+//            repoUserImageProfile = new clsUserImageProfileRepo(context);
+//            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 //        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
 //        folder.mkdir();
 
@@ -374,9 +470,31 @@ public class FragmentInfoContact extends Fragment {
 //                ivProfile.setImageBitmap(bitmap);
 //            }
 //        }
+        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+        dialog2.setIndeterminate(true);
+        dialog2.setMessage("Refresh Data...");
+        dialog2.setCancelable(false);
+        dialog2.show();
 
-        Picasso.with(getContext()).load(linkImageProfile).fit().into(ivProfile);
-        int a = 0;
+        // view image from web API with picasso
+        Picasso.with(getContext()).load(linkImageProfile)
+                .placeholder(R.drawable.profile)
+                .error(R.drawable.profile)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .fit()
+                .into(ivProfile, new Callback() {
+                    @Override
+                    public void onSuccess() {
+//                        Toast.makeText(getContext(), "Success download image", Toast.LENGTH_LONG).show();
+                        dialog2.dismiss();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
 }

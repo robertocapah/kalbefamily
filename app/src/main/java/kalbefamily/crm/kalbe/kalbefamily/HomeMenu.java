@@ -40,6 +40,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -85,7 +87,7 @@ public class HomeMenu extends AppCompatActivity {
     CircleImageView ivProfile;
     PackageInfo pInfo = null;
     int selectedId;
-    String linkImageProfile;
+    String linkImageProfile = "null";
     Boolean isSubMenu = false;
     List<clsUserMember> dataMember = null;
 
@@ -245,6 +247,7 @@ public class HomeMenu extends AppCompatActivity {
                                         final ProgressDialog dialog2 = new ProgressDialog(HomeMenu.this, ProgressDialog.STYLE_SPINNER);
                                         dialog2.setIndeterminate(true);
                                         dialog2.setMessage("Logging out...");
+                                        dialog2.setCancelable(false);
                                         dialog2.show();
 
                                         new android.os.Handler().postDelayed(
@@ -285,10 +288,15 @@ public class HomeMenu extends AppCompatActivity {
 
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+                        // send data from activity to fragment like intent
+                        Bundle bundle=new Bundle();
+                        bundle.putString("imageProfile", linkImageProfile);
+
                         FragmentNewPersonalData fragmentPersonalData = new FragmentNewPersonalData();
                         FragmentTransaction fragmentTransactionPersonalData = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionPersonalData.replace(R.id.frame, fragmentPersonalData);
                         fragmentTransactionPersonalData.commit();
+                        fragmentPersonalData.setArguments(bundle);
                         selectedId = 99;
 
                         return true;
@@ -475,26 +483,26 @@ public class HomeMenu extends AppCompatActivity {
                                     JSONArray jsonDataUserMemberImageProfile = jsonobject.getJSONArray("ListtkontakImageProfile");
                                     for (int j = 0; j < jsonDataUserMemberImageProfile.length(); j++) {
                                         JSONObject jsonobjectImage = jsonDataUserMemberImageProfile.getJSONObject(j);
-                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
-                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
-                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
-                                        String txtType = jsonobjectImage.getString("TxtType");
-
-                                        clsUserImageProfile imageProfile = new clsUserImageProfile();
-
-                                        try {
-                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
-                                            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        if (dataUserImageProfile.size() == 0) {
-                                            imageProfile.setTxtGuiId(txtGuiID);
-                                        } else {
-                                            imageProfile.setTxtGuiId(dataUserImageProfile.get(0).txtGuiId);
-                                        }
-                                        imageProfile.setTxtKontakId(txtKontakIDImage);
+//                                        String txtGuiID = jsonobjectImage.getString("TxtDataID");
+//                                        String txtKontakIDImage = jsonobjectImage.getString("TxtKontakID");
+//                                        String txtImageName = jsonobjectImage.getString("TxtImageName");
+//                                        String txtType = jsonobjectImage.getString("TxtType");
+//
+//                                        clsUserImageProfile imageProfile = new clsUserImageProfile();
+//
+//                                        try {
+//                                            repoUserImageProfile = new clsUserImageProfileRepo(getApplicationContext());
+//                                            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+//                                        } catch (SQLException e) {
+//                                            e.printStackTrace();
+//                                        }
+//
+//                                        if (dataUserImageProfile.size() == 0) {
+//                                            imageProfile.setTxtGuiId(txtGuiID);
+//                                        } else {
+//                                            imageProfile.setTxtGuiId(dataUserImageProfile.get(0).txtGuiId);
+//                                        }
+//                                        imageProfile.setTxtKontakId(txtKontakIDImage);
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
                                         if (!url.equals("null")) {
@@ -540,7 +548,15 @@ public class HomeMenu extends AppCompatActivity {
 //                    if (dataUserImageProfile.size() > 0) {
 //                        viewImageProfile();
 //                    }
-                    viewImageProfile();
+                    if (!linkImageProfile.equals("null")) {
+                        Picasso.with(getApplicationContext()).load(linkImageProfile)
+                                .placeholder(R.drawable.profile)
+                                .error(R.drawable.profile)
+                                .networkPolicy(NetworkPolicy.NO_CACHE)
+                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                                .fit()
+                                .into(ivProfile);
+                    }
 
                     FragmentInfoContact ContactFragment = new FragmentInfoContact();
                     FragmentTransaction fragmentTransactionHome = getSupportFragmentManager().beginTransaction();
@@ -595,19 +611,16 @@ public class HomeMenu extends AppCompatActivity {
 //        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
 //        folder.mkdir();
 
-//        for (clsUserImageProfile imgDt : dataUserImageProfile){
-//            final byte[] imgFile = imgDt.getTxtImg();
-//            if (imgFile != null) {
-//                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
-//                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
-//                ivProfile.setImageBitmap(bitmap);
-//
-////                Picasso.with(getApplicationContext()).load(linkImageProfile).fit().into(ivProfile);
-//            }
-//        }
+        for (clsUserImageProfile imgDt : dataUserImageProfile){
+            final byte[] imgFile = imgDt.getTxtImg();
+            if (imgFile != null) {
+                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+                ivProfile.setImageBitmap(bitmap);
 
-        Picasso.with(getApplicationContext()).load(linkImageProfile).fit().into(ivProfile);
-        int a = 0 ;
+//                Picasso.with(getApplicationContext()).load(linkImageProfile).fit().into(ivProfile);
+            }
+        }
     }
 
     private void logout() {

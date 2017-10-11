@@ -50,6 +50,10 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
@@ -112,6 +116,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     CircleImageView ivProfile;
     Context context;
     Spinner spinner;
+    String imageProfile = "null";
+//    String linkImage1 = "null";
+//    String linkImage2 = "null";
     private Uri uriImage, selectedImage;
     DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
@@ -178,6 +185,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         image2 = (ImageView) v.findViewById(R.id.image2);
         spinner = (Spinner) v.findViewById(R.id.spinnerContact);
         tvKategori = (TextView) v.findViewById(R.id.textViewKategori);
+
+        // receive data from activity to fragment in fragment class
+        imageProfile = getArguments().getString("imageProfile");
 
         try {
             repoUserMember = new clsUserMemberRepo(context);
@@ -404,9 +414,12 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
 
-        if (dataUserImageProfile.size() > 0) {
+        if (!imageProfile.equals("null")) {
             viewImageProfile();
         }
+//        if (dataUserImageProfile.size() > 0) {
+//            viewImageProfile();
+//        }
 
 //        if (dataMemberImage.size() > 0) {
 //            viewImage();
@@ -682,23 +695,46 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     }
 
     private void viewImageProfile() {
-        try {
-            repoUserImageProfile = new clsUserImageProfileRepo(context);
-            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
-        folder.mkdir();
+//        try {
+//            repoUserImageProfile = new clsUserImageProfileRepo(context);
+//            dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/Foto_Profil");
+//        folder.mkdir();
+//
+//        for (clsUserImageProfile imgDt : dataUserImageProfile){
+//            final byte[] imgFile = imgDt.getTxtImg();
+//            if (imgFile != null) {
+//                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+//                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+//                ivProfile.setImageBitmap(bitmap);
+//            }
+//        }
+        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
+        dialog2.setIndeterminate(true);
+        dialog2.setMessage("Refresh Data...");
+        dialog2.setCancelable(false);
+        dialog2.show();
 
-        for (clsUserImageProfile imgDt : dataUserImageProfile){
-            final byte[] imgFile = imgDt.getTxtImg();
-            if (imgFile != null) {
-                mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
-                Bitmap bitmap = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
-                ivProfile.setImageBitmap(bitmap);
-            }
-        }
+        Picasso.with(getContext()).load(imageProfile)
+                .placeholder(R.drawable.profile)
+                .error(R.drawable.profile)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .fit()
+                .into(ivProfile, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        dialog2.dismiss();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     // put image from camera
@@ -1875,6 +1911,14 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
 
                                         if (!url.equals("null")) {
+//                                            String substring = url.substring(Math.max(url.length() - 15, 0));
+//
+//                                            if (substring.equals("file_image1.jpg")) {
+//                                                linkImage1 = url;
+//                                            } else if (substring.equals("file_image2.jpg")){
+//                                                linkImage2 = url;
+//                                            }
+
                                             byte[] logoImage = getLogoImage(url);
 
                                             dataImage.setTxtImg(logoImage);
@@ -1886,7 +1930,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                             if(k > -1) {
                                                 Log.d("Data info", "Image " +txtType+ " Berhasil di update");
                                                 Log.d("Data info", "Data Member Image berhasil di update");
-//                                    status = true;
                                             }
                                         }
                                     }
@@ -2003,9 +2046,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
         if (dataMemberImage.size() > 0) {
-            File folder = new File(Environment.getExternalStorageDirectory().toString() + "/data/data/KalbeFamily/tempdata/FotoKTP");
-            folder.mkdir();
-
             for (clsUserMemberImage imgDt : dataMemberImage) {
                 final byte[] imgFile = imgDt.getTxtImg();
                 if (imgFile != null) {
