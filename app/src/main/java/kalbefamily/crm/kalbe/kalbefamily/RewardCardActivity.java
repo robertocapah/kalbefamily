@@ -36,6 +36,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
     Spinner spinner;
     AbsoluteLayout layoutDepan, layoutBelakang, layoutWebView;
     ImageView tampakDepan, tampakBelakang;
+    private String txtLink = "null";
     private WebView mWebView;
     PhotoViewAttacher photoViewAttacher;
 
@@ -120,7 +121,12 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         webSettings.setJavaScriptEnabled(true);
 
 //        mWebView.loadUrl("http://beta.html5test.com/");
-        mWebView.loadUrl("https://www.google.co.id");
+        txtLink = getIntent().getStringExtra("link");
+        if (!txtLink.equals("null")){
+            mWebView.loadUrl(txtLink);
+        } else {
+            mWebView.loadUrl("https://www.google.co.id");
+        }
 
         // Force links and redirects to open in the WebView instead of in a browser
         mWebView.setWebViewClient(new WebViewClient());

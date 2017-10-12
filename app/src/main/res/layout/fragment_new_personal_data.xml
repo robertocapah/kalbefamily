@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_shadow_end_color"
         android:orientation="vertical"
-        android:weightSum="4">
+        android:weightSum="2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,18 +17,17 @@
             android:orientation="horizontal"
             android:background="@drawable/batik_kecil"
             android:layout_marginBottom="0dp"
-            android:gravity="center_horizontal"
-            android:layout_weight="1.5">
+            android:gravity="start">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="-30dp"
+                android:layout_marginLeft="30dp"
                 android:src="@drawable/profile"
                 android:cropToPadding="false"
-                android:gravity="center"
+                android:gravity="start"
                 android:adjustViewBounds="false" />
 
             <LinearLayout

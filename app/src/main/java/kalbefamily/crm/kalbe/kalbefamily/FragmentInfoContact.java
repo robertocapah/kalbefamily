@@ -272,6 +272,9 @@ public class FragmentInfoContact extends Fragment {
                                         if (!url.equals("null")) {
                                             linkImageProfile = url;
                                         }
+                                        if (!linkImageProfile.equals("null")) {
+                                            viewImageProfile();
+                                        }
 
 //                                        byte[] logoImage = getLogoImage(url);
 //
@@ -323,9 +326,9 @@ public class FragmentInfoContact extends Fragment {
 //                    if (dataUserImageProfile.size() > 0) {
 //                        viewImageProfile();
 //                    }
-                    if (!linkImageProfile.equals("null")) {
-                        viewImageProfile();
-                    }
+//                    if (!linkImageProfile.equals("null")) {
+//                        viewImageProfile();
+//                    }
                 }
 //                if(!status){
 //                    new clsMainActivity().showCustomToast(getApplicationContext(), strErrorMsg, false);
@@ -470,31 +473,15 @@ public class FragmentInfoContact extends Fragment {
 //                ivProfile.setImageBitmap(bitmap);
 //            }
 //        }
-        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
-        dialog2.setIndeterminate(true);
-        dialog2.setMessage("Refresh Data...");
-        dialog2.setCancelable(false);
-        dialog2.show();
 
         // view image from web API with picasso
         Picasso.with(getContext()).load(linkImageProfile)
-                .placeholder(R.drawable.profile)
+                .placeholder(R.drawable.loading2)
                 .error(R.drawable.profile)
                 .networkPolicy(NetworkPolicy.NO_CACHE)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .fit()
-                .into(ivProfile, new Callback() {
-                    @Override
-                    public void onSuccess() {
-//                        Toast.makeText(getContext(), "Success download image", Toast.LENGTH_LONG).show();
-                        dialog2.dismiss();
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+                .into(ivProfile);
     }
 
 }

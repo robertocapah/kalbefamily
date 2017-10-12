@@ -88,6 +88,7 @@ public class HomeMenu extends AppCompatActivity {
     PackageInfo pInfo = null;
     int selectedId;
     String linkImageProfile = "null";
+    String txtLinkDesc;
     Boolean isSubMenu = false;
     List<clsUserMember> dataMember = null;
 
@@ -322,6 +323,7 @@ public class HomeMenu extends AppCompatActivity {
 //                        selectedId = 99;
 
                         Intent intentReward = new Intent(getApplicationContext(), RewardCardActivity.class);
+                        intentReward.putExtra("link", txtLinkDesc);
                         finish();
                         startActivity(intentReward);
 
@@ -451,6 +453,7 @@ public class HomeMenu extends AppCompatActivity {
                                 String intBasePoin = jsonobject.getString("IntBasePoin");
                                 String txtTglAwal = jsonobject.getString("DtTglAwal");
                                 String txtTglBerlaku = jsonobject.getString("TxttglBerlaku");
+                                txtLinkDesc = jsonobject.getString("TxtLinkDesc");
 
                                 clsUserMember dataUser = new clsUserMember();
                                 dataUser.setTxtKontakId(txtKontakId);
