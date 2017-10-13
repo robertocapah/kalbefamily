@@ -34,7 +34,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class RewardCardActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView etNumber, etNama, etTglBerlaku;
     Spinner spinner;
-    AbsoluteLayout layoutDepan, layoutBelakang, layoutWebView;
+    AbsoluteLayout layoutDepan, layoutBelakang;
     ImageView tampakDepan, tampakBelakang;
     private String txtLink = "null";
     private WebView mWebView;
@@ -62,10 +62,9 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         spinner = (Spinner) findViewById(R.id.spinner);
         layoutDepan = (AbsoluteLayout) findViewById(R.id.absoluteLayout);
         layoutBelakang = (AbsoluteLayout) findViewById(R.id.absoluteLayout_belakang);
-        layoutWebView = (AbsoluteLayout) findViewById(R.id.absoluteLayout_webView);
         tampakDepan = (ImageView) findViewById(R.id.tampakDepan);
         tampakBelakang = (ImageView) findViewById(R.id.tampakBelakang);
-        mWebView = (WebView) findViewById(R.id.webView);
+        mWebView = (WebView) findViewById(R.id.webViewCard);
 //        spinNama = (Spinner) findViewById(R.id.spnNama);
 
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
@@ -145,12 +144,10 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
 
         if (depan == "Tampak Depan") {
             layoutDepan.setVisibility(View.VISIBLE);
-//            layoutBelakang.setVisibility(View.GONE);
-            layoutWebView.setVisibility(View.GONE);
+            layoutBelakang.setVisibility(View.GONE);
         } else {
             layoutDepan.setVisibility(View.GONE);
-//            layoutBelakang.setVisibility(View.VISIBLE);
-            layoutWebView.setVisibility(View.VISIBLE);
+            layoutBelakang.setVisibility(View.VISIBLE);
         }
 
     }
