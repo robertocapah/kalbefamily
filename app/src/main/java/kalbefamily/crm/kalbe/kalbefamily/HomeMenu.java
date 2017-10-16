@@ -95,6 +95,7 @@ public class HomeMenu extends AppCompatActivity {
     private GoogleApiClient client;
     clsActivity _clsMainActivity = new clsActivity();
     private ZXingLibConfig zxingLibConfig;
+    DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
 
     private String txtKontakID;
     private String txtMember;
@@ -548,12 +549,13 @@ public class HomeMenu extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-//                    if (dataUserImageProfile.size() > 0) {
+                    if (dataUserImageProfile.size() > 0) {
 //                        viewImageProfile();
-//                    }
+                        helper.clear();
+                    }
                     if (!linkImageProfile.equals("null")) {
                         Picasso.with(getApplicationContext()).load(linkImageProfile)
-                                .placeholder(R.drawable.profile)
+                                .placeholder(R.drawable.loading2)
                                 .error(R.drawable.profile)
                                 .networkPolicy(NetworkPolicy.NO_CACHE)
                                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

@@ -116,7 +116,7 @@
         <WebView
             android:id="@+id/webViewCard"
             android:layout_width="365dp"
-            android:layout_height="185dp"
+            android:layout_height="180dp"
             android:layout_x="16dp"
             android:layout_y="83dp">
 

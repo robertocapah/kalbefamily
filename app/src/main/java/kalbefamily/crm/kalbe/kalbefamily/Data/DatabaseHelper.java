@@ -197,6 +197,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     }
 
+    public void clear(){
+        Log.i(DatabaseHelper.class.getName(), "onUpgrade");
+        try {
+            TableUtils.clearTable(connectionSource, clsUserImageProfile.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Dao<mConfigData, Integer> getmConfigDao() throws SQLException {
         if (mConfigDao == null) {
             mConfigDao = getDao(mConfigData.class);
