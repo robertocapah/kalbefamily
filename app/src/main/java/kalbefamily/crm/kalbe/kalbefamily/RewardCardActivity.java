@@ -111,9 +111,9 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         etNama.setText(dataMember.get(0).getTxtNama().toUpperCase());
         etTglBerlaku.setText(dataMember.get(0).getTxtTglBerlaku());
 
-        photoViewAttacher = new PhotoViewAttacher(tampakBelakang);
-
-        photoViewAttacher.update();
+//        photoViewAttacher = new PhotoViewAttacher(tampakBelakang);
+//
+//        photoViewAttacher.update();
 
         // Enable Javascript
         WebSettings webSettings = mWebView.getSettings();
