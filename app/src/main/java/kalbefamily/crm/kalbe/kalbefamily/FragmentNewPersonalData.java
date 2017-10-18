@@ -1070,6 +1070,10 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             e.printStackTrace();
         }
 
+        if (phtImage2 == null){
+            helper.refreshData2();
+        }
+
         if (dataMemberImage.size() == 0) {
             if (phtImage1 != null) {
                 clsUserMemberImage dataImage = new clsUserMemberImage();
@@ -1104,6 +1108,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         repoUserMemberImage = new clsUserMemberImageRepo(context.getApplicationContext());
                         repoUserMemberImage.createOrUpdate(dataImage);
                     }
+                } else if (phtImage1 == null){
+                    helper.refreshData2();
                 }
             }
         }

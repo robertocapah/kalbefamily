@@ -293,6 +293,7 @@ public class HomeMenu extends AppCompatActivity {
                         // send data from activity to fragment like intent
                         Bundle bundle=new Bundle();
                         bundle.putString("imageProfile", linkImageProfile);
+                        helper.refreshData2();
 
                         FragmentNewPersonalData fragmentPersonalData = new FragmentNewPersonalData();
                         FragmentTransaction fragmentTransactionPersonalData = getSupportFragmentManager().beginTransaction();
