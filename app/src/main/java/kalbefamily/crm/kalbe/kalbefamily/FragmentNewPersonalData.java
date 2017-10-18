@@ -117,6 +117,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     Context context;
     Spinner spinner;
     String imageProfile = "null";
+    String noKTPSementara;
 //    String linkImage1 = "null";
 //    String linkImage2 = "null";
     private Uri uriImage, selectedImage;
@@ -482,6 +483,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         clsUserMember dataUser = new clsUserMember();
                         dataUser.setTxtKontakId(dataMember.get(0).getTxtKontakId().toString());
                         dataUser.setTxtMemberId(member1);
+                        dataUser.setTxtNama(tvNama.getText().toString());
                         dataUser.setTxtNamaDepan(etNamaDepan.getText().toString());
                         dataUser.setTxtAlamat(etAlamat.getText().toString());
                         dataUser.setTxtNoKTP(etNoKTP.getText().toString());
@@ -500,8 +502,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                         repoUserMember.createOrUpdate(dataUser);
 
-                        savePicture1();
-                        savePicture2();
+//                        savePicture1();
+//                        savePicture2();
                         savePictureProfile();
 
                         sendData();
@@ -610,8 +612,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                 repoUserMember.createOrUpdate(dataUser);
 
-                savePicture1();
-                savePicture2();
+//                savePicture1();
+//                savePicture2();
                 savePictureProfile();
 
                 sendDataForwardMediaKomunikasi();
@@ -1272,6 +1274,51 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                                 mediaType();
                                 jenisMedia();
                                 kontakDetail();
+                            } else {
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
+                                popup();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.i(TAG, "Ski data from server - " + response);
+                        clsUserMember userMemberData = new clsUserMember();
+                    }
+                });
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void sendDataImageKTP() {
+        String versionName = "";
+        clsSendData dtJson = new clsHelper().sendData(versionName, context.getApplicationContext());
+        if (dtJson != null) {
+            try {
+                String strLinkAPI = new clsHardCode().linkSendData;
+                final String mRequestBody = "[" + dtJson.toString() + "]";
+
+                new VolleyUtils().makeJsonObjectRequestSendDataKTP(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        String error;
+                    }
+
+                    @Override
+                    public void onResponse(String response, Boolean status, String strErrorMsg) {
+                        try {
+                            JSONObject jsonObject1 = new JSONObject(response);
+                            JSONObject jsn = jsonObject1.getJSONObject("validJson");
+                            String warn = jsn.getString("TxtMessage");
+                            String result = jsn.getString("IntResult");
+                            String res = response;
+
+                            if (result.equals("1")) {
+//                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
+                                Log.d("Image KTP Status", "Saved");
                             } else {
 //                                new clsActivity().showCustomToast(context.getApplicationContext(), warn, false);
                                 popup();
@@ -2024,6 +2071,28 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 etNoKTP.setText(etKTPDialog.getText().toString());
+
+                clsUserMember dataUser = new clsUserMember();
+                dataUser.setTxtKontakId(dataMember.get(0).getTxtKontakId().toString());
+                dataUser.setTxtMemberId(dataMember.get(0).getTxtMemberId().toString());
+                dataUser.setTxtNama(tvNama.getText().toString());
+                dataUser.setTxtNamaDepan(etNamaDepan.getText().toString());
+                dataUser.setTxtAlamat(etAlamat.getText().toString());
+                dataUser.setTxtNoKTP(etKTPDialog.getText().toString());
+                dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
+                dataUser.setTxtNamaBelakang(etNamaBelakang.getText().toString());
+                dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
+                dataUser.setTxtEmail(etEmail.getText().toString());
+                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+                dataUser.setTxtJenisKelamin(dataMember.get(0).txtJenisKelamin);
+
+                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                repoUserMember.createOrUpdate(dataUser);
+
+                savePicture1();
+                savePicture2();
+                sendDataImageKTP();
+
                 dialog.dismiss();
                 //TODO Buy button action
             }
@@ -2032,6 +2101,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         ktp1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                noKTPSementara = etKTPDialog.getText().toString();
                 selectImage1();
                 dialog.dismiss();
             }
@@ -2040,6 +2110,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         ktp2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                noKTPSementara = etKTPDialog.getText().toString();
                 selectImage2();
                 dialog.dismiss();
             }
@@ -2289,7 +2360,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         Button simpan = (Button) dialog.findViewById(R.id.btnBuy);
         final EditText etKTPDialog = (EditText) dialog.findViewById(R.id.etKTPDialog);
 
-        etKTPDialog.setText(etNoKTP.getText().toString());
+        etKTPDialog.setText(noKTPSementara);
 //         max lenght
         int maxLength = 16;
         InputFilter[] FilterArray = new InputFilter[1];
@@ -2311,6 +2382,28 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 etNoKTP.setText(etKTPDialog.getText().toString());
+
+                clsUserMember dataUser = new clsUserMember();
+                dataUser.setTxtKontakId(dataMember.get(0).getTxtKontakId().toString());
+                dataUser.setTxtMemberId(dataMember.get(0).getTxtMemberId().toString());
+                dataUser.setTxtNama(tvNama.getText().toString());
+                dataUser.setTxtNamaDepan(etNamaDepan.getText().toString());
+                dataUser.setTxtAlamat(etAlamat.getText().toString());
+                dataUser.setTxtNoKTP(etKTPDialog.getText().toString());
+                dataUser.setTxtNamaPanggilan(etNamaPanggilan.getText().toString());
+                dataUser.setTxtNamaBelakang(etNamaBelakang.getText().toString());
+                dataUser.setTxtBasePoin(dataMember.get(0).getTxtBasePoin().toString());
+                dataUser.setTxtEmail(etEmail.getText().toString());
+                dataUser.setTxtNoTelp(etTelpon.getText().toString());
+                dataUser.setTxtJenisKelamin(dataMember.get(0).txtJenisKelamin);
+
+                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
+                repoUserMember.createOrUpdate(dataUser);
+
+                savePicture1();
+                savePicture2();
+                sendDataImageKTP();
+
                 dialog.dismiss();
                 //TODO Buy button action
             }

@@ -205,14 +205,79 @@ public class VolleyUtils {
                 Map<String, DataPart> params = new HashMap<>();
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
+                if (mRequestBody.getFileUploadProfile().get("profile_picture") != null){
+                    params.put("profile_picture.jpg", new DataPart("profile_picture.jpg", mRequestBody.getFileUploadProfile().get("profile_picture"), "image/jpeg"));
+                }
+
+                return params;
+            }
+        };
+        multipartRequest.setRetryPolicy(new
+                DefaultRetryPolicy(500000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueue queue = Volley.newRequestQueue(activity.getApplicationContext());
+        queue.add(multipartRequest);
+    }
+
+    public void makeJsonObjectRequestSendDataKTP(final Activity activity, String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+        ProgressDialog Dialog = new ProgressDialog(activity);
+//        Dialog.setCancelable(false);
+//        Dialog.show();
+
+        Dialog = ProgressDialog.show(activity, "",
+                "Mohon Tunggu...", true);
+//        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response.toString(), status, errorMessage);
+                finalDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                popup();
+                finalDialog1.dismiss();
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    final String mRequestBody2 = "[" +  mRequestBody.getDtdataJson().txtJSON().toString() + "]";
+                    params.put("txtParam", mRequestBody2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
                 if (mRequestBody.getFileUpload().get("txtFileName1") != null){
                     params.put("file_image1.jpg", new DataPart("file_image1.jpg", mRequestBody.getFileUpload().get("txtFileName1"), "image/jpeg"));
                 }
                 if (mRequestBody.getFileUpload().get("txtFileName2") != null){
                     params.put("file_image2.jpg", new DataPart("file_image2.jpg", mRequestBody.getFileUpload().get("txtFileName2"), "image/jpeg"));
-                }
-                if (mRequestBody.getFileUploadProfile().get("profile_picture") != null){
-                    params.put("profile_picture.jpg", new DataPart("profile_picture.jpg", mRequestBody.getFileUploadProfile().get("profile_picture"), "image/jpeg"));
                 }
 
                 return params;
