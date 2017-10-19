@@ -48,7 +48,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         String fNameKTP2 = getIntent().getStringExtra("imageKTP2");
         String pathKTP2 = Environment.getExternalStorageDirectory() + File.separator + fNameKTP2 + ".png";
 
-        if (pathProfile.equals("/storage/emulated/0/GambarProfil.png")) {
+        if (pathProfile.equals("/storage/emulated/0/Gambar.png")) {
 //            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             bmp = BitmapFactory.decodeFile(pathProfile);
         } else if (pathKTP1.equals("/storage/emulated/0/GambarKTP1.png")) {

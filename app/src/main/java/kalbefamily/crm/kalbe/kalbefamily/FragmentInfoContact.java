@@ -122,7 +122,7 @@ public class FragmentInfoContact extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!linkImageProfile.equals("null")) {
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "GambarProfil" + ".png");
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Gambar" + ".png");
                     file.delete();
                     FileOutputStream fOut = null;
                     try {
@@ -145,7 +145,7 @@ public class FragmentInfoContact extends Fragment {
                     }
 
                     Intent intent = new Intent(getActivity(), ViewPagerActivity.class);
-                    intent.putExtra("gambar profile", "GambarProfil");
+                    intent.putExtra("gambar profile", "Gambar");
                     startActivity(intent);
                 }
 
@@ -478,8 +478,8 @@ public class FragmentInfoContact extends Fragment {
         Picasso.with(getContext()).load(linkImageProfile)
                 .placeholder(R.drawable.loading2)
                 .error(R.drawable.profile)
-                .networkPolicy(NetworkPolicy.NO_CACHE)
-                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE)
+//                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .fit()
                 .into(ivProfile);
     }

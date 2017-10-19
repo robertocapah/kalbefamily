@@ -2,7 +2,9 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +79,43 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        layoutDepan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.setDrawingCacheEnabled(true);
+
+                view.buildDrawingCache();
+
+                Bitmap bm = view.getDrawingCache();
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Gambar" + ".png");
+                file.delete();
+                FileOutputStream fOut = null;
+                try {
+                    fOut = new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                try {
+                    fOut.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = new Intent(RewardCardActivity.this, ViewPagerActivity.class);
+                intent.putExtra("gambar profile", "Gambar");
+                startActivity(intent);
+
+            }
+        });
 
         // spinnerTelp name member
 //        List<String> dataMemberName = new ArrayList<>();
