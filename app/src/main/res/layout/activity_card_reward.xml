@@ -84,7 +84,7 @@
     <AbsoluteLayout
         android:id="@+id/absoluteLayout_belakang"
         android:layout_width="400dp"
-        android:layout_height="270dp"
+        android:layout_height="272dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
 
@@ -92,7 +92,7 @@
             android:id="@+id/tampakBelakang"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/hijau_polos" />
+            android:src="@drawable/kartu_back3" />
 
         <!--<FrameLayout-->
             <!--android:layout_width="372dp"-->
@@ -115,10 +115,10 @@
 
         <WebView
             android:id="@+id/webViewCard"
-            android:layout_width="360dp"
-            android:layout_height="184dp"
-            android:layout_x="19dp"
-            android:layout_y="83dp">
+            android:layout_width="355dp"
+            android:layout_height="219dp"
+            android:layout_x="21dp"
+            android:layout_y="51dp">
 
         </WebView>
     </AbsoluteLayout>

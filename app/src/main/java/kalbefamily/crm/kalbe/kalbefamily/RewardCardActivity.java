@@ -3,6 +3,7 @@ package kalbefamily.crm.kalbe.kalbefamily;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
@@ -163,7 +164,8 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         webSettings.setJavaScriptEnabled(true);
 
 //        mWebView.loadUrl("http://beta.html5test.com/");
-        txtLink = getIntent().getStringExtra("link");
+//        txtLink = getIntent().getStringExtra("link");
+        txtLink = "file:///android_asset/rewardCard.html";
         if (!txtLink.equals("null")){
             mWebView.loadUrl(txtLink);
         } else {
@@ -177,7 +179,8 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         mWebView.setWebViewClient(new MyAppWebViewClient());
 
         // set background
-        mWebView.setBackgroundResource(R.drawable.kartu_virtual_back_desain);
+//        mWebView.setBackgroundResource(R.drawable.kartu_virtual_back_desain);
+        mWebView.setBackgroundColor(Color.TRANSPARENT);
 
     }
 
