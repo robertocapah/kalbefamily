@@ -1,13 +1,12 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
-import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -111,10 +109,46 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
 
-                Intent intent = new Intent(RewardCardActivity.this, ViewPagerActivity.class);
-                intent.putExtra("gambar profile", "Gambar");
+                Intent intent = new Intent(RewardCardActivity.this, ZoomRewardCard.class);
+                intent.putExtra("gambar", "Gambar");
                 startActivity(intent);
 
+            }
+        });
+
+        layoutBelakang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.setDrawingCacheEnabled(true);
+
+                view.buildDrawingCache();
+
+                Bitmap bm = view.getDrawingCache();
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Gambar" + ".png");
+                file.delete();
+                FileOutputStream fOut = null;
+                try {
+                    fOut = new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                try {
+                    fOut.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = new Intent(RewardCardActivity.this, ZoomRewardCard.class);
+                intent.putExtra("gambar", "Gambar");
+                startActivity(intent);
             }
         });
 
@@ -182,6 +216,39 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
 //        mWebView.setBackgroundResource(R.drawable.kartu_virtual_back_desain);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
 
+        mWebView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch(event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        layoutBelakang.setDrawingCacheEnabled(true);
+
+                        layoutBelakang.buildDrawingCache();
+
+                        Bitmap bm = layoutBelakang.getDrawingCache();
+                        zoomTampakBelakang(bm);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        layoutBelakang.setDrawingCacheEnabled(true);
+
+                        layoutBelakang.buildDrawingCache();
+
+                        Bitmap bm2 = layoutBelakang.getDrawingCache();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        layoutBelakang.setDrawingCacheEnabled(true);
+
+                        layoutBelakang.buildDrawingCache();
+
+                        Bitmap bm3 = layoutBelakang.getDrawingCache();
+                        break;
+                }
+
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -201,5 +268,32 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    private void zoomTampakBelakang(Bitmap bm) {
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Gambar" + ".png");
+        file.delete();
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+        try {
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(RewardCardActivity.this, ZoomRewardCard.class);
+        intent.putExtra("gambar", "Gambar");
+        startActivity(intent);
     }
 }
