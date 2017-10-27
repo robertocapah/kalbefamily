@@ -56,7 +56,7 @@ public class NewLoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_new_login);
-        popup();
+//        popup();
 
         memberID = (EditText) findViewById(R.id.memberID);
         password = (EditText) findViewById(R.id.password);
