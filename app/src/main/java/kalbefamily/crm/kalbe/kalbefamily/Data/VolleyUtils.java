@@ -3,11 +3,13 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.util.Base64;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -47,8 +49,13 @@ public class VolleyUtils {
     public void makeJsonObjectRequest(final Activity activity, String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
         ProgressDialog Dialog = new ProgressDialog(activity);
 //        Dialog.setCancelable(false);
+//        Dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Toast.makeText(activity, "cancel request", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 //        Dialog.show();
-
         Dialog = ProgressDialog.show(activity, "",
                 progressBarType, false);
 //        Dialog.setIndeterminateDrawable(activity.getResources().getDrawable(R.mipmap.ic_kalbe_2, null));

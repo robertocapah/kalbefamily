@@ -100,7 +100,7 @@ public class NewLoginActivity extends AppCompatActivity {
     }
 
     private void popupSubmit() {
-        final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
         pDialog.setTitleText("Apakah Anda yakin ?");
         pDialog.setCancelText("BATAL");
         pDialog.setConfirmText("SUBMIT");
