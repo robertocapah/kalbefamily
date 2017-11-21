@@ -198,8 +198,8 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         webSettings.setJavaScriptEnabled(true);
 
 //        mWebView.loadUrl("http://beta.html5test.com/");
-        txtLink = getIntent().getStringExtra("link");
-//        txtLink = "file:///android_asset/rewardCard.html";
+//        txtLink = getIntent().getStringExtra("link");
+        txtLink = "file:///android_asset/rewardCard.html";
         if (!txtLink.equals("null")){
             mWebView.loadUrl(txtLink);
         } else {
