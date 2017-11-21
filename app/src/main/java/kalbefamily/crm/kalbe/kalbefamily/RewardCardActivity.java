@@ -39,10 +39,11 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class RewardCardActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView etNumber, etNama, etTglBerlaku;
     Spinner spinner;
-    AbsoluteLayout layoutDepan, layoutBelakang;
+    static AbsoluteLayout layoutDepan;
+    static AbsoluteLayout layoutBelakang;
     ImageView tampakDepan, tampakBelakang;
     private String txtLink = "null";
-    private WebView mWebView;
+    private static WebView mWebView;
     PhotoViewAttacher photoViewAttacher;
 
     List<clsUserMember> dataMember = null;
@@ -82,6 +83,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         layoutDepan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                layoutDepan.setEnabled(false);
                 view.setDrawingCacheEnabled(true);
 
                 view.buildDrawingCache();
@@ -119,6 +121,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         layoutBelakang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                layoutBelakang.setClickable(false);
                 view.setDrawingCacheEnabled(true);
 
                 view.buildDrawingCache();
@@ -198,8 +201,8 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         webSettings.setJavaScriptEnabled(true);
 
 //        mWebView.loadUrl("http://beta.html5test.com/");
-//        txtLink = getIntent().getStringExtra("link");
-        txtLink = "file:///android_asset/rewardCard.html";
+        txtLink = getIntent().getStringExtra("link");
+//        txtLink = "file:///android_asset/rewardCard.html";
         if (!txtLink.equals("null")){
             mWebView.loadUrl(txtLink);
         } else {
@@ -219,6 +222,7 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         mWebView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
+                mWebView.setEnabled(false);
                 switch(event.getAction())
                 {
                     case MotionEvent.ACTION_DOWN:
@@ -295,5 +299,11 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         Intent intent = new Intent(RewardCardActivity.this, ZoomRewardCard.class);
         intent.putExtra("gambar", "Gambar");
         startActivity(intent);
+    }
+
+    public static void test() {
+        layoutDepan.setEnabled(true);
+        layoutBelakang.setEnabled(true);
+        mWebView.setEnabled(true);
     }
 }

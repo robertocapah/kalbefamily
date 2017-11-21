@@ -76,7 +76,9 @@
         <activity android:name=".CardViewActivity" />
         <activity android:name=".HomeMenu"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".QrCodeActivity" />
+        <activity android:name=".QrCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".RewardCardActivity"
             android:configChanges="orientation|keyboardHidden"

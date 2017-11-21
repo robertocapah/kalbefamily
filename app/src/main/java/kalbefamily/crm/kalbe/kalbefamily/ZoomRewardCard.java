@@ -1,5 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -18,6 +19,13 @@ import uk.co.senab.photoview.PhotoView;
 
 public class ZoomRewardCard extends AppCompatActivity {
     static Bitmap bmp;
+    String link;
+
+    public void onBackPressed() {
+        RewardCardActivity.test();
+
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
