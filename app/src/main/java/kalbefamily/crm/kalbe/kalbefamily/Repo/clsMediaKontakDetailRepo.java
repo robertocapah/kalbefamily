@@ -126,7 +126,7 @@ public class clsMediaKontakDetailRepo implements crud {
         List<clsMediaKontakDetail> items = null;
         try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
-                    helper.getAvailablePoinDao().queryRaw(
+                    helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail group by txtDeskripsi",
                             new RawRowMapper<clsMediaKontakDetail>() {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
@@ -156,7 +156,7 @@ public class clsMediaKontakDetailRepo implements crud {
         List<clsMediaKontakDetail> items = null;
         try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
-                    helper.getAvailablePoinDao().queryRaw(
+                    helper.getUserMediaKontakDetailDao().queryRaw(
                             "select * from clsMediaKontakDetail where txtDeskripsi='" + txtDeskripsi + "'",
                             new RawRowMapper<clsMediaKontakDetail>() {
                                 public clsMediaKontakDetail mapRow(String[] columnNames,
@@ -187,7 +187,7 @@ public class clsMediaKontakDetailRepo implements crud {
         List<clsMediaKontakDetail> items = null;
         try {
             GenericRawResults<clsMediaKontakDetail> rawResults =
-                    helper.getAvailablePoinDao().queryRaw(
+                    helper.getUserMediaKontakDetailDao().queryRaw(
                             "select a.lttxtMediaID, a.lttxtStatusAktif, a.txtDeskripsi, a.txtDetailMedia, a.txtExtension, a.txtGuiId," +
                                     "a.txtKategoriMedia, a.txtKeterangan, a.txtKontakId, a.txtPrioritasKontak, b.txtNamaMasterData" +
                                     " from clsMediaKontakDetail a left join clsJenisMedia b on a.txtKategoriMedia = b.txtGuiId where a.txtDeskripsi='" + txtDeskripsi + "'",
