@@ -74,30 +74,48 @@ public class FlashActivity extends clsActivity {
         int hasCameraPermission = ContextCompat.checkSelfPermission(FlashActivity.this,
                 Manifest.permission.CAMERA);
 
-        if (Build.VERSION.SDK_INT >= 23
-                && hasWriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED
-                && hasReadExternalStoragePermission != PackageManager.PERMISSION_GRANTED
-                && hasAccessFineLocationPermission != PackageManager.PERMISSION_GRANTED
-                && hasCameraPermission != PackageManager.PERMISSION_GRANTED
-                ) {
-            boolean checkPermission = checkPermission();
-
-        } else if (Build.VERSION.SDK_INT >= 23
-                && hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED
-                && hasReadExternalStoragePermission == PackageManager.PERMISSION_GRANTED
-                && hasAccessFineLocationPermission == PackageManager.PERMISSION_GRANTED
-                && hasCameraPermission == PackageManager.PERMISSION_GRANTED
-                ){
-            StartAnimations();
-            checkStatusMenu();
-
-        } else if (Build.VERSION.SDK_INT >= 23
-                && hasCameraPermission != PackageManager.PERMISSION_GRANTED){
-            boolean checkPermission = checkPermission();
+        if (Build.VERSION.SDK_INT >= 23){
+            if (hasWriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                checkPermission();
+            } else if (hasReadExternalStoragePermission != PackageManager.PERMISSION_GRANTED){
+                checkPermission();
+            } else if (hasAccessFineLocationPermission != PackageManager.PERMISSION_GRANTED){
+                checkPermission();
+            } else if (hasCameraPermission != PackageManager.PERMISSION_GRANTED){
+                checkPermission();
+            } else {
+                StartAnimations();
+                checkStatusMenu();
+            }
         } else {
             StartAnimations();
             checkStatusMenu();
         }
+
+//        if (Build.VERSION.SDK_INT >= 23
+//                && hasWriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED
+//                && hasReadExternalStoragePermission != PackageManager.PERMISSION_GRANTED
+//                && hasAccessFineLocationPermission != PackageManager.PERMISSION_GRANTED
+//                && hasCameraPermission != PackageManager.PERMISSION_GRANTED
+//                ) {
+//            boolean checkPermission = checkPermission();
+//
+//        } else if (Build.VERSION.SDK_INT >= 23
+//                && hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED
+//                && hasReadExternalStoragePermission == PackageManager.PERMISSION_GRANTED
+//                && hasAccessFineLocationPermission == PackageManager.PERMISSION_GRANTED
+//                && hasCameraPermission == PackageManager.PERMISSION_GRANTED
+//                ){
+//            StartAnimations();
+//            checkStatusMenu();
+//
+//        } else if (Build.VERSION.SDK_INT >= 23
+//                && hasCameraPermission != PackageManager.PERMISSION_GRANTED){
+//            boolean checkPermission = checkPermission();
+//        } else {
+//            StartAnimations();
+//            checkStatusMenu();
+//        }
         //StartAnimations();
         //checkStatusMenu();
     }
