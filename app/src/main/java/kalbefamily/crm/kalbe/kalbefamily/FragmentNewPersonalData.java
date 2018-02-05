@@ -1059,6 +1059,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     protected void captureImageProfile() {
         uriImage = getOutputMediaFileUri();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
         startActivityForResult(cameraIntent, CAMERA_REQUEST_PROFILE);

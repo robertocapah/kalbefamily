@@ -15,7 +15,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 
 public class mConfigRepo {
     DatabaseHelper helper;
-//    public String API = "http://10.171.11.114/WebApi2/KF/";
+//    public String API = "http://10.171.11.101/WebApi2/KF/";
     public String API = "http://Apikf.kalbenutritionals.web.id/KF/";
 
     public mConfigRepo(Context context) {
