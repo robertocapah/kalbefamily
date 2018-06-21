@@ -1,0 +1,36 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.oktaviani.dewi.mylibrary.authenticator"
+    android:versionCode="1"
+    android:versionName="1.0"
+    android:sharedUserId="com.kalbe">
+
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_kalbe">
+
+        <service
+            android:name="com.oktaviani.dewi.mylibrary.authenticator.KalbeAuthenticatorService2">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <receiver
+        android:name=".RestartServiceReceiver"
+        android:enabled="true"
+        android:label="RestartServiceWhenStopped">
+        <intent-filter>
+        <action android:name="com.oktaviani.dewi.myapplication.RestartSensor" />
+        </intent-filter>
+        </receiver>
+        <activity android:name=".AuthenticatorActivity" android:configChanges="orientation|screenSize"/>
+    </application>
+
+</manifest>
