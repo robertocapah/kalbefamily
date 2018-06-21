@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import kalbefamily.crm.kalbe.kalbefamily.Adapter.ListAdapter;
+import kalbefamily.crm.kalbe.kalbefamily.Adapter.ListAdapterNew;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsImageStruk;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsImageStrukRepo;
@@ -50,7 +49,7 @@ public class FragmentInputStrukGetData extends Fragment {
 
     ListView lView;
 
-    ListAdapter lAdapter;
+    ListAdapterNew lAdapter;
     FloatingActionButton fabAddInputStruk;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +112,7 @@ public class FragmentInputStrukGetData extends Fragment {
             listGuiId.add(data.getTxtGuiId());
         }
 
-        lAdapter = new ListAdapter(getActivity(), status, strDate, icon, time);
+        lAdapter = new ListAdapterNew(getActivity(), status, strDate, icon, time);
 
         lView.setAdapter(lAdapter);
 

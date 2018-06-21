@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\ProjectAndroid\kalbefamily\zXingLib\src\main\assets"/><source path="C:\ProjectAndroid\kalbefamily\zXingLib\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="C:\ProjectAndroid\kalbefamily\zXingLib\src\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\AndroidStudioProjects\kalbefamilyOAuth\zXingLib\src\main\assets"/><source path="D:\AndroidStudioProjects\kalbefamilyOAuth\zXingLib\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\AndroidStudioProjects\kalbefamilyOAuth\zXingLib\src\debug\assets"/></dataSet></merger>

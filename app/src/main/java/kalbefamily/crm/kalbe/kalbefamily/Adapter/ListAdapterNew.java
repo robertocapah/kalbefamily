@@ -18,7 +18,7 @@ import kalbefamily.crm.kalbe.kalbefamily.R;
  * Created by User on 2/27/2018.
  */
 
-public class ListAdapter extends BaseAdapter {
+public class ListAdapterNew extends BaseAdapter {
 
     Context context;
     private final List<String> values;
@@ -26,7 +26,7 @@ public class ListAdapter extends BaseAdapter {
     private final List<Integer> images;
     private final List<String> time;
 
-    public ListAdapter(Context context, List<String> ltdt, List<String> strDate, List<Integer> images, List<String> time){
+    public ListAdapterNew(Context context, List<String> ltdt, List<String> strDate, List<Integer> images, List<String> time){
         //super(context, R.layout.single_list_app_item, utilsArrayList);
         this.context = context;
         this.values = ltdt;
