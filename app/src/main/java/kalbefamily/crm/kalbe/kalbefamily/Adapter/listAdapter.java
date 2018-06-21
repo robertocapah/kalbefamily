@@ -33,6 +33,8 @@ public class ListAdapter extends BaseAdapter {
         this.strDate = strDate;
         this.images = images;
         this.time = time;
+        //tess
+        String a = "aaa";
     }
 
     @Override
@@ -55,7 +57,6 @@ public class ListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-
         ViewHolder viewHolder;
 
         final View result;
@@ -69,7 +70,6 @@ public class ListAdapter extends BaseAdapter {
             viewHolder.subTitle = (TextView) convertView.findViewById(R.id.subTitle);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.list_image);
             viewHolder.time = (TextView) convertView.findViewById(R.id.jam);
-
             result=convertView;
 
             convertView.setTag(viewHolder);
@@ -82,12 +82,10 @@ public class ListAdapter extends BaseAdapter {
         viewHolder.subTitle.setText(strDate.get(position));
         viewHolder.icon.setImageResource(images.get(position));
         viewHolder.time.setText(time.get(position));
-
         return convertView;
     }
 
     private static class ViewHolder {
-
         TextView title;
         TextView subTitle;
         ImageView icon;
