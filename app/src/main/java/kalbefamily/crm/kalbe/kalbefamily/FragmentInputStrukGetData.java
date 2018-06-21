@@ -52,6 +52,7 @@ public class FragmentInputStrukGetData extends Fragment {
     ListAdapterNew lAdapter;
     FloatingActionButton fabAddInputStruk;
 
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_input_struk_get_data, container, false);
         context = getActivity().getApplicationContext();

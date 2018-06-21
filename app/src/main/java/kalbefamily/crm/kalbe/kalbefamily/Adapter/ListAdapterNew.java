@@ -35,6 +35,7 @@ public class ListAdapterNew extends BaseAdapter {
         this.time = time;
         //tess
         String a = "aaa";
+
     }
 
     @Override
