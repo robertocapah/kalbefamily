@@ -21,4 +21,5 @@
     <color name="table_data_row_even">#FFFFFF</color>
     <color name="table_data_row_odd">#ecf0f1</color>
     <color name="title_login">#13b586</color>
+    <color name="back_login">#f3f3f3</color>
 </resources>

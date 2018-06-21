@@ -46,4 +46,14 @@
     <string name="main_action_rotate">Rotate 90 degrees clockwise</string>
     <string name="drawer_option_title">Crop View Presets</string>
     <string name="drawer_option_oval">Circular</string>
+
+    <string name="crash_toast_text">Oops, Your application has Stopped, but a report has been sent to my developer to help fix the issue !</string>
+    <string name="crash_dialog_text">An unexpected error occurred forcing the
+    application to stop. Please help us fix this by sending us error data,
+    all you have to do is click OK.</string>
+    <string name="crash_dialog_title">apps has crashed</string>
+    <string name="crash_dialog_comment_prompt">You might add your comments about the problem below:</string>
+    <string name="crash_dialog_ok_toast">Thank you !</string>
+
+    <string name="classname_PickAccountActivity">PickAccountActivity</string>
 </resources>

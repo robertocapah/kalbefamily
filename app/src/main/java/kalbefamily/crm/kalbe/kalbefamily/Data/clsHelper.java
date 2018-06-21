@@ -3,6 +3,8 @@ package kalbefamily.crm.kalbe.kalbefamily.Data;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsImageStruk;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsQRCodeData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
@@ -36,6 +39,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Common.dataJson;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsImageStrukRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsQRCodeRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
@@ -139,6 +143,55 @@ public class clsHelper {
         dtclsSendData.setDtdataJson(dtSend);
         dtclsSendData.setFileUpload(FileUpload);
         dtclsSendData.setFileUploadProfile(FileUploadProfile);
+        return dtclsSendData;
+    }
+
+    public clsSendData sendDataInputStruk(Context context) {
+        clsSendData dtclsSendData = new clsSendData();
+        dataJson dtSend = new dataJson();
+        HashMap<String, byte[]> FileUpload = null;
+        clsImageStrukRepo _clsImageStrukRepo = new clsImageStrukRepo(context);
+        List<clsImageStruk> ListOfClsImageStruk = _clsImageStrukRepo.getAllDataToSendData(context);
+        FileUpload = new HashMap<String, byte[]>();
+
+        if (ListOfClsImageStruk != null) {
+            dtSend.setListImageStruk(ListOfClsImageStruk);
+            for (clsImageStruk dttInputStrukImage : ListOfClsImageStruk) {
+                if (dttInputStrukImage.getTxtImg() != null) {
+                    FileUpload.put("input_struk", dttInputStrukImage.getTxtImg());
+                }
+            }
+        }
+        dtclsSendData.setDtdataJson(dtSend);
+        dtclsSendData.setFileUpload(FileUpload);
+        return dtclsSendData;
+    }
+
+    public clsSendData sendDataInputStrukNew(Context context,byte[] phtImage, String guuid) {
+        clsSendData dtclsSendData = new clsSendData();
+        dataJson dtSend = new dataJson();
+        HashMap<String, byte[]> FileUpload = null;
+        clsImageStrukRepo _clsImageStrukRepo = new clsImageStrukRepo(context);
+        List<clsImageStruk> ListOfClsImageStruk = _clsImageStrukRepo.getAllDataToSendData(context);
+        FileUpload = new HashMap<String, byte[]>();
+
+        if (ListOfClsImageStruk != null) {
+            dtSend.setListImageStruk(ListOfClsImageStruk);
+
+            for (clsImageStruk dttInputStrukImage : ListOfClsImageStruk) {
+                dttInputStrukImage.setTxtGuiId(guuid);
+            }
+
+//            for (clsImageStruk dttInputStrukImage : ListOfClsImageStruk) {
+//                if (ListOfClsImageStruk.get(0).getTxtImg() != null) {
+                    FileUpload.put("input_struk", phtImage);
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(phtImage, 0, phtImage.length);
+//                    Bitmap bitmap2 = BitmapFactory.decodeByteArray(phtImage, 0, phtImage.length);
+//                }
+//            }
+        }
+        dtclsSendData.setDtdataJson(dtSend);
+        dtclsSendData.setFileUpload(FileUpload);
         return dtclsSendData;
     }
 

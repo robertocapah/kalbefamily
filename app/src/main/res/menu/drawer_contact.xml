@@ -50,6 +50,15 @@
             app:actionLayout="@layout/menu_counter"
             />
 
+        <item
+            android:id="@+id/inputStruk"
+            android:checked="true"
+            android:icon="@drawable/ic_bill"
+            android:orderInCategory="0"
+            android:title="Input Struk"
+            app:actionLayout="@layout/menu_counter"
+            />
+
     </group>
     <group
         android:checkableBehavior="single"

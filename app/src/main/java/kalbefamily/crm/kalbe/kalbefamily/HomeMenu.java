@@ -1,6 +1,10 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.util.ByteArrayBuffer;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,9 +38,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,28 +59,36 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jim.h.common.android.lib.zxing.config.ZXingLibConfig;
 import jim.h.common.android.lib.zxing.integrator.IntentIntegrator;
 import jim.h.common.android.lib.zxing.integrator.IntentResult;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsToken;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Common.mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsAvailablePoinRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsTokenRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
 
 
 /**
@@ -88,8 +105,10 @@ public class HomeMenu extends AppCompatActivity {
     PackageInfo pInfo = null;
     int selectedId;
     String linkImageProfile = "null";
-    String txtLinkDesc;
+    String txtLinkDesc, access_token, linkImageStruk;
     Boolean isSubMenu = false;
+    clsTokenRepo tokenRepo;
+    List<clsToken> dataToken;
     List<clsUserMember> dataMember = null;
 
     private GoogleApiClient client;
@@ -105,6 +124,7 @@ public class HomeMenu extends AppCompatActivity {
     clsUserImageProfileRepo repoUserImageProfile = null;
     List<clsUserImageProfile> dataUserImageProfile = null;
     private static Bitmap mybitmapImageProfile;
+    private Context context;
 
 
 //    @Override
@@ -133,6 +153,7 @@ public class HomeMenu extends AppCompatActivity {
 //        alert.show();
 //    }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onBackPressed() {
         boolean isHome = false;
@@ -201,6 +222,13 @@ public class HomeMenu extends AppCompatActivity {
         toolbar.setTitle("Home");
         setSupportActionBar(toolbar);
 
+        try {
+            tokenRepo = new clsTokenRepo(getApplicationContext());
+            dataToken = (List<clsToken>) tokenRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         UserMember();
 
 //        FragmentInfoContact ContactFragment = new FragmentInfoContact();
@@ -215,10 +243,13 @@ public class HomeMenu extends AppCompatActivity {
         tvUsername = (TextView) vwHeader.findViewById(R.id.username);
         tvEmail = (TextView) vwHeader.findViewById(R.id.email);
 
+
+
         Menu header = navigationView.getMenu();
         SubMenu subMenuVersion = header.addSubMenu(R.id.groupVersion, 0, 3, "Version");
         try {
             subMenuVersion.add(getPackageManager().getPackageInfo(getPackageName(), 0).versionName + " \u00a9 KN-IT").setIcon(R.drawable.ic_android).setEnabled(false);
+            subMenuVersion.add(new mConfigRepo(context).API).setIcon(R.drawable.ic_action_link2).setEnabled(false);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -343,6 +374,21 @@ public class HomeMenu extends AppCompatActivity {
 
                         return true;
 
+                    case R.id.inputStruk:
+//                        availablePoin();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                        Bundle bundle2=new Bundle();
+//                        bundle2.putString("imageStruk", linkImageStruk);
+
+                        toolbar.setTitle("Input Struk");
+                        FragmentGetInput fragmentInputStruk = new FragmentGetInput();
+                        FragmentTransaction fragmentTransactionInputStruk = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionInputStruk.replace(R.id.frame, fragmentInputStruk);
+                        fragmentTransactionInputStruk.commit();
+                        selectedId = 99;
+
+                        return true;
+
                 }
                 return false;
             }
@@ -401,7 +447,6 @@ public class HomeMenu extends AppCompatActivity {
 
     public void UserMember() {
         final ProgressDialog Dialog = new ProgressDialog(HomeMenu.this);
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         clsUserMemberRepo repo = new clsUserMemberRepo(getApplicationContext());
         try {
             dataMember = (List<clsUserMember>) repo.findAll();
@@ -422,7 +467,7 @@ public class HomeMenu extends AppCompatActivity {
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(HomeMenu.this, strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
+        volleyUserMember(strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(getApplicationContext(), response, false);
@@ -510,6 +555,7 @@ public class HomeMenu extends AppCompatActivity {
 //                                        imageProfile.setTxtKontakId(txtKontakIDImage);
 
                                         String url = String.valueOf(jsonobjectImage.get("TxtPath"));
+                                        linkImageStruk = jsonobject.optString("TxtImageStruk");
                                         if (!url.equals("null")) {
 //                                            byte[] logoImage = getLogoImage(url);
 //                                            imageProfile.setTxtImg(logoImage);
@@ -555,13 +601,13 @@ public class HomeMenu extends AppCompatActivity {
                         helper.clear();
                     }
                     if (!linkImageProfile.equals("null")) {
-                        Picasso.with(getApplicationContext()).load(linkImageProfile)
-                                .placeholder(R.drawable.loading2)
-                                .error(R.drawable.profile)
-                                .networkPolicy(NetworkPolicy.NO_CACHE)
-                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                                .fit()
-                                .into(ivProfile);
+                            Picasso.with(getApplicationContext()).load(linkImageProfile)
+                                    .placeholder(R.drawable.loading2)
+                                    .error(R.drawable.profile)
+                                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                                    .fit()
+                                    .into(ivProfile);
                     }
 
                     FragmentInfoContact ContactFragment = new FragmentInfoContact();
@@ -575,6 +621,161 @@ public class HomeMenu extends AppCompatActivity {
 //                }
             }
         });
+    }
+
+    private void volleyUserMember(String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
+        String client = "";
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        ProgressDialog Dialog = new ProgressDialog(HomeMenu.this);
+        Dialog = ProgressDialog.show(HomeMenu.this, "", progressBarType, false);
+
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
+
+        mConfigRepo configRepo = new mConfigRepo(getApplicationContext());
+        try {
+            mConfigData configDataClient = (mConfigData) configRepo.findById(5);
+            client = configDataClient.getTxtDefaultValue().toString();
+            dataToken = (List<clsToken>) tokenRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final String finalClient = client;
+        StringRequest req = new StringRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response, status, errorMessage);
+                finalDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String strLinkRequestToken = new clsHardCode().linkToken;
+                final String refresh_token = dataToken.get(0).txtRefreshToken;
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                    // HTTP Status Code: 401 Unauthorized
+                    //new clsActivity().showCustomToast(getApplicationContext(), "401, Authorization has been denied for this request", false);
+
+                    new VolleyUtils().requestTokenWithRefresh(HomeMenu.this, strLinkRequestToken, refresh_token, finalClient, new VolleyResponseListener() {
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(String response, Boolean status, String strErrorMsg) {
+                            if (response != null) {
+                                try {
+                                    String accessToken = "";
+                                    String newRefreshToken = "";
+                                    String refreshToken = "";
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    accessToken = jsonObject.getString("access_token");
+                                    refreshToken = jsonObject.getString("refresh_token");
+                                    String dtIssued = jsonObject.getString(".issued");
+
+                                    clsToken data = new clsToken();
+                                    data.setIntId("1");
+                                    data.setDtIssuedToken(dtIssued);
+                                    data.setTxtUserToken(accessToken);
+                                    data.setTxtRefreshToken(refreshToken);
+
+                                    tokenRepo.createOrUpdate(data);
+                                    //Toast.makeText(getApplicationContext(), "Success get new Access Token", Toast.LENGTH_SHORT).show();
+                                    newRefreshToken = refreshToken;
+                                    if (refreshToken == newRefreshToken && !newRefreshToken.equals("")) {
+                                        UserMember();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), strErrorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                            finalDialog1.dismiss();
+                        }
+                    });
+                } else if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR ){
+                    new clsActivity().showCustomToast(getApplicationContext(), "Error 500, Server Error", false);
+                    finalDialog1.dismiss();
+                } else {
+                    popup();
+                    finalDialog1.dismiss();
+                }
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(HomeMenu.this, SweetAlertDialog.WARNING_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                        activity.startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)); // turn on internet with wifi
+//                        activity.startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)); // turn on internet with mobile data
+                        dialog.dismiss();
+                        sweetAlertDialog.dismiss();
+
+                        final SweetAlertDialog pDialog = new SweetAlertDialog(HomeMenu.this, SweetAlertDialog.WARNING_TYPE);
+                        pDialog.setTitleText("Refresh Data ?");
+                        pDialog.setContentText("");
+                        pDialog.setConfirmText("Refresh");
+                        pDialog.setCancelText("Keluar Aplikasi");
+                        pDialog.showCancelButton(true);
+                        pDialog.setCancelable(false);
+                        pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                UserMember();
+                                sweetAlertDialog.dismiss();
+                            }
+                        });
+                        pDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                pDialog.cancel();
+                                finish();
+                            }
+                        });
+                        pDialog.show();
+                    }
+                });
+                dialog.show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("txtParam", mRequestBody);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                try {
+                    tokenRepo = new clsTokenRepo(getApplicationContext());
+                    dataToken = (List<clsToken>) tokenRepo.findAll();
+                    access_token = dataToken.get(0).getTxtUserToken();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + access_token);
+
+                return headers;
+            }
+        };
+        req.setRetryPolicy(new
+                DefaultRetryPolicy(60000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+        queue.add(req);
     }
 
     private byte[] getLogoImage(String url) {
@@ -629,7 +830,7 @@ public class HomeMenu extends AppCompatActivity {
         }
     }
 
-    private void logout() {
+    public void logout() {
         Intent intent = new Intent(HomeMenu.this, FlashActivity.class);
         DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
         helper.clearDataAfterLogout();

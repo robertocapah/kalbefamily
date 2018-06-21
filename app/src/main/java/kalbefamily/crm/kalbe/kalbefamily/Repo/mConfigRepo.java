@@ -15,8 +15,12 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 
 public class mConfigRepo {
     DatabaseHelper helper;
-//    public String API = "http://10.171.11.101/WebApi2/KF/";
-    public String API = "http://Apikf.kalbenutritionals.web.id/KF/";
+//    public String API = "http://10.171.10.16:8088/KF/";
+//    public String API = "http://Apikf.kalbenutritionals.web.id/KF/";
+    public String API = "http://appgw.kalbenutritionals.com/api/kalbefamily/KF/";
+//    public String APIToken = "http://10.171.10.16:8088/";
+//    public String APIToken = "http://Apikf.kalbenutritionals.web.id/";
+    public String APIToken = "http://appgw.kalbenutritionals.com/api/kalbefamily/";
 
     public mConfigRepo(Context context) {
         DatabaseManager.init(context);
@@ -31,6 +35,16 @@ public class mConfigRepo {
             e.printStackTrace();
         }
         return item;
+    }
+
+    public List<?> findAll() throws SQLException {
+        List<mConfigData> items = null;
+        try{
+            items = helper.getmConfigDao().queryForAll();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
     }
 
     public void InsertDefaultmConfig() throws SQLException {
@@ -66,16 +80,23 @@ public class mConfigRepo {
         data5.setIntId(5);
         data5.setTxtName("Application Name");
         data5.setTxtValue("Kalbe Family");
-        data5.setTxtDefaultValue("Kalbe Family");
+        data5.setTxtDefaultValue("5p9N66fDmyUlPBzuZacOlhNFxyRZp8GspXhlV8CSvgI=");
         data5.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data5);
         mConfigData data6 = new mConfigData();
         data6.setIntId(6);
-        data6.setTxtName("Text Footer");
-        data6.setTxtValue("Copyright &copy; KN IT 2017");
-        data6.setTxtDefaultValue("Copyright &copy; KN IT 2017");
+        data6.setTxtName("UserName");
+        data6.setTxtValue("rian.andrivani");
+        data6.setTxtDefaultValue("rian.andrivani");
         data6.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data6);
+        mConfigData data7 = new mConfigData();
+        data7.setIntId(7);
+        data7.setTxtName("Text Footer");
+        data7.setTxtValue("Copyright &copy; KN IT 2017");
+        data7.setTxtDefaultValue("Copyright &copy; KN IT 2017");
+        data7.setIntEditAdmin("1");
+        helper.getmConfigDao().createOrUpdate(data7);
     }
 
     public List<mConfigData> findByName(String name) throws SQLException {

@@ -18,16 +18,19 @@ public class clsHardCode {
     public String txtFolderData = Environment.getExternalStorageDirectory()+ File.separator+"Android"+File.separator+"data"+File.separator+"KalbeFamily"+File.separator+"image_Person"+File.separator;
     public String txtFolderAbsen = Environment.getExternalStorageDirectory()+ File.separator+"Android"+File.separator+"data"+File.separator+"KalbeFamily"+File.separator+"image_Person"+File.separator;
 
+    public String linkToken = new mConfigRepo(context).APIToken + "token";
     public String linkGetDetailKontak =  new mConfigRepo(context).API + "GetDetailKontak";;
-    public String linkCheckVersion = new mConfigRepo(context).API + "CheckVersionApp";
+    public String linkCheckVersion = new mConfigRepo(context).API + "CheckVersionApp"; // Authorize
     //    public String linkPushData = "http://10.171.11.87/APIEF2/api/PushData/pushData2";
-    public String linkSendData = new mConfigRepo(context).API + "UpdateDataKontak";
-    public String linkSendDataMediaKontak = new mConfigRepo(context).API + "UpdateDataMediaKontak";
-    public String linkGetDetailCustomer = new mConfigRepo(context).API + "GetDetailKontakCustomer";
-    public String linkScanQRCode = new mConfigRepo(context).API + "ScanQRCode";
-    public String linkGetDatadMembership = new mConfigRepo(context).API + "GetDatadMembership";
-    public String linkAvailablePoin = new mConfigRepo(context).API + "AvailablePoinCustomer";
-    public String linkGetDataKontakDetail = new mConfigRepo(context).API + "GetDataMediaKontakDetail";
-    public String linkGetDataMediaType = new mConfigRepo(context).API + "GetMediaType";
-    public String linkGetDataJenisMedia = new mConfigRepo(context).API + "GetJenisMedia";
+    public String linkSendData = new mConfigRepo(context).API + "UpdateDataKontak"; // Authorize
+    public String linkSendDataMediaKontak = new mConfigRepo(context).API + "UpdateDataMediaKontak"; // Authorize
+    public String linkGetDetailCustomer = new mConfigRepo(context).API + "GetDetailKontakCustomer"; // Authorize
+    public String linkScanQRCode = new mConfigRepo(context).API + "ScanQRCode"; // Authorize
+    public String linkGetDatadMembership = new mConfigRepo(context).API + "GetDatadMembership"; // Authorize
+    public String linkAvailablePoin = new mConfigRepo(context).API + "AvailablePoinCustomer"; // Authorize
+    public String linkGetDataKontakDetail = new mConfigRepo(context).API + "GetDataMediaKontakDetail"; // Authorize
+    public String linkGetDataMediaType = new mConfigRepo(context).API + "GetMediaType"; // Authorize
+    public String linkGetDataJenisMedia = new mConfigRepo(context).API + "GetJenisMedia"; // Authorize
+    public String linkInputStruk = new mConfigRepo(context).API + "inputStruk"; // Authorize
+    public String linkGetDataInputStruk = new mConfigRepo(context).API + "GetDataInputStruk"; // Authorize
 }

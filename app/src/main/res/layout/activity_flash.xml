@@ -45,8 +45,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:textSize="15dp"
+            android:textSize="@dimen/text_size_small"
             android:id="@+id/tvVersion" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_link"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/tvVersion"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:text="link"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="@dimen/text_size_small"-->
+            <!--android:textStyle="normal" />-->
     </RelativeLayout>
     <!--<LinearLayout-->
     <!--android:layout_width="match_parent"-->

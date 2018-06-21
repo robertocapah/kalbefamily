@@ -1,8 +1,10 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kalbefamily.crm.kalbe.kalbefamily.BL.AuthenticatorUtil;
 import kalbefamily.crm.kalbe.kalbefamily.BL.Mobile_mConfigBL;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsMainBL;
@@ -35,13 +38,16 @@ import kalbefamily.crm.kalbe.kalbefamily.BL.tdeviceBL;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
+import static com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
 
 public class FlashActivity extends clsActivity {
     long delay = 5000;
-    private TextView version;
+    private TextView version,txtLink;
     public ImageView ivBannerLogin=null;
     boolean firstStart;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    private AccountManager mAccountManager;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,9 +56,13 @@ public class FlashActivity extends clsActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_flash);
+        mAccountManager = AccountManager.get(this);
         version = (TextView) findViewById(R.id.tv_version);
-        version.setText(txtVersionApp());
+//        txtLink = (TextView) findViewById(R.id.tv_link);
+        version.setText(txtVersionApp()+ "\n" + new mConfigRepo(getApplicationContext()).API );
         version.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+//        txtLink.setText(new mConfigRepo(getApplicationContext()).API );
+        new MyApp().onCreate();
 
     }
     @Override
@@ -176,55 +186,125 @@ public class FlashActivity extends clsActivity {
         iv.clearAnimation();
         iv.startAnimation(anim);
     }
-    private void checkStatusMenu() {
+//    private void checkStatusMenu() {
+//
+//        Timer runProgress = new Timer();
+//        TimerTask viewTask = new TimerTask() {
+//            public void run() {
+//                SharedPreferences setting = getSharedPreferences("PRFRS", 0);
+//                firstStart = setting.getBoolean("first_time_start", true);
+//
+//                if (firstStart) {
+//                    SharedPreferences.Editor editor = setting.edit();
+//                    editor.putBoolean("first_time_start", false);
+//                    editor.commit();
+//
+//                    Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
+//                    try {
+//                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                    finish();
+//                    startActivity(myIntent);
+//                } else {
+//                    Intent myIntent = new Intent(getApplicationContext(), NewMemberActivity.class);
+//                    clsStatusMenuStart _clsStatusMenuStart = null;
+//
+//                    try {
+//                        _clsStatusMenuStart = new clsMainBL().checkUserActive(getApplicationContext());
+//                        if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.FormLogin) {
+//                            myIntent = new Intent(getApplicationContext(), NewMemberActivity.class);
+//                        } else if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
+//                            myIntent = new Intent(getApplicationContext(), HomeMenu.class);
+//                            myIntent.putExtra("key_view", "home_menu");
+////                        startService(new Intent(getApplicationContext(), MyServiceNative.class));
+////                        startService(new Intent(getApplicationContext(), MyTrackingLocationService.class));
+//                        }
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    try {
+//                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                    finish();
+//                    startActivity(myIntent);
+//                }
+//            }
+//        };
+//        runProgress.schedule(viewTask, delay);
+//    }
 
-        Timer runProgress = new Timer();
-        TimerTask viewTask = new TimerTask() {
-            public void run() {
-                SharedPreferences setting = getSharedPreferences("PRFRS", 0);
-                firstStart = setting.getBoolean("first_time_start", true);
+    Intent myIntent = null;
+    clsStatusMenuStart _clsStatusMenuStart = null;
+private void checkStatusMenu() {
 
-                if (firstStart) {
-                    SharedPreferences.Editor editor = setting.edit();
-                    editor.putBoolean("first_time_start", false);
-                    editor.commit();
+    Timer runProgress = new Timer();
+    TimerTask viewTask = new TimerTask() {
+        public void run() {
+            SharedPreferences setting = getSharedPreferences("PRFRS", 0);
+            firstStart = setting.getBoolean("first_time_start", true);
 
-                    Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
-                    try {
-                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    finish();
-                    startActivity(myIntent);
-                } else {
-                    Intent myIntent = new Intent(getApplicationContext(), NewMemberActivity.class);
-                    clsStatusMenuStart _clsStatusMenuStart = null;
+            if (firstStart) {
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putBoolean("first_time_start", false);
+                editor.commit();
 
-                    try {
-                        _clsStatusMenuStart = new clsMainBL().checkUserActive(getApplicationContext());
+                Intent myIntent = new Intent(getApplicationContext(), IntroActivity.class);
+                try {
+                    new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finish();
+                startActivity(myIntent);
+            } else {
+//                Intent myIntent = new Intent(getApplicationContext(), NewMemberActivity.class);
+//                clsStatusMenuStart _clsStatusMenuStart = null;
+
+                try {
+                    _clsStatusMenuStart = new clsMainBL().checkUserActive(getApplicationContext());
+//                    new MyApplication().onCreate();
+                    if (_clsStatusMenuStart.get_intStatus() != null){
                         if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.FormLogin) {
                             myIntent = new Intent(getApplicationContext(), NewMemberActivity.class);
                         } else if (_clsStatusMenuStart.get_intStatus() == enumStatusMenuStart.UserActiveLogin) {
-                            myIntent = new Intent(getApplicationContext(), HomeMenu.class);
-                            myIntent.putExtra("key_view", "home_menu");
+                            if (new AuthenticatorUtil().countingAccount(mAccountManager).length==0){
+                                myIntent = new Intent(getApplicationContext(), HomeMenu.class);
+                                myIntent.putExtra("key_view", "home_menu");
+                                finish();
+                                startActivity(myIntent);
+                            } else {
+                                myIntent = new Intent(getApplicationContext(), HomeMenu.class);
+                                myIntent.putExtra("key_view", "home_menu");
+                                finish();
+                                startActivity(myIntent);
+                            }
+//                            myIntent = new Intent(getApplicationContext(), HomeMenu.class);
+//                            myIntent.putExtra("key_view", "home_menu");
 //                        startService(new Intent(getApplicationContext(), MyServiceNative.class));
 //                        startService(new Intent(getApplicationContext(), MyTrackingLocationService.class));
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    } else {
+                        new AuthenticatorUtil().showAccountPicker(FlashActivity.this, mAccountManager, AUTHTOKEN_TYPE_FULL_ACCESS);
                     }
-
-                    try {
-                        new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    finish();
-                    startActivity(myIntent);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+
+                try {
+                    new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+//                finish();
+//                startActivity(myIntent);
             }
-        };
-        runProgress.schedule(viewTask, delay);
-    }
+        }
+    };
+    runProgress.schedule(viewTask, delay);
+}
 }

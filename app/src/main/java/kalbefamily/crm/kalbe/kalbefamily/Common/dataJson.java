@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
+
 /**
  * Created by Rian Andrivani on 7/26/2017.
  */
@@ -17,6 +19,7 @@ public class dataJson {
     public List<clsUserImageProfile> ListDataUserImageProfile;
     public List<clsQRCodeData> LisClsQRCodeData;
     public List<clsMediaKontakDetail> ListMediaKontakDetail;
+    public List<clsImageStruk> ListImageStruk;
 
     public synchronized List<clsUserMember> getListDataUserMember() {
         return ListDataUserMember;
@@ -56,6 +59,14 @@ public class dataJson {
 
     public synchronized void setListMediaKontakDetail(List<clsMediaKontakDetail> listMediaKontakDetail) {
         ListMediaKontakDetail = listMediaKontakDetail;
+    }
+
+    public List<clsImageStruk> getListImageStruk() {
+        return ListImageStruk;
+    }
+
+    public void setListImageStruk(List<clsImageStruk> listImageStruk) {
+        ListImageStruk = listImageStruk;
     }
 
     public JSONObject txtJSON() throws JSONException {
@@ -98,6 +109,23 @@ public class dataJson {
             for (clsUserImageProfile data : this.getListDataUserImageProfile()) {
                 resJson.put(dtUserImageProfile.Property_txtHeaderId, String.valueOf(data.getTxtKontakId()));
                 resJson.put(dtUserImageProfile.Property_txtImg, String.valueOf(data.getTxtImg()));
+                itemsListJquey.add(resJson);
+            }
+        }
+
+        return resJson;
+    }
+
+    public JSONObject txtJSONInputStruk() throws JSONException {
+        JSONObject resJson = new JSONObject();
+        Collection<JSONObject> itemsListJquey = new ArrayList<JSONObject>();
+        if (this.getListImageStruk() != null) {
+            clsImageStruk dtImageStruk = new clsImageStruk();
+            itemsListJquey = new ArrayList<JSONObject>();
+            for (clsImageStruk data : this.getListImageStruk()) {
+                resJson.put(dtImageStruk.Property_txtKontakID, String.valueOf(data.getTxtKontakId()));
+                resJson.put(dtImageStruk.Property_txtImg, String.valueOf(data.getTxtImg()));
+                resJson.put(dtImageStruk.Property_txtGuiId, String.valueOf(data.getTxtGuiId()));
                 itemsListJquey.add(resJson);
             }
         }

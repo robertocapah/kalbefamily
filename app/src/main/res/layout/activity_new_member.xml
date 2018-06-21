@@ -54,14 +54,14 @@
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:inputType="number"
                     android:hint="Member ID"
                     android:ems="10"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:id="@+id/txtMember"
-                    android:background="@drawable/bg_edtext"
+                    android:background="@color/back_login"
                     android:drawableRight="@mipmap/ic_username"
                     />
                 <TextView
@@ -100,6 +100,7 @@
                     android:background="@drawable/bg_edtext" />-->
                 <View
                     android:layout_width="match_parent"
+                    android:visibility="invisible"
                     android:layout_height="1dp"
                     android:id="@+id/viewFlipper2"
                     android:layout_marginTop="10dp"
@@ -133,8 +134,9 @@
                 <Button
                     android:text="Submit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:textStyle="bold"
+                    android:background="@color/back_login"
                     android:id="@+id/buttonSubmit" />
 
             </LinearLayout>
@@ -148,24 +150,33 @@
 
                 <Button
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:text="Exit"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:textStyle="bold"
                     android:id="@+id/buttonExit"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/btn_on_click"
+                    android:background="@color/back_login"
                     android:layout_alignParentBottom="true"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/tv_version"
+                    android:text="version"
                     android:id="@+id/txtVersionLogin"
                     android:layout_gravity="center_horizontal"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="link API"
+                    android:id="@+id/txtVersionLogin2"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
                     android:layout_marginBottom="20dp"
                     android:textColor="@color/white"/>
 

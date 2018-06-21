@@ -48,17 +48,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -73,8 +82,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -83,9 +94,11 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsJenisMedia;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaKontakDetail;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsMediaType;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsSendData;
+import kalbefamily.crm.kalbe.kalbefamily.Common.clsToken;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserImageProfile;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
+import kalbefamily.crm.kalbe.kalbefamily.Common.mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
@@ -95,9 +108,12 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsJenisMediaRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaTypeRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.clsTokenRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
+import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
+import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
 
 import static android.app.Activity.RESULT_OK;
 import static com.android.volley.VolleyLog.TAG;
@@ -117,7 +133,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     Context context;
     Spinner spinner;
     String imageProfile = "null";
-    String noKTPSementara;
+    String noKTPSementara, access_token, txtValidationMethod;
 //    String linkImage1 = "null";
 //    String linkImage2 = "null";
     private Uri uriImage, selectedImage;
@@ -154,6 +170,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
     clsMediaKontakDetailRepo repoKontakDetail;
     clsMediaTypeRepo mediaTypeRepo;
     clsJenisMediaRepo jenisMediaRepo;
+    clsTokenRepo tokenRepo;
+    List<clsToken> dataToken;
     clsUserMemberImage dtImage;
     clsUserImageProfile dtImageProfile;
     boolean validate = false;
@@ -167,7 +185,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         v = inflater.inflate(R.layout.fragment_new_personal_data,container,false);
         context = getActivity().getApplicationContext();
 
-        ivProfile = (CircleImageView) v.findViewById(R.id.profile_image);
+        ivProfile = (CircleImageView) v.findViewById(R.id.profile_image_personal);
         tvNama = (TextView) v.findViewById(R.id.tvNama);
         tvMember = (TextView) v.findViewById(R.id.tvMember);
         etNamaDepan = (TextView) v.findViewById(R.id.textViewNamaKeluarga);
@@ -192,7 +210,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         try {
             repoUserMember = new clsUserMemberRepo(context);
+            tokenRepo = new clsTokenRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
+            dataToken = (List<clsToken>) tokenRepo.findAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -502,78 +522,9 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                         repoUserMember.createOrUpdate(dataUser);
 
-//                        savePicture1();
-//                        savePicture2();
                         savePictureProfile();
-
                         sendData();
 
-//                        final ProgressDialog dialog2 = new ProgressDialog(getActivity(), ProgressDialog.STYLE_SPINNER);
-//                        dialog2.setIndeterminate(true);
-//                        dialog2.setMessage("Mohon Tunggu...");
-//                        dialog2.show();
-//
-//                        new android.os.Handler().postDelayed(
-//                                new Runnable() {
-//                                    public void run() {
-//                                        // On complete call either onLoginSuccess or onLoginFailed
-//
-//                                        // onLoginFailed();
-//                                        dialog2.dismiss();
-//                                    }
-//                                }, 3000);
-
-//                        if(!isValidEmail(etEmail.getText().toString())){
-//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Email tidak valid", false);
-//                            validate = false;
-//                        } else if (tvKategori.getText().toString().equals("(No Telp)")) {
-//                            if (!isValidMobile(etTelpon.getText().toString())) {
-//                                new clsActivity().showCustomToast(context.getApplicationContext(), "No BBM tidak Valid", false);
-//                                validate = false;
-//                            } else {
-//                                dataUser.setTxtEmail(etEmail.getText().toString());
-//                                dataUser.setTxtNoTelp(etTelpon.getText().toString());
-//
-//                                int selectedId = radioGenderGroup.getCheckedRadioButtonId();
-//                                RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
-//
-//                                dataUser.setTxtJenisKelamin(rbGender.getText().toString());
-//
-//                                repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
-//                                repoUserMember.createOrUpdate(dataUser);
-//
-//                                savePicture1();
-//                                savePicture2();
-//                                savePictureProfile();
-//                                sendData();
-//
-//                                new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-//                                Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-//                                getActivity().finish();
-//                                startActivity(intent);
-//                            }
-//                        } else {
-//                            dataUser.setTxtEmail(etEmail.getText().toString());
-//                            dataUser.setTxtNoTelp(etTelpon.getText().toString());
-//
-//                            int selectedId = radioGenderGroup.getCheckedRadioButtonId();
-//                            RadioButton rbGender = (RadioButton) v.findViewById(selectedId);
-//
-//                            dataUser.setTxtJenisKelamin(rbGender.getText().toString());
-//
-//                            repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
-//                            repoUserMember.createOrUpdate(dataUser);
-//
-//                            savePicture1();
-//                            savePicture2();
-//                            savePictureProfile();
-//                            sendData();
-//
-//                            new clsActivity().showCustomToast(context.getApplicationContext(), "Saved", true);
-//                            Intent intent = new Intent(context.getApplicationContext(), HomeMenu.class);
-//                            getActivity().finish();
-//                            startActivity(intent);
-//                        }
                     }
                 });
                 alertDialog.setNegativeButton("BATAL", new DialogInterface.OnClickListener() {
@@ -612,9 +563,28 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 repoUserMember = new clsUserMemberRepo(context.getApplicationContext());
                 repoUserMember.createOrUpdate(dataUser);
 
-//                savePicture1();
-//                savePicture2();
                 savePictureProfile();
+
+                // update username and profile image @navigation menu
+                TextView tvUsername = (TextView) getActivity().findViewById(R.id.username);
+                CircleImageView photoMenu = (CircleImageView) getActivity().findViewById(R.id.profile_image);
+
+                tvUsername.setText(etNamaDepan.getText().toString());
+                try {
+                    repoUserImageProfile = new clsUserImageProfileRepo(context);
+                    dataUserImageProfile = (List<clsUserImageProfile>) repoUserImageProfile.findAll();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                for (clsUserImageProfile imgDt : dataUserImageProfile){
+                    final byte[] imgFile = imgDt.getTxtImg();
+                    if (imgFile != null) {
+                        mybitmapImageProfile = BitmapFactory.decodeByteArray(imgFile, 0, imgFile.length);
+                        Bitmap bitmapProfile = Bitmap.createScaledBitmap(mybitmapImageProfile, 150, 150, true);
+                        photoMenu.setImageBitmap(bitmapProfile);
+                    }
+                }
 
                 sendDataForwardMediaKomunikasi();
             }
@@ -734,7 +704,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
                     @Override
                     public void onError() {
-
+                        new clsActivity().showToast(context.getApplicationContext(), "Error Loading Image", false);
+                        dialog2.dismiss();
                     }
                 });
     }
@@ -774,9 +745,17 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                thePic = extras.getParcelable("data");
+                Uri uri = data.getData();
+                if (uri != null){
+                    thePic = decodeUriAsBitmap(uri);
+                }
+                if  (extras != null){
+                    Bitmap tempBitm = extras.getParcelable("data");
+                    if (tempBitm != null){
+                        thePic = tempBitm;
+                    }
+                }
                 validate = true;
-
 //                previewCaptureImage1(thePic);
                 dialogPopupImage(thePic);
             } else if (resultCode == 0) {
@@ -817,7 +796,16 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                thePic2 = extras.getParcelable("data");
+                Uri uri = data.getData();
+                if (uri != null){
+                    thePic2 = decodeUriAsBitmap(uri);
+                }
+                if  (extras != null){
+                    Bitmap tempBitm = extras.getParcelable("data");
+                    if (tempBitm != null){
+                        thePic2 = tempBitm;
+                    }
+                }
                 validate_2 = true;
 
 //                previewCaptureImage2(thePic2);
@@ -860,7 +848,17 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                Bitmap thePic = null;
+                Uri uri = data.getData();
+                if (uri != null){
+                    thePic = decodeUriAsBitmap(uri);
+                }
+                if  (extras != null){
+                    Bitmap tempBitm = extras.getParcelable("data");
+                    if (tempBitm != null){
+                        thePic = tempBitm;
+                    }
+                }
 
                 previewCaptureImageProfile(thePic);
             } else if (resultCode == 0) {
@@ -1045,6 +1043,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     protected void captureImage1() {
         uriImage = getOutputMediaFileUri();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
@@ -1052,6 +1052,8 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     protected void captureImage2() {
         uriImage = getOutputMediaFileUri();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImage);
         startActivityForResult(cameraIntent, CAMERA_REQUEST2);
@@ -1209,7 +1211,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                volleyRequestSendData(strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;
@@ -1237,7 +1239,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         }
 
                         Log.i(TAG, "Ski data from server - " + response);
-                        clsUserMember userMemberData = new clsUserMember();
                     }
                 });
             } catch (Exception e) {
@@ -1255,7 +1256,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendData(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                volleyRequestSendData(strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;
@@ -1303,7 +1304,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                 String strLinkAPI = new clsHardCode().linkSendData;
                 final String mRequestBody = "[" + dtJson.toString() + "]";
 
-                new VolleyUtils().makeJsonObjectRequestSendDataKTP(getActivity(), strLinkAPI, dtJson, new VolleyResponseListener() {
+                volleyRequestSendDataKTP(strLinkAPI, dtJson, new VolleyResponseListener() {
                     @Override
                     public void onError(String message) {
                         String error;
@@ -1330,7 +1331,6 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
                         }
 
                         Log.i(TAG, "Ski data from server - " + response);
-                        clsUserMember userMemberData = new clsUserMember();
                     }
                 });
             } catch (Exception e) {
@@ -1576,6 +1576,17 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         builder.show();
     }
 
+    private Bitmap decodeUriAsBitmap(Uri uri){
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String kontak = adapterView.getItemAtPosition(i).toString();
@@ -1662,7 +1673,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     public void kontakDetail() {
         final ProgressDialog Dialog = new ProgressDialog(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        txtValidationMethod = "kontakDetail";
         clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
         DatabaseHelper helper = DatabaseManager.getInstance().getHelper();
         helper.refreshData2();
@@ -1685,7 +1696,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
+        volleyJsonObjectRequest(strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -1755,7 +1766,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     public void mediaType() {
         final ProgressDialog Dialog = new ProgressDialog(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        txtValidationMethod = "MediaType";
         try {
             repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
@@ -1776,7 +1787,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
+        volleyJsonObjectRequest(strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -1831,7 +1842,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     public void jenisMedia() {
         final ProgressDialog Dialog = new ProgressDialog(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        txtValidationMethod = "jenisMedia";
         try {
             repoUserMember = new clsUserMemberRepo(context);
             dataMember = (List<clsUserMember>) repoUserMember.findAll();
@@ -1852,7 +1863,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
+        volleyJsonObjectRequest(strLinkAPI, mRequestBody, "Sinkronisasi Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -1907,7 +1918,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
     private void getImageFromAPI() {
         final ProgressDialog Dialog = new ProgressDialog(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+        txtValidationMethod = "getImageFromAPI";
         clsUserMemberRepo repo = new clsUserMemberRepo(context.getApplicationContext());
         helper.refreshData2();
         try {
@@ -1929,7 +1940,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         final String mRequestBody = "[" + resJson.toString() + "]";
 
-        new VolleyUtils().makeJsonObjectRequest(getActivity(), strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
+        volleyJsonObjectRequest(strLinkAPI, mRequestBody, "Refresh Data...", new VolleyResponseListener() {
             @Override
             public void onError(String response) {
                 new clsActivity().showCustomToast(context.getApplicationContext(), response, false);
@@ -2041,7 +2052,7 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         // custom dialog
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.custom_dialog);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
 
         // set the custom dialog components - text, image and button
         FloatingActionButton ktp1 = (FloatingActionButton) dialog.findViewById(R.id.editImageKtp1);
@@ -2677,6 +2688,427 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.show();
+    }
+
+    public void volleyJsonObjectRequest(String strLinkAPI, final String mRequestBody, String progressBarType, final VolleyResponseListener listener) {
+        String client = "";
+        RequestQueue queue = Volley.newRequestQueue(context);
+        ProgressDialog Dialog = new ProgressDialog(getActivity());
+        Dialog = ProgressDialog.show(getActivity(), "", progressBarType, false);
+
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
+
+        mConfigRepo configRepo = new mConfigRepo(context);
+        try {
+            mConfigData configDataClient = (mConfigData) configRepo.findById(5);
+            client = configDataClient.getTxtDefaultValue().toString();
+            dataToken = (List<clsToken>) tokenRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final String finalClient = client;
+        StringRequest req = new StringRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response, status, errorMessage);
+                finalDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String strLinkRequestToken = new clsHardCode().linkToken;
+                final String refresh_token = dataToken.get(0).txtRefreshToken;
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                    // HTTP Status Code: 401 Unauthorized
+                    //new clsActivity().showCustomToast(getApplicationContext(), "401, Authorization has been denied for this request", false);
+
+                    new VolleyUtils().requestTokenWithRefresh(getActivity(), strLinkRequestToken, refresh_token, finalClient, new VolleyResponseListener() {
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(String response, Boolean status, String strErrorMsg) {
+                            if (response != null) {
+                                try {
+                                    String accessToken = "";
+                                    String newRefreshToken = "";
+                                    String refreshToken = "";
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    accessToken = jsonObject.getString("access_token");
+                                    refreshToken = jsonObject.getString("refresh_token");
+                                    String dtIssued = jsonObject.getString(".issued");
+
+                                    clsToken data = new clsToken();
+                                    data.setIntId("1");
+                                    data.setDtIssuedToken(dtIssued);
+                                    data.setTxtUserToken(accessToken);
+                                    data.setTxtRefreshToken(refreshToken);
+
+                                    tokenRepo.createOrUpdate(data);
+                                    //Toast.makeText(getApplicationContext(), "Success get new Access Token", Toast.LENGTH_SHORT).show();
+                                    newRefreshToken = refreshToken;
+                                    if (refreshToken == newRefreshToken && !newRefreshToken.equals("")) {
+                                        if (txtValidationMethod.equals("kontakDetail")) {
+                                            kontakDetail();
+                                        } else if (txtValidationMethod.equals("MediaType")){
+                                            mediaType();
+                                        } else if (txtValidationMethod.equals("jenisMedia")){
+                                            jenisMedia();
+                                        } else if (txtValidationMethod.equals("getImageFromAPI")){
+                                            getImageFromAPI();
+                                        } else {
+                                            Toast.makeText(context, "Silahkan coba lagi", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(context, strErrorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                            finalDialog1.dismiss();
+                        }
+                    });
+                } else if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR ){
+                    new clsActivity().showCustomToast(context, "Error 500, Server Error", false);
+                    finalDialog1.dismiss();
+                } else {
+                    popup();
+                    finalDialog1.dismiss();
+                }
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        dialog.dismiss();
+                        sweetAlertDialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("txtParam", mRequestBody);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                try {
+                    tokenRepo = new clsTokenRepo(context);
+                    dataToken = (List<clsToken>) tokenRepo.findAll();
+                    access_token = dataToken.get(0).getTxtUserToken();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + access_token);
+
+                return headers;
+            }
+        };
+        req.setRetryPolicy(new
+                DefaultRetryPolicy(60000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+        queue.add(req);
+    }
+
+    private void volleyRequestSendDataKTP(String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+        String client = "";
+        RequestQueue queue = Volley.newRequestQueue(context);
+        ProgressDialog Dialog = new ProgressDialog(getActivity());
+
+        Dialog = ProgressDialog.show(getActivity(), "", "Mohon Tunggu...", true);
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
+
+        mConfigRepo configRepo = new mConfigRepo(context);
+        try {
+            mConfigData configDataClient = (mConfigData) configRepo.findById(5);
+            client = configDataClient.getTxtDefaultValue().toString();
+            dataToken = (List<clsToken>) tokenRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final String finalClient = client;
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response.toString(), status, errorMessage);
+                finalDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String strLinkRequestToken = new clsHardCode().linkToken;
+                final String refresh_token = dataToken.get(0).txtRefreshToken;
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_UNAUTHORIZED) {
+
+                    new VolleyUtils().requestTokenWithRefresh(getActivity(), strLinkRequestToken, refresh_token, finalClient, new VolleyResponseListener() {
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(String response, Boolean status, String strErrorMsg) {
+                            if (response != null) {
+                                try {
+                                    String accessToken = "";
+                                    String newRefreshToken = "";
+                                    String refreshToken = "";
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    accessToken = jsonObject.getString("access_token");
+                                    refreshToken = jsonObject.getString("refresh_token");
+                                    String dtIssued = jsonObject.getString(".issued");
+
+                                    clsToken data = new clsToken();
+                                    data.setIntId("1");
+                                    data.setDtIssuedToken(dtIssued);
+                                    data.setTxtUserToken(accessToken);
+                                    data.setTxtRefreshToken(refreshToken);
+
+                                    tokenRepo.createOrUpdate(data);
+                                    //Toast.makeText(getApplicationContext(), "Success get new Access Token", Toast.LENGTH_SHORT).show();
+                                    newRefreshToken = refreshToken;
+                                    if (refreshToken == newRefreshToken && !newRefreshToken.equals("")) {
+                                        sendDataImageKTP();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(context, strErrorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                            finalDialog1.dismiss();
+                        }
+                    });
+                } else if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR ){
+                    new clsActivity().showCustomToast(context, "Error 500, Server Error", false);
+                    finalDialog1.dismiss();
+                } else {
+                    popup();
+                    finalDialog1.dismiss();
+                }
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    final String mRequestBody2 = "[" +  mRequestBody.getDtdataJson().txtJSON().toString() + "]";
+                    params.put("txtParam", mRequestBody2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                if (mRequestBody.getFileUpload().get("txtFileName1") != null){
+                    params.put("file_image1.jpg", new DataPart("file_image1.jpg", mRequestBody.getFileUpload().get("txtFileName1"), "image/jpeg"));
+                }
+                if (mRequestBody.getFileUpload().get("txtFileName2") != null){
+                    params.put("file_image2.jpg", new DataPart("file_image2.jpg", mRequestBody.getFileUpload().get("txtFileName2"), "image/jpeg"));
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                try {
+                    tokenRepo = new clsTokenRepo(context);
+                    dataToken = (List<clsToken>) tokenRepo.findAll();
+                    access_token = dataToken.get(0).getTxtUserToken();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + access_token);
+
+                return headers;
+            }
+        };
+        multipartRequest.setRetryPolicy(new
+                DefaultRetryPolicy(500000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(multipartRequest);
+    }
+
+    private void volleyRequestSendData(String strLinkAPI, final clsSendData mRequestBody, final VolleyResponseListener listener) {
+        String client = "";
+        RequestQueue queue = Volley.newRequestQueue(context);
+        ProgressDialog Dialog = new ProgressDialog(getActivity());
+
+        Dialog = ProgressDialog.show(getActivity(), "", "Mohon Tunggu...", true);
+        final ProgressDialog finalDialog = Dialog;
+        final ProgressDialog finalDialog1 = Dialog;
+
+        mConfigRepo configRepo = new mConfigRepo(context);
+        try {
+            mConfigData configDataClient = (mConfigData) configRepo.findById(5);
+            client = configDataClient.getTxtDefaultValue().toString();
+            dataToken = (List<clsToken>) tokenRepo.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final String finalClient = client;
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, strLinkAPI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Boolean status = false;
+                String errorMessage = null;
+                listener.onResponse(response.toString(), status, errorMessage);
+                finalDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String strLinkRequestToken = new clsHardCode().linkToken;
+                final String refresh_token = dataToken.get(0).txtRefreshToken;
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_UNAUTHORIZED) {
+
+                    new VolleyUtils().requestTokenWithRefresh(getActivity(), strLinkRequestToken, refresh_token, finalClient, new VolleyResponseListener() {
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onResponse(String response, Boolean status, String strErrorMsg) {
+                            if (response != null) {
+                                try {
+                                    String accessToken = "";
+                                    String newRefreshToken = "";
+                                    String refreshToken = "";
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    accessToken = jsonObject.getString("access_token");
+                                    refreshToken = jsonObject.getString("refresh_token");
+                                    String dtIssued = jsonObject.getString(".issued");
+
+                                    clsToken data = new clsToken();
+                                    data.setIntId("1");
+                                    data.setDtIssuedToken(dtIssued);
+                                    data.setTxtUserToken(accessToken);
+                                    data.setTxtRefreshToken(refreshToken);
+
+                                    tokenRepo.createOrUpdate(data);
+                                    //Toast.makeText(getApplicationContext(), "Success get new Access Token", Toast.LENGTH_SHORT).show();
+                                    newRefreshToken = refreshToken;
+                                    if (refreshToken == newRefreshToken && !newRefreshToken.equals("")) {
+                                        sendDataImageKTP();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(context, strErrorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                            finalDialog1.dismiss();
+                        }
+                    });
+                } else if (networkResponse != null && networkResponse.statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR ){
+                    new clsActivity().showCustomToast(context, "Error 500, Server Error", false);
+                    finalDialog1.dismiss();
+                } else {
+                    popup();
+                    finalDialog1.dismiss();
+                }
+            }
+            public void popup() {
+                final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE);
+                dialog.setTitleText("Oops...");
+                dialog.setContentText("Mohon check kembali koneksi internet anda");
+                dialog.setCancelable(false);
+                dialog.show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    final String mRequestBody2 = "[" +  mRequestBody.getDtdataJson().txtJSON().toString() + "]";
+                    params.put("txtParam", mRequestBody2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                if (mRequestBody.getFileUploadProfile().get("profile_picture") != null){
+                    params.put("profile_picture.jpg", new DataPart("profile_picture.jpg", mRequestBody.getFileUploadProfile().get("profile_picture"), "image/jpeg"));
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                try {
+                    tokenRepo = new clsTokenRepo(context);
+                    dataToken = (List<clsToken>) tokenRepo.findAll();
+                    access_token = dataToken.get(0).getTxtUserToken();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + access_token);
+
+                return headers;
+            }
+        };
+        multipartRequest.setRetryPolicy(new
+                DefaultRetryPolicy(500000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(multipartRequest);
     }
 
     private void popup() {

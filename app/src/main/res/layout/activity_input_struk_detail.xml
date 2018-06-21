@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/common_action_bar_splitter">
+
+    <include
+        android:id="@+id/toolbarInputStruk"
+        layout="@layout/toolbar"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp">
+
+                <ImageView
+                    android:id="@+id/detailImageInputStruk"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_ceklis"/>
+            </FrameLayout>
+
+            <View xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="18dp"
+                android:background="#B6B6B6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/PaddingLinearLayout">
+
+                <!--<TextView-->
+                    <!--android:id="@+id/detail_tv_name"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:fontFamily="sans-serif-condensed"-->
+                    <!--android:textSize="34sp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--tools:text="Harper Jonny Noxville"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/detail_tv_mail"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:layout_marginTop="14dp"-->
+                    <!--android:textSize="23sp"-->
+                    <!--android:fontFamily="sans-serif-light"-->
+                    <!--tools:text="myawesomemail@mail.com"/>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:text="Image Name"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:id="@+id/tvImageName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_weight="3"
+                        tools:text="My awseome nickname"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:text="Hasil OCR"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:id="@+id/tvHasilOCR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="sans-serif-light"
+                        android:ems="10"
+                        android:editable="false"
+                        android:minLines="6"
+                        android:maxLines="6"
+                        android:lines="6"
+                        android:isScrollContainer="true"
+                        android:scrollbars="vertical"
+                        android:layout_weight="3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:text="Reason"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:id="@+id/tvReason"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="sans-serif-light"
+                        android:ems="10"
+                        android:editable="false"
+                        android:minLines="6"
+                        android:maxLines="6"
+                        android:lines="6"
+                        android:isScrollContainer="true"
+                        android:scrollbars="vertical"
+                        android:layout_weight="3" />
+                </LinearLayout>
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_marginTop="40dp">-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/android_tv_biography_title"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:textColor="@color/title_login"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="24sp"-->
+                        <!--android:text="detail_biography_title"-->
+                        <!--android:fontFamily="sans-serif-condensed"/>-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/detail_tv_biography"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="15dp"-->
+                        <!--android:lineSpacingExtra="10dp"-->
+                        <!--android:text="lorem"-->
+                        <!--android:textSize="22sp"-->
+                        <!--android:textColor="@color/title_login"-->
+                        <!--android:maxLines="20"-->
+                        <!--android:ellipsize="end"-->
+                        <!--android:fontFamily="sans-serif-light"-->
+                        <!--android:layout_weight="3"/>-->
+                <!--</LinearLayout>-->
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="bottom">
+
+                <Button
+                    android:id="@+id/btnStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:text="Status : Valid"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center|bottom"
+                    android:background="@drawable/btn_download_all"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+
+
+
+

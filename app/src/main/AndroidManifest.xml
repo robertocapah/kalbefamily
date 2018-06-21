@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="kalbefamily.crm.kalbe.kalbefamily">
+    package="kalbefamily.crm.kalbe.kalbefamily"
+    android:installLocation="internalOnly"
+    android:sharedUserId="com.kalbe">
 
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <uses-permission
+        android:name="android.permission.MANAGE_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -69,33 +77,54 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IntroActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".IntroActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".MemberActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".CardViewActivity" />
-        <activity android:name=".HomeMenu"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".QrCodeActivity"
-            android:configChanges="orientation|keyboardHidden"
+        <activity
+            android:name=".HomeMenu"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".QrCodeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RewardCardActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape" />
-        <activity android:name=".NewMemberActivity"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".NewLoginActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".NewMemberActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".NewLoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PasswordActivity" />
-        <activity android:name=".ViewPagerActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".ViewPagerActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".ZoomRewardCard"
+        <activity
+            android:name=".ZoomRewardCard"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape" />
+        <activity android:name=".InputStrukDetailActivity"></activity>
+        <activity
+            android:name=".PickAccountActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="org.acra.CrashReportDialog"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

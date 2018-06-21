@@ -48,6 +48,10 @@ public class ViewPagerActivity extends AppCompatActivity {
         String fNameKTP2 = getIntent().getStringExtra("imageKTP2");
         String pathKTP2 = Environment.getExternalStorageDirectory() + File.separator + fNameKTP2 + ".png";
 
+        // zoom image for image struk
+        String fNameStruk = getIntent().getStringExtra("gambar struk");
+        String pathStruk = Environment.getExternalStorageDirectory() + File.separator + fNameStruk + ".png";
+
         if (pathProfile.equals("/storage/emulated/0/Gambar.png")) {
 //            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             bmp = BitmapFactory.decodeFile(pathProfile);
@@ -55,6 +59,8 @@ public class ViewPagerActivity extends AppCompatActivity {
             bmp = BitmapFactory.decodeFile(pathKTP1);
         } else if (pathKTP2.equals("/storage/emulated/0/GambarKTP2.png")) {
             bmp = BitmapFactory.decodeFile(pathKTP2);
+        } else if (pathStruk.equals("/storage/emulated/0/ImageStruk.png")) {
+            bmp = BitmapFactory.decodeFile(pathStruk);
         }
 
         String asd = "";

@@ -20,7 +20,7 @@
             android:gravity="start">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
+                android:id="@+id/profile_image_personal"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_marginTop="10dp"
@@ -324,7 +324,7 @@
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/gender" />
+                    android:src="@drawable/gender_grey" />
 
                 <RadioGroup
                     android:id="@+id/radioGroupGender"
@@ -348,7 +348,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="22dp"
                         android:paddingRight="@dimen/action_button_margin"
                         android:text="Perempuan"
                         android:layout_below="@+id/radioGroup"
