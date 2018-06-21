@@ -1,1 +1,1 @@
-include ':app', ':cropper', ':badgeall', ':zXingLib'
+include ':app', ':cropper', ':badgeall', ':zXingLib', ':mylibrary'
