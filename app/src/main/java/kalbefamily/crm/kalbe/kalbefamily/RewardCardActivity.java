@@ -185,6 +185,9 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
 
         String sub, sub2, sub3;
         String member1 = dataMember.get(0).getTxtMemberId();
+//        sub = member1.substring(0, member1.length() - 8);
+//        sub2 = member1.substring(4, member1.length() - 4);
+//        sub3 = member1.substring(8, member1.length());
         sub = member1.substring(0, member1.length() - 8);
         sub2 = member1.substring(4, member1.length() - 4);
         sub3 = member1.substring(8, member1.length());

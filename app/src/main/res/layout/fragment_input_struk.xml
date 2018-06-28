@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="15dp"
-            android:src="@drawable/profile" />
+            android:src="@drawable/ic_assignment" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_image_struk"

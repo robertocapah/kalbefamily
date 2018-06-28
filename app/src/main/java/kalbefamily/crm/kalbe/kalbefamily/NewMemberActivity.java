@@ -1,7 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,10 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,8 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +46,7 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
-import kalbefamily.crm.kalbe.kalbefamily.BL.clsMainBL;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsToken;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsWarning;
@@ -61,12 +55,10 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
-import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsDeviceInfoRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsTokenRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsmVersionAppRepo;
-import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
 
 import static com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral.ARG_ACCOUNT_NAME;
@@ -504,7 +496,9 @@ public class NewMemberActivity extends AppCompatActivity {
                 try {
                     tokenRepo = new clsTokenRepo(getApplicationContext());
                     dataToken = (List<clsToken>) tokenRepo.findAll();
-                    access_token = dataToken.get(0).getTxtUserToken();
+                    if(dataToken.size()!=0){
+                        access_token = dataToken.get(0).getTxtUserToken();
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
