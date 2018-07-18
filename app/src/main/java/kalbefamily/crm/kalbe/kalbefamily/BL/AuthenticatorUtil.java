@@ -14,7 +14,6 @@ import com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral;
 import java.util.List;
 
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsToken;
-import kalbefamily.crm.kalbe.kalbefamily.MemberActivity;
 import kalbefamily.crm.kalbe.kalbefamily.NewMemberActivity;
 import kalbefamily.crm.kalbe.kalbefamily.PickAccountActivity;
 
@@ -49,7 +48,7 @@ public class AuthenticatorUtil {
                     final Account availableAccounts[] = countingAccount(mAccountManager);
 
                     Intent intent = new Intent(context, NewMemberActivity.class);
-                    intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                    intent.putExtra(AccountGeneral.ARG_ACCOUNT_TYPE, accountType);
                     intent.putExtra(AccountGeneral.ARG_AUTH_TYPE, authTokenType);
                     intent.putExtra(AccountGeneral.ARG_IS_ADDING_NEW_ACCOUNT, newAccount);
                     intent.putExtra(ARG_ARRAY_ACCOUNT_AVAILABLE, availableAccounts);

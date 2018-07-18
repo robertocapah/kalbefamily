@@ -1,7 +1,6 @@
 package kalbefamily.crm.kalbe.kalbefamily.Data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -13,7 +12,6 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-//import kalbefamily.crm.kalbe.kalbefamily.Common.Mobile_mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsAbsenData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsAvailablePoin;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
@@ -31,6 +29,8 @@ import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMemberImage;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsmVersionApp;
 import kalbefamily.crm.kalbe.kalbefamily.Common.mConfigData;
 
+//import kalbefamily.crm.kalbe.kalbefamily.Common.Mobile_mConfigData;
+
 /**
  * Created by Rian Andrivani on 6/22/2017.
  */
@@ -40,7 +40,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for your application -- change to something appropriate for your app
     private static final String DATABASE_NAME = _path.dbName;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // the DAO object we use to access the SimpleData table
     protected Dao<mConfigData, Integer> mConfigDao;
@@ -136,6 +136,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 //            TableUtils.dropTable(connectionSource, clsDisplayPicture.class, true);
 //            TableUtils.dropTable(connectionSource, mConfigData.class, true);
 //            TableUtils.dropTable(connectionSource, clsAbsenData.class, true);
+            TableUtils.dropTable(connectionSource, clsImageStruk.class, true);
 
             // after we drop the old databases, we create the new ones
             //onCreate(db, connectionSource);

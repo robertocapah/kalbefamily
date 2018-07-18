@@ -1,4 +1,4 @@
-package kalbefamily.crm.kalbe.kalbefamily;
+package kalbefamily.crm.kalbe.kalbefamily.Fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -50,6 +50,8 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.HomeMenu;
+import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 

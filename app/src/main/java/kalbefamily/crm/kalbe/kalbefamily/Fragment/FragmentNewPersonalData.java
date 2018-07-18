@@ -1,4 +1,4 @@
-package kalbefamily.crm.kalbe.kalbefamily;
+package kalbefamily.crm.kalbe.kalbefamily.Fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -67,7 +67,6 @@ import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -105,6 +104,8 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHardCode;
 import kalbefamily.crm.kalbe.kalbefamily.Data.clsHelper;
+import kalbefamily.crm.kalbe.kalbefamily.HomeMenu;
+import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsJenisMediaRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaKontakDetailRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsMediaTypeRepo;
@@ -113,6 +114,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserImageProfileRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberImageRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserMemberRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
+import kalbefamily.crm.kalbe.kalbefamily.ViewPagerActivity;
 import kalbefamily.crm.kalbe.kalbefamily.addons.volley.VolleyMultipartRequest;
 
 import static android.app.Activity.RESULT_OK;
@@ -219,12 +221,28 @@ public class FragmentNewPersonalData extends Fragment implements AdapterView.OnI
 
         tvNama.setText(dataMember.get(0).getTxtNama().toString());
 
-        String sub, sub2, sub3;
-        final String member1 = dataMember.get(0).getTxtMemberId().toString();
-        sub = member1.substring(0, member1.length() - 8);
-        sub2 = member1.substring(4, member1.length() - 4);
-        sub3 = member1.substring(8, member1.length());
-        tvMember.setText(sub +" "+ sub2 +" "+ sub3);
+//        String sub, sub2, sub3;
+//        final String member1 = dataMember.get(0).getTxtMemberId().toString();
+//        sub = member1.substring(0, member1.length() - 8);
+//        sub2 = member1.substring(4, member1.length() - 4);
+//        sub3 = member1.substring(8, member1.length());
+
+        String sub, sub2, sub3 , sub4;
+        final String member1 = dataMember.get(0).getTxtMemberId();
+        if(member1.length() == 16){
+            sub = member1.substring(0, 4);
+            sub2 = member1.substring(4, 8);
+            sub3 = member1.substring(8, 12);
+            sub4 = member1.substring(12, 16);
+            tvMember.setText(sub +" "+ sub2 +" "+ sub3+" "+sub4);
+        }else if(member1.length() == 12){
+            sub = member1.substring(0, 4);
+            sub2 = member1.substring(4, 8);
+            sub3 = member1.substring(8, 12);
+            tvMember.setText(sub +" "+ sub2 +" "+ sub3);
+        }
+
+//        tvMember.setText(sub +" "+ sub2 +" "+ sub3);
 
         if (dataMember.get(0).getTxtNamaDepan().toString().equals("null")) {
             etNamaDepan.setText("");

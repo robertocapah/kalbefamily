@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by User on 2/14/2018.
@@ -83,6 +84,14 @@ public class clsImageStruk implements Serializable {
         this.txtReason = txtReason;
     }
 
+    public Date getDtDate() {
+        return dtDate;
+    }
+
+    public void setDtDate(Date dtDate) {
+        this.dtDate = dtDate;
+    }
+
     @DatabaseField(id = true,columnName = "txtGuiId")
     public String txtGuiId;
     @DatabaseField(columnName = "txtKontakId")
@@ -95,6 +104,8 @@ public class clsImageStruk implements Serializable {
     public String txtValidate;
     @DatabaseField(columnName = "txtDate")
     public String txtDate;
+    @DatabaseField(columnName = "dtDate", dataType = DataType.DATE_STRING, format = "yyyy-MM-dd HH:mm:ss")
+    public Date dtDate;
     @DatabaseField(columnName = "txtActiveOcr")
     public String txtActiveOcr;
     @DatabaseField(columnName = "txtFileEdit")

@@ -126,6 +126,9 @@ public class NewMemberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_member);
+        /*if(getIntent().getStringExtra(AccountGeneral.ARG_ACCOUNT_TYPE) == null){
+            new AuthenticatorUtil().showAccountPicker(this, mAccountManager, AUTHTOKEN_TYPE_FULL_ACCESS);
+        }*/
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -360,7 +363,8 @@ public class NewMemberActivity extends AppCompatActivity {
                             Intent intent = new Intent(NewMemberActivity.this, NewLoginActivity.class);
                             intent.putExtra("memberID", txtMember);
                             String a = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
-                            intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+                            intent.putExtra(AccountGeneral.ARG_ACCOUNT_TYPE, getIntent().getStringExtra(AccountGeneral.ARG_ACCOUNT_TYPE));
+//                            intent.putExtra(AccountGeneral.ARG_ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
                             intent.putExtra(AccountGeneral.ARG_IS_ADDING_NEW_ACCOUNT, getIntent().getBooleanExtra(AccountGeneral.ARG_IS_ADDING_NEW_ACCOUNT, false));
                             intent.putExtra(AccountGeneral.ARG_AUTH_TYPE, getIntent().getStringExtra(AccountGeneral.ARG_AUTH_TYPE));
                             Parcelable[] parceAccount = getIntent().getParcelableArrayExtra(ARG_ARRAY_ACCOUNT_AVAILABLE);

@@ -99,6 +99,17 @@ public class clsImageStrukRepo implements crud {
         }
         return item;
     }
+    public List<clsImageStruk> findByAllSortByDate(String id) throws SQLException {
+        List<clsImageStruk> item = null;
+
+        try {
+//            item = helper.getImageStrukDao().queryBuilder().where().eq("txtGuiId", id).query();
+            item = helper.getImageStrukDao().queryBuilder().orderBy("dtDate",false).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
 
     public List<clsImageStruk> getAllDataToSendData(Context context) {
         QueryBuilder<clsImageStruk, Integer> queryBuilder = null;

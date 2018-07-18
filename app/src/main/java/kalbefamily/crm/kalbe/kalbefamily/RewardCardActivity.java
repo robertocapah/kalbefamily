@@ -183,15 +183,24 @@ public class RewardCardActivity extends AppCompatActivity implements AdapterView
         // attaching data adapter to spinnerTelp
         spinner.setAdapter(dataAdapter);
 
-        String sub, sub2, sub3;
+        String sub, sub2, sub3 , sub4;
         String member1 = dataMember.get(0).getTxtMemberId();
 //        sub = member1.substring(0, member1.length() - 8);
 //        sub2 = member1.substring(4, member1.length() - 4);
 //        sub3 = member1.substring(8, member1.length());
-        sub = member1.substring(0, member1.length() - 8);
-        sub2 = member1.substring(4, member1.length() - 4);
-        sub3 = member1.substring(8, member1.length());
-        etNumber.setText(sub +" "+ sub2 +" "+ sub3);
+        if(member1.length() == 16){
+            sub = member1.substring(0, 4);
+            sub2 = member1.substring(4, 8);
+            sub3 = member1.substring(8, 12);
+            sub4 = member1.substring(12, 16);
+            etNumber.setText(sub +" "+ sub2 +" "+ sub3+" "+sub4);
+        }else if(member1.length() == 12){
+            sub = member1.substring(0, 4);
+            sub2 = member1.substring(4, 8);
+            sub3 = member1.substring(8, 12);
+            etNumber.setText(sub +" "+ sub2 +" "+ sub3);
+        }
+
         etNama.setText(dataMember.get(0).getTxtNama().toUpperCase());
         etTglBerlaku.setText(dataMember.get(0).getTxtTglBerlaku());
 

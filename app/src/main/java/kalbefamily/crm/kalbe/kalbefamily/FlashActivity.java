@@ -2,7 +2,6 @@ package kalbefamily.crm.kalbe.kalbefamily;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,24 +20,22 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.activeandroid.query.Select;
-
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import kalbefamily.crm.kalbe.kalbefamily.BL.AuthenticatorUtil;
-import kalbefamily.crm.kalbe.kalbefamily.BL.Mobile_mConfigBL;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsMainBL;
-import kalbefamily.crm.kalbe.kalbefamily.BL.tdeviceBL;
-//import kalbefamily.crm.kalbe.kalbefamily.Common.tdeviceData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.enumStatusMenuStart;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.mConfigRepo;
+
 import static com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
+
+//import com.activeandroid.query.Select;
+//import kalbefamily.crm.kalbe.kalbefamily.Common.tdeviceData;
 
 public class FlashActivity extends clsActivity {
     long delay = 5000;
@@ -83,6 +80,8 @@ public class FlashActivity extends clsActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCameraPermission = ContextCompat.checkSelfPermission(FlashActivity.this,
                 Manifest.permission.CAMERA);
+        int hasPhoneStatePermission = ContextCompat.checkSelfPermission(FlashActivity.this,
+                Manifest.permission.READ_PHONE_STATE);
 
         if (Build.VERSION.SDK_INT >= 23){
             if (hasWriteExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
@@ -92,6 +91,8 @@ public class FlashActivity extends clsActivity {
             } else if (hasAccessFineLocationPermission != PackageManager.PERMISSION_GRANTED){
                 checkPermission();
             } else if (hasCameraPermission != PackageManager.PERMISSION_GRANTED){
+                checkPermission();
+            }  else if (hasPhoneStatePermission != PackageManager.PERMISSION_GRANTED){
                 checkPermission();
             } else {
                 StartAnimations();
@@ -145,16 +146,18 @@ public class FlashActivity extends clsActivity {
                         &&!ActivityCompat.shouldShowRequestPermissionRationale(FlashActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         &&!ActivityCompat.shouldShowRequestPermissionRationale(FlashActivity.this,
-                        Manifest.permission.CAMERA)){
+                        Manifest.permission.CAMERA)
+                        &&!ActivityCompat.shouldShowRequestPermissionRationale(FlashActivity.this,
+                        Manifest.permission.READ_PHONE_STATE)){
                     ActivityCompat.requestPermissions(FlashActivity.this,
-                            new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA},
+                            new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA},
                             REQUEST_CODE_ASK_PERMISSIONS);
                     dialog.dismiss();
 
                 }
-                ActivityCompat.requestPermissions(FlashActivity.this,
-                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA},
-                        REQUEST_CODE_ASK_PERMISSIONS);
+//                ActivityCompat.requestPermissions(FlashActivity.this,
+//                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA},
+//                        REQUEST_CODE_ASK_PERMISSIONS);
                 dialog.dismiss();
             }
         });

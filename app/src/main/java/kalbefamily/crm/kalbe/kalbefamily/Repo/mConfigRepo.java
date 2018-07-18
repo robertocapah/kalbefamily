@@ -15,12 +15,12 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 
 public class mConfigRepo {
     DatabaseHelper helper;
-    public String API = "http://10.171.10.28:8036/KF/";
+//    public String API = "http://10.171.10.28:8036/KF/";
+//    public String APIToken = "http://10.171.10.28:8036/";
+    public String API = "http://appgw.kalbenutritionals.com/api/kalbefamily/KF/";
+    public String APIToken = "http://appgw.kalbenutritionals.com/api/kalbefamily/";
 //    public String API = "http://Apikf.kalbenutritionals.web.id/KF/";
-//    public String API = "http://appgw.kalbenutritionals.com/api/kalbefamily/KF/";
-    public String APIToken = "http://10.171.10.28:8036/";
 //    public String APIToken = "http://Apikf.kalbenutritionals.web.id/";
-//    public String APIToken = "http://appgw.kalbenutritionals.com/api/kalbefamily/";
 
     public mConfigRepo(Context context) {
         DatabaseManager.init(context);

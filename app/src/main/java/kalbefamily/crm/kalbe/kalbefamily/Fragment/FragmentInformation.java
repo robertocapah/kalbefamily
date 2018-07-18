@@ -1,4 +1,4 @@
-package kalbefamily.crm.kalbe.kalbefamily;
+package kalbefamily.crm.kalbe.kalbefamily.Fragment;
 
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -13,6 +13,7 @@ import com.owater.library.CircleTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserLoginData;
+import kalbefamily.crm.kalbe.kalbefamily.R;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserLoginRepo;
 
 /**

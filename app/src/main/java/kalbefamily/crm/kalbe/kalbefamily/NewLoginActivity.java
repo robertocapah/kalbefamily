@@ -6,7 +6,6 @@ import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -26,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -39,10 +39,8 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import kalbefamily.crm.kalbe.kalbefamily.BL.clsActivity;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsDeviceInfoData;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsToken;
 import kalbefamily.crm.kalbe.kalbefamily.Common.clsUserMember;
-import kalbefamily.crm.kalbe.kalbefamily.Common.clsmVersionApp;
 import kalbefamily.crm.kalbe.kalbefamily.Common.mConfigData;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
@@ -186,7 +184,7 @@ public class NewLoginActivity extends AccountAuthenticatorActivity {
 //        Bundle bbb = mm.getExtras();
 //        String ccc = bbb.getString(AccountManager.KEY_ACCOUNT_TYPE);
 
-        final String accountType = getIntent().getExtras().getString(AccountManager.KEY_ACCOUNT_TYPE);
+        final String accountType = getIntent().getExtras().getString(AccountGeneral.ARG_ACCOUNT_TYPE);
         final boolean newAccount = getIntent().getExtras().getBoolean(ARG_IS_ADDING_NEW_ACCOUNT, false);
 
         final Bundle datum = new Bundle();
@@ -241,7 +239,7 @@ public class NewLoginActivity extends AccountAuthenticatorActivity {
                                 Log.d("Data info", "Data member valid");
 
                                 datum.putString(AccountManager.KEY_ACCOUNT_NAME, txtMember);
-                                datum.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                                datum.putString(AccountGeneral.ARG_ACCOUNT_TYPE, accountType);
                                 datum.putString(AccountManager.KEY_AUTHTOKEN, accessToken);
                                 datum.putString(PARAM_USER_PASS, txtPassword);
                                 datum.putString(ARG_AUTH_TYPE, mAuthTokenType);
@@ -400,7 +398,7 @@ public class NewLoginActivity extends AccountAuthenticatorActivity {
 
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
-        final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+        final Account account = new Account(accountName, intent.getStringExtra(AccountGeneral.ARG_ACCOUNT_TYPE));
         String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
         String authtokenType = intent.getStringExtra(ARG_AUTH_TYPE);
         if (intent.getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {

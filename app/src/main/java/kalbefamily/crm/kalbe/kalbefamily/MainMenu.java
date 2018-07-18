@@ -52,6 +52,7 @@ import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseHelper;
 import kalbefamily.crm.kalbe.kalbefamily.Data.DatabaseManager;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyResponseListener;
 import kalbefamily.crm.kalbe.kalbefamily.Data.VolleyUtils;
+import kalbefamily.crm.kalbe.kalbefamily.Fragment.FragmentInformation;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsAbsenDataRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsDisplayPictureRepo;
 import kalbefamily.crm.kalbe.kalbefamily.Repo.clsUserLoginRepo;
@@ -98,7 +99,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                finishAffinity();
             }
         });
 
