@@ -17,6 +17,7 @@ import static com.oktaviani.dewi.mylibrary.authenticator.AccountGeneral.AUTHTOKE
  * Created by Rian Andrivani on 6/16/2017.
  */
 
+
 public class IntroActivity extends AppIntro {
     private AccountManager mAccountManager;
     @Override
